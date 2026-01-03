@@ -1,0 +1,1 @@
+<view class="topIndex"><image class="topImg" src="{{a}}" mode="widthFix"></image></view><view>moment</view><image src="{{b}}"></image>

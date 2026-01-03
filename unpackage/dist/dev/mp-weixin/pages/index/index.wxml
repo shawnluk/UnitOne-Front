@@ -1,0 +1,1 @@
+<view class="topIndex"><image class="topImg" src="{{a}}" mode="widthFix"></image></view><view class="content"><view class="nvgContent"><button class="btn1">获取位置</button><button class="btn2"><image src="{{b}}" class="nvgImg" mode="widthFix"></image></button><button class="btn3">搜索活动</button></view></view>

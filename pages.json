@@ -1,0 +1,57 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index"
+			// "style": {
+			// 	"navigationBarTitleText": "toFindMore",
+			// 	"navigationStyle": "custom"
+			// }
+		},
+		{
+			"path": "pages/moment/moment"
+		},
+		{
+			"path": "pages/message/message"
+		},
+		{
+			"path": "pages/user/user"
+		}
+	],
+	"tabBar": {
+		"list": [
+			{
+				"pagePath": "pages/index/index",
+				"text": "活动",
+				"iconPath": "/static/e_000109_r.png",
+				"selectedIconPath": "/static/e_000109_r.png"
+			},
+			{
+				"pagePath": "pages/moment/moment",
+				"text": "时刻",
+				"iconPath": "/static/e_000108_r.png",
+				"selectedIconPath": "/static/e_000108_r.png"
+			},
+			{
+				"pagePath": "pages/message/message",
+				"text": "消息",
+				"iconPath": "/static/e_000103_r.png",
+				"selectedIconPath": "/static/e_000103_r.png"
+			},
+			{
+				"pagePath": "pages/user/user",
+				"text": "我的",
+				"iconPath": "/static/e_000100_r_w.png",
+				"selectedIconPath": "/static/e_000100_r_w.png"
+			}
+		]
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8",
+		"navigationStyle": "custom"
+		}
+	},
+	"uniIdRouter": {}
+}

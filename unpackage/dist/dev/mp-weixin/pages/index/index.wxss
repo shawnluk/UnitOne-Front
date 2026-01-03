@@ -1,0 +1,67 @@
+
+/* 	.content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	} */
+
+/* 	.logo {
+		height: 200rpx;
+		width: 200rpx;
+		margin-top: 200rpx;
+		margin-left: auto;
+		margin-right: auto;
+		margin-bottom: 50rpx;
+	} */
+
+/* 	.text-area {
+		display: flex;
+		justify-content: center;
+	}
+
+	.title {
+		font-size: 36rpx;
+		color: #8f8f94;
+	} */
+.topIndex {
+		height: 200rpx;
+		overflow: hidden;
+}
+.topImg{
+		width:100%;
+		/* height: rpx; */
+}
+.nvgContent{
+		display: flex;
+		margin-top: 20rpx;
+}
+.nvgContent button {
+		height: 100rpx;
+}
+.btn1{
+		flex: 2;
+		margin: 0 20rpx;
+}
+.btn2{
+		flex: 4;
+/* 		margin: 0 0;
+		padding: 0 0; */
+/* 		background-image:url('/static/flag_007_ll.png');
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: center;	 */	
+		background: none;
+		border: none;
+		padding: 0;
+}
+.btn2 .nvgImg{
+		/* display: none; */
+/* 		width: 100rpx;
+		height: auto; */
+}
+.btn3{
+		flex: 2;
+		margin: 0 20rpx;
+}
+

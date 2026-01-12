@@ -28,9 +28,16 @@
 			<button class="tagBtn2">观影</button>
 			<button class="tagBtn3">户外</button>
 			<button class="tagBtn4">收藏</button> -->
-				<button v-for="(item,index) in tagList" :key="index" @click="getselectBtn">
+			<view v-for="(item,index) in tagList" :key="index">
+				<button  @click="getselectBtn(item,index)" hover-class="is-hover" :type="changeBtnType">
 					{{item.name}}{{item.active}}
 				</button>
+			</view>
+		</view>
+		<view class="activitylist">
+			<view v-for="(item,index) in activityList" :key="index" v-show="showContent" >
+				{{item.name}}
+			</view>
 		</view>
 	</view>
 		
@@ -38,6 +45,8 @@
 </template>
 
 <script>
+import { vShow } from 'vue';
+
 	// import Swiper from '@/components/Swiper.vue'
 	
 
@@ -45,17 +54,27 @@
 		data() {
 			return {
 				title: 'Hello',
+				Number : 0,
+				changeBtnType:"deafult",
+				showContent:false,
 				bannerList: [
 					{url:"/static/e_000100_r_w.png"},
 					{url:"/static/e_000102_r_ll.png"},
 					{url:"/static/e_000103_r.png" }
 				],
 				tagList: [
-					{id:"1",name:"约球",active:1},
-					{id:"2",name:"观影",active:1},
-					{id:"3",name:"户外",active:1},
-					{id:"4",name:"闲聊",active:1},
-					{id:"5",name:"订阅",active:1}
+					{id:1,name:"约球",active:1},
+					{id:2,name:"观影",active:1},
+					{id:3,name:"户外",active:1},
+					{id:4,name:"闲聊",active:1},
+					{id:5,name:"订阅",active:1}
+				],
+				activityList:[
+					{id:1,name:"1-1"},
+					{id:2,name:"2-2"},
+					{id:3,name:"3-3"},
+					{id:4,name:"4-4"},
+					{id:5,name:"5-5"}
 				]
 			}
 		},
@@ -63,13 +82,15 @@
 
 		},
 		methods: {
-			getselectBtn(){
-				// console.log(item.id)
-				// const newActive = 0
-				// item.id = newActive
-				// console.log(this.buttonstyle)
-				// this.buttonstyle.type = 'primary'
-				
+			getselectBtn(item,index){
+				this.changeBtnType = "deafult"
+				// const newBtnType = document.getElementById("id") 
+				this.Number = item.id
+				console.log(index,item.name,this.Number);
+				if(this.activityList[index].id === this.Number){
+					// console.log(this.changeVshow)
+					// this.changeType.type = "primary"					
+				}
 			}
 		}
 	}
@@ -116,7 +137,13 @@
 	}
 	.taglist {
 		display: flex;
+		justify-content: space-between;
+		margin: 0 20rpx;
 	}
-	
+	.activitylist {
+		display: flex;
+		justify-content: space-between;
+		margin: 0 40rpx;
+	}
 
 </style>

@@ -24,10 +24,10 @@
 		</view>
 		<!-- 分类列表 -->
 		<view class="TagList">
-			<button class="tagBtn1">约球</button>
+<!-- 			<button class="tagBtn1">约球</button>
 			<button class="tagBtn2">观影</button>
 			<button class="tagBtn3">户外</button>
-			<button class="tagBtn4">收藏</button>
+			<button class="tagBtn4">收藏</button> -->
 		</view>
 	</view>
 		

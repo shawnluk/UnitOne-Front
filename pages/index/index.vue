@@ -23,11 +23,15 @@
 			</swiper>
 		</view>
 		<!-- 分类列表 -->
-		<view class="TagList">
-			<button class="tagBtn1">约球</button>
+		<view class="activitylist">
+<!-- 			<button class="tagBtn1">约球</button>
 			<button class="tagBtn2">观影</button>
 			<button class="tagBtn3">户外</button>
-			<button class="tagBtn4">收藏</button>
+			<button class="tagBtn4">收藏</button> -->
+			<!-- 分类标题 -->
+			<view v-for="(item,index) in activityList" :key="index">
+				<button>{{item.name}}</button>
+			</view>
 		</view>
 	</view>
 		
@@ -46,6 +50,18 @@
 					{url:"/static/e_000100_r_w.png"},
 					{url:"/static/e_000102_r_ll.png"},
 					{url:"/static/e_000103_r.png" }
+				],
+				activityList:[
+					{name:"约球"},
+					{name:"观影"},
+					{name:"户外"},
+					{name:"订阅"}
+				],
+				activityContent:[
+					{content:"1"},
+					{content:"2"},
+					{content:"3"},
+					{content:"4"},
 				]
 			}
 		},
@@ -97,9 +113,13 @@
 		width: 100%;
 		height: 100%;
 	}
-	.TagList {
+/* 	.TagList {
 		display: flex;
+	} */
+	.activitylist {
+		margin: 0 20rpx;
+		display: flex;
+		justify-content: space-between;
 	}
-	
 
 </style>

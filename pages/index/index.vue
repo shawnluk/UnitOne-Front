@@ -23,11 +23,14 @@
 			</swiper>
 		</view>
 		<!-- 分类列表 -->
-		<view class="TagList">
+		<view class="taglist">
 <!-- 			<button class="tagBtn1">约球</button>
 			<button class="tagBtn2">观影</button>
 			<button class="tagBtn3">户外</button>
 			<button class="tagBtn4">收藏</button> -->
+				<button v-for="(item,index) in tagList" :key="index" @click="getselectBtn">
+					{{item.name}}{{item.active}}
+				</button>
 		</view>
 	</view>
 		
@@ -46,6 +49,13 @@
 					{url:"/static/e_000100_r_w.png"},
 					{url:"/static/e_000102_r_ll.png"},
 					{url:"/static/e_000103_r.png" }
+				],
+				tagList: [
+					{id:"1",name:"约球",active:1},
+					{id:"2",name:"观影",active:1},
+					{id:"3",name:"户外",active:1},
+					{id:"4",name:"闲聊",active:1},
+					{id:"5",name:"订阅",active:1}
 				]
 			}
 		},
@@ -53,7 +63,14 @@
 
 		},
 		methods: {
-
+			getselectBtn(){
+				// console.log(item.id)
+				// const newActive = 0
+				// item.id = newActive
+				// console.log(this.buttonstyle)
+				// this.buttonstyle.type = 'primary'
+				
+			}
 		}
 	}
 </script>
@@ -97,7 +114,7 @@
 		width: 100%;
 		height: 100%;
 	}
-	.TagList {
+	.taglist {
 		display: flex;
 	}
 	

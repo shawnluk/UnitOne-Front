@@ -24,18 +24,14 @@
 		</view>
 		<!-- 分类列表 -->
 		<view class="taglist">
-<!-- 			<button class="tagBtn1">约球</button>
-			<button class="tagBtn2">观影</button>
-			<button class="tagBtn3">户外</button>
-			<button class="tagBtn4">收藏</button> -->
 			<view v-for="(item,index) in tagList" :key="index">
-				<button  @click="getselectBtn(item,index)" hover-class="is-hover" :type="changeBtnType">
+				<button  @click="getselectBtn(item,index)" hover-class="is-hover" :style="btnStyleObj" :ref="item.acid">
 					{{item.name}}{{item.active}}
 				</button>
 			</view>
 		</view>
 		<view class="activitylist">
-			<view v-for="(item,index) in activityList" :key="index" v-show="showContent" >
+			<view v-for="(item,index) in activityList" :key="index" v-show="showContent" :ref="'item'+index">
 				{{item.name}}
 			</view>
 		</view>
@@ -57,24 +53,28 @@ import { vShow } from 'vue';
 				Number : 0,
 				changeBtnType:"deafult",
 				showContent:false,
+				btnStyleObj:{
+					// background-color : #179b16
+					color:"red"
+				},
 				bannerList: [
 					{url:"/static/e_000100_r_w.png"},
 					{url:"/static/e_000102_r_ll.png"},
 					{url:"/static/e_000103_r.png" }
 				],
 				tagList: [
-					{id:1,name:"约球",active:1},
-					{id:2,name:"观影",active:1},
-					{id:3,name:"户外",active:1},
-					{id:4,name:"闲聊",active:1},
-					{id:5,name:"订阅",active:1}
+					{acid:1,name:"约球",active:1},
+					{acid:2,name:"观影",active:1},
+					{acid:3,name:"户外",active:1},
+					{acid:4,name:"闲聊",active:1},
+					{acid:5,name:"订阅",active:1}
 				],
 				activityList:[
-					{id:1,name:"1-1"},
-					{id:2,name:"2-2"},
-					{id:3,name:"3-3"},
-					{id:4,name:"4-4"},
-					{id:5,name:"5-5"}
+					{acid:1,name:"1-1"},
+					{acid:2,name:"2-2"},
+					{acid:3,name:"3-3"},
+					{acid:4,name:"4-4"},
+					{acid:5,name:"5-5"}
 				]
 			}
 		},
@@ -83,14 +83,21 @@ import { vShow } from 'vue';
 		},
 		methods: {
 			getselectBtn(item,index){
-				this.changeBtnType = "deafult"
-				// const newBtnType = document.getElementById("id") 
-				this.Number = item.id
+				// this.changeBtnType = "deafult"
+				// const newBtnType = document.getElementById("acid") 
+				this.Number = item.acid
 				console.log(index,item.name,this.Number);
-				if(this.activityList[index].id === this.Number){
+				// if(this.activityList[index].acid === this.Number){
 					// console.log(this.changeVshow)
-					// this.changeType.type = "primary"					
-				}
+					// this.changeType.type = "primary"	
+					// this.btnStyleObj={color:#179b16}
+					// this.showContent = true
+					// this.btnStyleObj.color = "blue"
+				// }
+				// if(this.$refs.ref = this.Number){
+				// 	this.$refs.ref.style.color = "blue"
+				// }
+				// console.log(this.$refs["'item'+index"])
 			}
 		}
 	}

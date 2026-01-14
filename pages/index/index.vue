@@ -23,16 +23,33 @@
 			</swiper>
 		</view>
 		<!-- 分类列表 -->
-		<view class="taglist">
-			<view v-for="(item,index) in tagList" :key="index">
-				<button  @click="getselectBtn(item,index)" hover-class="is-hover" :style="btnStyleObj" :ref="item.acid">
+		<view class="buttonlist">
+			<view v-for="(item,index) in buttonList" :key="index">
+				<button  @click="getselectBtn(item,index)" hover-class="is-hover" :style="{color:item.isActive ? 'blue' : 'red'}">
 					{{item.name}}{{item.active}}
 				</button>
 			</view>
 		</view>
 		<view class="activitylist">
-			<view v-for="(item,index) in activityList" :key="index" v-show="showContent" :ref="'item'+index">
-				{{item.name}}
+			<view v-for="(item,index) in NewActivityList" :key="index" :style="{display:item.isActive ? 'contents' : 'none' }">
+				<view class="ActivityDeteil" @click="goto(item.acid)">
+					<image :src="item.photo" class="activityImg"></image>
+					<view class="activityText">
+						<view>{{item.title}}</view>
+						<view>{{item.time}}</view>
+						<view>{{item.address}}</view>
+					</view>
+					<view class="activityAuthor">
+						<view>
+							{{item.author}}
+						</view>
+					</view>
+					<view class="activityPeople">
+						<view>
+							"参与人数："{{item.people}}
+						</view>
+					</view>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -51,8 +68,6 @@ import { vShow } from 'vue';
 			return {
 				title: 'Hello',
 				Number : 0,
-				changeBtnType:"deafult",
-				showContent:false,
 				btnStyleObj:{
 					// background-color : #179b16
 					color:"red"
@@ -62,42 +77,57 @@ import { vShow } from 'vue';
 					{url:"/static/e_000102_r_ll.png"},
 					{url:"/static/e_000103_r.png" }
 				],
-				tagList: [
-					{acid:1,name:"约球",active:1},
-					{acid:2,name:"观影",active:1},
-					{acid:3,name:"户外",active:1},
-					{acid:4,name:"闲聊",active:1},
-					{acid:5,name:"订阅",active:1}
+				buttonList: [
+					{acid:1,name:"约球",isActive:false},
+					{acid:2,name:"观影",isActive:false},
+					{acid:3,name:"户外",isActive:false},
+					{acid:4,name:"闲聊",isActive:false},
+					{acid:5,name:"订阅",isActive:false}
 				],
 				activityList:[
-					{acid:1,name:"1-1"},
-					{acid:2,name:"2-2"},
-					{acid:3,name:"3-3"},
-					{acid:4,name:"4-4"},
-					{acid:5,name:"5-5"}
-				]
+					{acid:1,name:"1-1",isActive:false,photo:"/static/e_000100_r_w.png",title:"标题-1",address:"地址-1",time:"时间",author:"作者-1",people:10},
+					{acid:1,name:"1-2",isActive:false,photo:"/static/e_000100_r_w.png",title:"标题-1-2",address:"地址-1-2",time:"时间",author:"作者-1",people:10},
+					{acid:2,name:"2-2",isActive:false,photo:"/static/e_000100_r_w.png",title:"标题-2",address:"地址-2",time:"时间",author:"作者-2",people:11},
+					{acid:3,name:"3-3",isActive:false,photo:"/static/e_000100_r_w.png",title:"标题-3",address:"地址-3",time:"时间",author:"作者-3",people:12},
+					{acid:4,name:"4-4",isActive:false,photo:"/static/e_000100_r_w.png",title:"标题-4",address:"地址-4",time:"时间",author:"作者-4",people:13},
+					{acid:5,name:"5-5",isActive:false,photo:"/static/e_000100_r_w.png",title:"标题-5",address:"地址-5",time:"时间",author:"作者-5",people:14}
+				],
+				NewActivityList:[],
 			}
 		},
 		onLoad() {
-
+				this.activityList.forEach((value)=>{value.isActive = true})
+				this.NewActivityList = this.activityList
+				// console.log(this.NewActivityList)
+								
 		},
 		methods: {
 			getselectBtn(item,index){
-				// this.changeBtnType = "deafult"
-				// const newBtnType = document.getElementById("acid") 
+				this.NewActivityList=[],
 				this.Number = item.acid
-				console.log(index,item.name,this.Number);
-				// if(this.activityList[index].acid === this.Number){
-					// console.log(this.changeVshow)
-					// this.changeType.type = "primary"	
-					// this.btnStyleObj={color:#179b16}
-					// this.showContent = true
-					// this.btnStyleObj.color = "blue"
-				// }
-				// if(this.$refs.ref = this.Number){
-				// 	this.$refs.ref.style.color = "blue"
-				// }
-				// console.log(this.$refs["'item'+index"])
+				// console.log(index,item.name,this.Number);
+				this.buttonList.forEach((value)=>{ value.isActive = false })
+				// this.activityList.forEach((value)=>{value.isActive = false})
+				this.NewActivityList = this.activityList.filter( e=>e.acid === item.acid)
+				// console.log(this.NewActivityList)
+				this.buttonList[index].isActive = !this.buttonList[index].isActive
+				this.NewActivityList.forEach((value)=>{ value.isActive = true })
+			},
+			goto(i){
+				// console.log(i)
+				// uni.navigateTo({
+				// 	url:"/components/ButtonList"
+				// })
+				if(i === 1){
+					uni.navigateTo({
+						url:"/components/ButtonList"
+					})
+				}
+				if(i === 2){
+					uni.navigateTo({
+						url:"/components/Swiper"
+					})
+				}
 			}
 		}
 	}
@@ -142,7 +172,7 @@ import { vShow } from 'vue';
 		width: 100%;
 		height: 100%;
 	}
-	.taglist {
+	.buttonlist {
 		display: flex;
 		justify-content: space-between;
 		margin: 0 20rpx;
@@ -150,7 +180,43 @@ import { vShow } from 'vue';
 	.activitylist {
 		display: flex;
 		justify-content: space-between;
-		margin: 0 40rpx;
+		margin: 20rpx;
+		flex-direction: column;
 	}
-
+	.ActivityDeteil {
+		display: flex;
+		justify-content: space-between;
+		position: relative;
+		margin-top: 20rpx;
+		background-color: bisque;
+		border-radius: 20rpx;
+		height: 300rpx;
+		
+	}
+	.activityImg {
+	/* 	position: absolute; */
+		height: 200rpx;
+		width: 30%;
+		margin-top: 10rpx;
+	}
+	.activityText {
+		position: absolute;
+		margin-top: 20rpx;
+		margin-left: 20rpx;
+		left:250rpx
+	}
+	.activityAuthor {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		margin-left: 20rpx;
+		margin-bottom: 20rpx;
+	}
+	.activityPeople {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		margin-right: 20rpx;
+		margin-bottom: 20rpx;
+	}
 </style>

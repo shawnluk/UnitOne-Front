@@ -151,6 +151,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   padding: 0 4rpx;
+    background: #FAEBD7;
 }
 
 .org {
@@ -177,6 +178,7 @@ export default {
   display: flex;
   align-items: center;
   gap: 12rpx;
+  /* background: #ff7a00; */
 }
 
 .join-text {

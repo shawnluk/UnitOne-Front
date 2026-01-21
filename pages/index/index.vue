@@ -8,17 +8,18 @@
 				<button class="btn3">搜索活动</button>
 			</view>
 		</view>
+		
 		<!-- 轮播图组件 -->
 		<view>
 			<Swiper/>
 		</view>
+		
 		<!-- 分类列表 -->
 		<view>
-			<!-- <HomeCategoryBar :items="categoryItems" @select="onSelectCategory" /> -->
 			<HomeCategoryBar :items="categoryItems" @select="onSelectCategory" ></HomeCategoryBar>
 			<view class="section-head">
 				<view class="head-left">
-					<text class="head-title">热门</text>
+					<text class="head-title" @click="onclickHeadTitle">热门</text>
 					<text class="head-max">MAX</text>
 				</view>
 				<view class="head-right" @click="onClickFilter">
@@ -28,35 +29,6 @@
 			</view>
 			
 		</view>
-<!-- 		<view class="buttonlist">
-			<view v-for="(item,index) in buttonList" :key="index">
-				<button  @click="getselectBtn(item,index)" hover-class="is-hover" :style="{color:item.isActive ? 'blue' : 'red'}">
-					{{item.name}}{{item.active}}
-				</button>
-			</view>
-		</view> -->
-<!-- 		<view class="activitylist">
-			<view v-for="(item,index) in NewActivityList" :key="index" :style="{display:item.isActive ? 'contents' : 'none' }">
-				<view class="ActivityDeteil" @click="goto(item.acid)">
-					<image :src="item.photo" class="activityImg"></image>
-					<view class="activityText">
-						<view>{{item.title}}</view>
-						<view>{{item.time}}</view>
-						<view>{{item.address}}</view>
-					</view>
-					<view class="activityAuthor">
-						<view>
-							{{item.author}}
-						</view>
-					</view>
-					<view class="activityPeople">
-						<view>
-							"参与人数："{{item.people}}
-						</view>
-					</view>
-				</view>
-			</view>
-		</view> -->
 		<!-- 活动列表 -->
 		<view class="activitylist">
 			<HomeActivityCard @select="onSelectCard" :items="NewActivityList"></HomeActivityCard>
@@ -79,10 +51,6 @@
 			return {
 				title: 'Hello',
 				Number : 0,
-				btnStyleObj:{
-					// background-color : #179b16
-					color:"red"
-				},
 				categoryItems: [
 					{ acid:1,key: 'sport', text: '约球', icon: '/static/e_000109_r.png' ,isActive:false},
 					{ acid:2,key: 'movie', text: '观影', icon: '/static/e_000103_r.png' ,isActive:false},
@@ -193,6 +161,11 @@
 			onSelectCard(item) {
 				uni.showToast({ title: item.title, icon: 'none' })
 				console.log(item)
+			},
+			onclickHeadTitle(){
+				uni.reLaunch({
+					url:"/pages/index/index"
+				})
 			},
 			goto(i){
 				if(i === 1){

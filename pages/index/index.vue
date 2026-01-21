@@ -8,29 +8,34 @@
 				<button class="btn3">搜索活动</button>
 			</view>
 		</view>
-		<!-- 配置轮播图属性 -->
-		<view class="banner">
-			<swiper
-			:indicator-dots="true"
-			:autoplay="true"
-			:interval="3000"
-			:duration="1000"
-			circular>			
-				<swiper-item v-for="(item, index) in bannerList" :key="index">
-					<!-- <image :src="item.url" mode="aspectFill" /> -->
-				<image :src="item.url" />
-				</swiper-item>
-			</swiper>
+		<!-- 轮播图组件 -->
+		<view>
+			<Swiper/>
 		</view>
 		<!-- 分类列表 -->
-		<view class="buttonlist">
+		<view>
+			<!-- <HomeCategoryBar :items="categoryItems" @select="onSelectCategory" /> -->
+			<HomeCategoryBar :items="categoryItems" @select="onSelectCategory" ></HomeCategoryBar>
+			<view class="section-head">
+				<view class="head-left">
+					<text class="head-title">热门</text>
+					<text class="head-max">MAX</text>
+				</view>
+				<view class="head-right" @click="onClickFilter">
+					<text class="filter-text">筛选</text>
+					<text class="filter-arrow">▾</text>
+				</view>
+			</view>
+			
+		</view>
+<!-- 		<view class="buttonlist">
 			<view v-for="(item,index) in buttonList" :key="index">
 				<button  @click="getselectBtn(item,index)" hover-class="is-hover" :style="{color:item.isActive ? 'blue' : 'red'}">
 					{{item.name}}{{item.active}}
 				</button>
 			</view>
-		</view>
-		<view class="activitylist">
+		</view> -->
+<!-- 		<view class="activitylist">
 			<view v-for="(item,index) in NewActivityList" :key="index" :style="{display:item.isActive ? 'contents' : 'none' }">
 				<view class="ActivityDeteil" @click="goto(item.acid)">
 					<image :src="item.photo" class="activityImg"></image>
@@ -51,6 +56,10 @@
 					</view>
 				</view>
 			</view>
+		</view> -->
+		<!-- 活动列表 -->
+		<view class="activitylist">
+			<HomeActivityCard @select="onSelectCard" :items="NewActivityList"></HomeActivityCard>
 		</view>
 	</view>
 		
@@ -58,12 +67,14 @@
 </template>
 
 <script>
-import { vShow } from 'vue';
-
-	// import Swiper from '@/components/Swiper.vue'
+	import { vShow } from 'vue';
+	import HomeCategoryBar from '@/components/HomeCategoryBar.vue'
+	import HomeActivityCard from '@/components/HomeActivityCard.vue'
+	import Swiper from '@/components/Swiper.vue'
 	
 
 	export default {
+		components:{ Swiper,HomeActivityCard, HomeCategoryBar },
 		data() {
 			return {
 				title: 'Hello',
@@ -72,52 +83,118 @@ import { vShow } from 'vue';
 					// background-color : #179b16
 					color:"red"
 				},
-				bannerList: [
-					{url:"/static/e_000100_r_w.png"},
-					{url:"/static/e_000102_r_ll.png"},
-					{url:"/static/e_000103_r.png" }
-				],
-				buttonList: [
-					{acid:1,name:"约球",isActive:false},
-					{acid:2,name:"观影",isActive:false},
-					{acid:3,name:"户外",isActive:false},
-					{acid:4,name:"闲聊",isActive:false},
-					{acid:5,name:"订阅",isActive:false}
+				categoryItems: [
+					{ acid:1,key: 'sport', text: '约球', icon: '/static/e_000109_r.png' ,isActive:false},
+					{ acid:2,key: 'movie', text: '观影', icon: '/static/e_000103_r.png' ,isActive:false},
+					{ acid:3,key: 'outdoor', text: '户外', icon: '/static/e_000108_r.png' ,isActive:false},
+					{ acid:4,key: 'chat', text: '闲聊', icon: '/static/e_000102_r_ll.png' ,isActive:false},
+					{ acid:5,keykey: 'art', text: '艺术', icon: '/static/e_000100_r_w.png',isActive:false},
+					{ acid:6,key: 'subscribe', text: '订阅', icon: '/static/e_000109_r.png', badge: true,isActive:false },
 				],
 				activityList:[
-					{acid:1,name:"1-1",isActive:false,photo:"/static/e_000100_r_w.png",title:"标题-1",address:"地址-1",time:"时间",author:"作者-1",people:10},
-					{acid:1,name:"1-2",isActive:false,photo:"/static/e_000100_r_w.png",title:"标题-1-2",address:"地址-1-2",time:"时间",author:"作者-1",people:10},
-					{acid:2,name:"2-2",isActive:false,photo:"/static/e_000100_r_w.png",title:"标题-2",address:"地址-2",time:"时间",author:"作者-2",people:11},
-					{acid:3,name:"3-3",isActive:false,photo:"/static/e_000100_r_w.png",title:"标题-3",address:"地址-3",time:"时间",author:"作者-3",people:12},
-					{acid:4,name:"4-4",isActive:false,photo:"/static/e_000100_r_w.png",title:"标题-4",address:"地址-4",time:"时间",author:"作者-4",people:13},
-					{acid:5,name:"5-5",isActive:false,photo:"/static/e_000100_r_w.png",title:"标题-5",address:"地址-5",time:"时间",author:"作者-5",people:14}
+					{
+						acid:1,
+						name:"1-1",
+						isActive:false,
+						cover:"/static/e_000100_r_w.png",
+						title:"标题-1",
+						locationText:"地址-1",
+						timeText:"时间",
+						orgAvatar: '/static/logo.png',
+						orgName:"作者-1",
+						joinCount:10,
+						joinAvatars: ['/static/flag_007_ll.png', '/static/e_000108_r.png', '/static/e_000103_r.png'],
+					},
+					{
+						acid:1,
+						name:"1-2",
+						isActive:false,
+						cover:"/static/e_000100_r_w.png",
+						title:"标题-1-2",
+						locationText:"地址-1-2",
+						timeText:"时间",
+						orgAvatar: '/static/logo.png',
+						orgName:"作者-1",
+						joinCount:10,
+						joinAvatars: ['/static/flag_007_ll.png', '/static/e_000108_r.png', '/static/e_000103_r.png'],
+					},
+					{
+						acid:2,
+						name:"2-2",
+						isActive:false,
+						cover:"/static/e_000100_r_w.png",
+						title:"标题-2",
+						locationText:"地址-2",
+						timeText:"时间",
+						orgAvatar: '/static/logo.png',
+						orgName:"作者-2",
+						joinCount:11,
+						joinAvatars: ['/static/flag_007_ll.png', '/static/e_000108_r.png', '/static/e_000103_r.png'],
+					},
+					{
+						acid:3,
+						name:"3-3",
+						isActive:false,
+						cover:"/static/e_000100_r_w.png",
+						title:"标题-3",
+						locationText:"地址-3",
+						timeText:"时间",
+						orgAvatar: '/static/logo.png',
+						orgName:"作者-3",
+						joinCount:12,
+						joinAvatars: ['/static/e_000100_r_w.png', '/static/e_000102_r_ll.png', '/static/e_000109_r.png'],
+					},
+					{
+						acid:4,
+						name:"4-4",
+						isActive:false,
+						cover:"/static/e_000100_r_w.png",
+						title:"标题-4",
+						locationText:"地址-4",
+						timeText:"时间",
+						orgAvatar: '/static/logo.png',
+						orgName:"作者-4",
+						joinCount:13,
+						joinAvatars: ['/static/flag_007_ll.png', '/static/e_000108_r.png', '/static/e_000103_r.png'],
+					},
+					{
+						acid:5,
+						name:"5-5",
+						isActive:false,
+						cover:"/static/e_000100_r_w.png",
+						title:"标题-5",
+						locationText:"地址-5",
+						timeText:"时间",
+						orgAvatar: '/static/logo.png',
+						orgName:"作者-5",
+						joinCount:14,
+						joinAvatars: ['/static/e_000100_r_w.png', '/static/e_000100_r_w.png', '/static/e_000109_r.png','/static/e_000100_r_w.png', '/static/e_000102_r_ll.png', '/static/e_000109_r.png'],
+					}
 				],
 				NewActivityList:[],
 			}
 		},
 		onLoad() {
 				this.activityList.forEach((value)=>{value.isActive = true})
-				this.NewActivityList = this.activityList
-				// console.log(this.NewActivityList)
-								
+				this.NewActivityList = this.activityList								
 		},
 		methods: {
-			getselectBtn(item,index){
+			onSelectCategory(item,index) {
 				this.NewActivityList=[],
 				this.Number = item.acid
-				// console.log(index,item.name,this.Number);
-				this.buttonList.forEach((value)=>{ value.isActive = false })
-				// this.activityList.forEach((value)=>{value.isActive = false})
+				this.categoryItems.forEach((value)=>{ value.isActive = false })
 				this.NewActivityList = this.activityList.filter( e=>e.acid === item.acid)
-				// console.log(this.NewActivityList)
-				this.buttonList[index].isActive = !this.buttonList[index].isActive
+				this.categoryItems[index].isActive = !this.categoryItems[index].isActive
 				this.NewActivityList.forEach((value)=>{ value.isActive = true })
 			},
+			onClickFilter() {
+				uni.showToast({ title: '点击了筛选', icon: 'none' })
+			},
+			onSelectCard(item) {
+				uni.showToast({ title: item.title, icon: 'none' })
+				console.log(item)
+			},
 			goto(i){
-				// console.log(i)
-				// uni.navigateTo({
-				// 	url:"/components/ButtonList"
-				// })
 				if(i === 1){
 					uni.navigateTo({
 						url:"/components/ButtonList"
@@ -162,28 +239,58 @@ import { vShow } from 'vue';
 		flex: 2;
 		margin-right: 20rpx;
 	}
-	
-	.banner {
-		padding-top: 10rpx;
-		width: 100%;
-		height: 200px;
-	}
-	.banner image {
-		width: 100%;
-		height: 100%;
-	}
-	.buttonlist {
+	.section-head {
 		display: flex;
+		align-items: center;
 		justify-content: space-between;
-		margin: 0 20rpx;
+		padding: 18rpx 24rpx 10rpx;
 	}
-	.activitylist {
+	
+	.head-left {
+		display: flex;
+		align-items: center;
+		gap: 14rpx;
+	}
+	
+	.head-title {
+		font-size: 40rpx;
+		font-weight: 800;
+		color: #111;
+	}
+	
+	.head-max {
+		font-size: 30rpx;
+		font-weight: 900;
+		color: #ff7a00;
+		letter-spacing: 2rpx;
+	}
+	
+	.head-right {
+		display: flex;
+		align-items: center;
+		gap: 10rpx;
+		padding: 10rpx 14rpx;
+		border-radius: 18rpx;
+		background: rgba(255, 255, 255, 0.7);
+	}
+	
+	.filter-text {
+		font-size: 28rpx;
+		color: #888;
+	}
+	
+	.filter-arrow {
+		font-size: 26rpx;
+		color: #bbb;
+		margin-top: -2rpx;
+	}
+/* 	.activitylist {
 		display: flex;
 		justify-content: space-between;
 		margin: 20rpx;
 		flex-direction: column;
-	}
-	.ActivityDeteil {
+	} */
+/* 	.ActivityDeteil {
 		display: flex;
 		justify-content: space-between;
 		position: relative;
@@ -192,31 +299,36 @@ import { vShow } from 'vue';
 		border-radius: 20rpx;
 		height: 300rpx;
 		
-	}
-	.activityImg {
-	/* 	position: absolute; */
+	} */
+/* 	.activityImg {
 		height: 200rpx;
 		width: 30%;
 		margin-top: 10rpx;
-	}
-	.activityText {
+	} */
+/* 	.activityText {
 		position: absolute;
 		margin-top: 20rpx;
 		margin-left: 20rpx;
 		left:250rpx
-	}
-	.activityAuthor {
+	} */
+/* 	.activityAuthor {
 		position: absolute;
 		bottom: 0;
 		left: 0;
 		margin-left: 20rpx;
 		margin-bottom: 20rpx;
-	}
-	.activityPeople {
+	} */
+/* 	.activityPeople {
 		position: absolute;
 		bottom: 0;
 		right: 0;
 		margin-right: 20rpx;
 		margin-bottom: 20rpx;
+	} */
+	.activitylist {
+		display: flex;
+		flex-direction: column;
+		gap: 18rpx;
+		padding: 10rpx 24rpx 24rpx;
 	}
 </style>

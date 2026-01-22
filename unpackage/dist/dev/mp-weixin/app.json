@@ -3,7 +3,10 @@
     "pages/index/index",
     "pages/moment/moment",
     "pages/message/message",
-    "pages/user/user"
+    "pages/user/user",
+    "components/ButtonList",
+    "components/Swiper",
+    "src/ActivityDetail/activity-detail"
   ],
   "window": {
     "navigationBarTextStyle": "black",

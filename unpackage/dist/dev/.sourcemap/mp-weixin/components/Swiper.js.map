@@ -1,0 +1,1 @@
+{"version":3,"file":"Swiper.js","sources":["components/Swiper.vue?type=page"],"sourcesContent":["import MiniProgramPage from '/Users/shawn/Desktop/unitone/UnitOne-Front/components/Swiper.vue'\nwx.createPage(MiniProgramPage)"],"names":["MiniProgramPage"],"mappings":";;AACA,GAAG,WAAWA,OAAe,eAAA;"}

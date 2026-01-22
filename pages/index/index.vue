@@ -136,7 +136,20 @@
 						orgAvatar: '/static/logo.png',
 						orgName:"作者-5",
 						joinCount:14,
-						joinAvatars: ['/static/e_000100_r_w.png', '/static/e_000100_r_w.png', '/static/e_000109_r.png','/static/e_000100_r_w.png', '/static/e_000102_r_ll.png', '/static/e_000109_r.png'],
+						joinAvatars: [
+							'/static/e_000100_r_w.png', 
+							'/static/e_000100_r_w.png', 
+							'/static/e_000109_r.png',
+							'/static/e_000100_r_w.png', 
+							'/static/e_000102_r_ll.png', 
+							'/static/e_000109_r.png',
+							'/static/e_000100_r_w.png', 
+							'/static/e_000100_r_w.png', 
+							'/static/e_000109_r.png',
+							'/static/e_000100_r_w.png', 
+							'/static/e_000102_r_ll.png', 
+							'/static/e_000109_r.png'
+						],
 					}
 				],
 				NewActivityList:[],
@@ -159,8 +172,10 @@
 				uni.showToast({ title: '点击了筛选', icon: 'none' })
 			},
 			onSelectCard(item) {
-				uni.showToast({ title: item.title, icon: 'none' })
-				console.log(item)
+				uni.navigateTo({
+				  url: "/src/ActivityDetail/activity-detail?item=" + encodeURIComponent(JSON.stringify(item))
+				})
+				// console.log("/src/ActivityDetail/activity-detail?item=" + encodeURIComponent(JSON.stringify(item)))
 			},
 			onclickHeadTitle(){
 				uni.reLaunch({

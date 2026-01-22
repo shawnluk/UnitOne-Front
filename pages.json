@@ -21,6 +21,9 @@
 		},
 		{
 			"path": "components/Swiper"
+		},
+		{
+			"path": "src/ActivityDetail/activity-detail"
 		}
 	],
 	"tabBar": {

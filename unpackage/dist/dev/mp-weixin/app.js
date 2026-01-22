@@ -6,6 +6,9 @@ if (!Math) {
   "./pages/moment/moment.js";
   "./pages/message/message.js";
   "./pages/user/user.js";
+  "./components/ButtonList.js";
+  "./components/Swiper.js";
+  "./src/ActivityDetail/activity-detail.js";
 }
 const _sfc_main = {
   onLaunch: function() {

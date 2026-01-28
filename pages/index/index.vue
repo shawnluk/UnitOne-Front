@@ -39,7 +39,7 @@
 </template>
 
 <script>
-	import { vShow } from 'vue';
+	
 	import HomeCategoryBar from '@/components/HomeCategoryBar.vue'
 	import HomeActivityCard from '@/components/HomeActivityCard.vue'
 	import Swiper from '@/components/Swiper.vue'

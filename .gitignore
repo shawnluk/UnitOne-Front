@@ -1,1 +1,5 @@
  unpackage/
+ 
+/* 忽略编译输出 */
+ dist/
+ build/

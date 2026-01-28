@@ -1,1 +1,0 @@
-{"version":3,"file":"Swiper2.js","sources":["D:/Program Files/HBuilderX/plugins/uniapp-cli-vite/uniPage:/RzovRGVza3RvcC9Vbml0T25lIC0gRnJvbnQvY29tcG9uZW50cy9Td2lwZXIudnVl"],"sourcesContent":["import MiniProgramPage from 'G:/Desktop/UnitOne - Front/components/Swiper.vue'\nwx.createPage(MiniProgramPage)"],"names":["MiniProgramPage"],"mappings":";;AACA,GAAG,WAAWA,OAAe,eAAA;"}

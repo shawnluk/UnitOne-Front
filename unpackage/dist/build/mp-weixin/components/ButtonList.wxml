@@ -1,1 +1,0 @@
-<view class="button-container data-v-27f949e4"><button wx:for="{{a}}" wx:for-item="item" wx:key="b" bindtap="{{item.c}}" style="{{'background-color:' + item.d}}" class="custom-button data-v-27f949e4"> 按钮 {{item.a}}</button></view>

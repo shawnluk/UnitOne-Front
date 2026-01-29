@@ -24,6 +24,9 @@
 		},
 		{
 			"path": "src/ActivityDetail/activity-detail"
+		},
+		{
+			"path": "src/CreateAct/createAct"
 		}
 	],
 	"tabBar": {

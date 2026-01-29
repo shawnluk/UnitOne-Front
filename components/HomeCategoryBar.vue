@@ -2,7 +2,7 @@
   <view class="hc-wrap">
     <scroll-view scroll-x class="hc-scroll" :show-scrollbar="false">
       <view class="hc-row">
-        <view
+        <button
           v-for="(item, idx) in items"
           :key="idx"
           class="hc-item"
@@ -14,7 +14,7 @@
 				<view v-if="item.badge" class="hc-badge"></view>
 			</view>
 			<text class="hc-text">{{ item.text }}</text>
-        </view>
+        </button>
       </view>
     </scroll-view>
   </view>
@@ -58,6 +58,10 @@ export default {
   width: 120rpx;
 }
 
+.hc-item::after {
+  border: none;
+}
+
 .hc-icon-box {
   position: relative;
   width: 104rpx;
@@ -78,6 +82,7 @@ export default {
 .hc-text {
   /* margin-top: 12rpx; */
   font-size: 26rpx;
+  width: 62rpx;
   /* color: #666; */
 }
 

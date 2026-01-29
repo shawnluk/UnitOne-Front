@@ -19,6 +19,9 @@
   /* justify-content: space-between; */
   width: 120rpx;
 }
+.hc-item.data-v-d21e0912::after {
+  border: none;
+}
 .hc-icon-box.data-v-d21e0912 {
   position: relative;
   width: 104rpx;
@@ -37,6 +40,7 @@
 .hc-text.data-v-d21e0912 {
   /* margin-top: 12rpx; */
   font-size: 26rpx;
+  width: 62rpx;
   /* color: #666; */
 }
 .hc-badge.data-v-d21e0912 {

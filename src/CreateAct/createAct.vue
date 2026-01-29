@@ -101,7 +101,7 @@ export default {
 		// 这里可以添加提交活动的逻辑
 		console.log('提交活动', this.activityForm);
 		// 提交成功后关闭弹窗
-		this.showActivityModal = false;
+		// this.showActivityModal = false;
 		// 重置表单
 		this.activityForm = {
 			title: '',

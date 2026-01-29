@@ -9,6 +9,7 @@ if (!Math) {
   "./components/ButtonList.js";
   "./components/Swiper.js";
   "./src/ActivityDetail/activity-detail.js";
+  "./src/CreateAct/createAct.js";
 }
 const _sfc_main = {
   onLaunch: function() {

@@ -6,7 +6,8 @@
     "pages/user/user",
     "components/ButtonList",
     "components/Swiper",
-    "src/ActivityDetail/activity-detail"
+    "src/ActivityDetail/activity-detail",
+    "src/CreateAct/createAct"
   ],
   "window": {
     "navigationBarTextStyle": "black",

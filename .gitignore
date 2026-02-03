@@ -1,8 +1,8 @@
-	/* 忽略编译输出 */
 
-	node_modules/
-	unpackage/
-	.project
-	.DS_Store
-	.hbuilderx/
-    .idea/
+
+node_modules/
+unpackage/
+.project
+.DS_Store
+.hbuilderx/
+.idea/

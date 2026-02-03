@@ -1,11 +1,8 @@
+	/* 忽略编译输出 */
 
-/* 忽略编译输出 */
- dist/
- build/
- 
- node_modules/
- .project
- unpackage/
- .DS_Store
- .hbuilderx/
+	node_modules/
+	unpackage/
+	.project
+	.DS_Store
+	.hbuilderx/
  

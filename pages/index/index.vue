@@ -71,7 +71,10 @@
 						orgAvatar: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/logo.png',
 						orgName:"作者-1",
 						joinCount:10,
-						joinAvatars: ['https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/flag_007_ll.png', 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000108_r.png', 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000103_r.png'],
+						joinAvatars: ['https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/flag_007_ll.png',
+                          'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000108_r.png',
+                          'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000103_r.png'
+                        ],
 					},
 					{
 						acid:1,
@@ -84,7 +87,11 @@
 						orgAvatar: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/logo.png',
 						orgName:"作者-1",
 						joinCount:10,
-						joinAvatars: ['https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/flag_007_ll.png', 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000108_r.png', 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000103_r.png'],
+						joinAvatars: [
+                          'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/flag_007_ll.png',
+                          'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000108_r.png',
+                          'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000103_r.png'
+                        ],
 					},
 					{
 						acid:2,
@@ -97,7 +104,11 @@
 						orgAvatar: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/logo.png',
 						orgName:"作者-2",
 						joinCount:11,
-						joinAvatars: ['https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/flag_007_ll.png', 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000108_r.png', 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000103_r.png'],
+						joinAvatars: [
+                          'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/flag_007_ll.png',
+                          'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000108_r.png',
+                          'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000103_r.png'
+                        ],
 					},
 					{
 						acid:3,
@@ -110,7 +121,11 @@
 						orgAvatar: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/logo.png',
 						orgName:"作者-3",
 						joinCount:12,
-						joinAvatars: ['https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000100_r_w.png', 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000102_r_ll.png', 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000109_r.png'],
+						joinAvatars: [
+                          'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000100_r_w.png',
+                          'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000102_r_ll.png',
+                          'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000109_r.png'
+                        ],
 					},
 					{
 						acid:4,
@@ -123,7 +138,11 @@
 						orgAvatar: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/logo.png',
 						orgName:"作者-4",
 						joinCount:13,
-						joinAvatars: ['https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/flag_007_ll.png', 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000108_r.png', 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000103_r.png'],
+						joinAvatars: [
+                          'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/flag_007_ll.png',
+                          'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000108_r.png',
+                          'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000103_r.png'
+                        ],
 					},
 					{
 						acid:5,
@@ -137,19 +156,19 @@
 						orgName:"作者-5",
 						joinCount:14,
 						joinAvatars: [
-							'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000100_r_w.png',
-							'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000100_r_w.png',
-							'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000109_r.png',
-							'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000100_r_w.png',
-							'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000102_r_ll.png',
-							'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000109_r.png',
-							'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000100_r_w.png',
-							'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000100_r_w.png',
-							'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000109_r.png',
-							'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000100_r_w.png',
-							'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000102_r_ll.png',
-							'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000109_r.png'
-						],
+							              'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000100_r_w.png',
+							              'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000100_r_w.png',
+							              'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000109_r.png',
+							              'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000100_r_w.png',
+							              'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000102_r_ll.png',
+							              'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000109_r.png',
+							              'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000100_r_w.png',
+							              'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000100_r_w.png',
+							              'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000109_r.png',
+							              'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000100_r_w.png',
+							              'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000102_r_ll.png',
+							              'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000109_r.png'
+                        ],
 					}
 				],
 				NewActivityList:[],

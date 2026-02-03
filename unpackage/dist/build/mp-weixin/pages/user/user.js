@@ -1,1 +1,0 @@
-"use strict";const e=require("../../common/vendor.js"),t={data:()=>({}),methods:{CreateActivity(){e.index.navigateTo({url:"/src/CreateAct/createAct"})}}};const r=e._export_sfc(t,[["render",function(t,r,c,a,i,o){return{a:e.o(((...e)=>o.CreateActivity&&o.CreateActivity(...e)))}}],["__scopeId","data-v-69e8d4d6"]]);wx.createPage(r);

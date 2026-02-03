@@ -1,7 +1,0 @@
-{
-  "usingComponents": {
-    "home-category-bar": "../../components/HomeCategoryBar",
-    "home-activity-card": "../../components/HomeActivityCard",
-    "swiper": "../../components/Swiper"
-  }
-}

@@ -1,10 +1,10 @@
 <template>
-	
+
   <view class="user-container">
     <!-- 顶部用户信息区域 -->
     <view class="user-header">
       <view class="user-info">
-        <image class="avatar" src="/static/helloworld_01.jpg" mode="aspectFill"></image>
+        <image class="avatar" src="https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/helloworld_01.jpg" mode="aspectFill"></image>
         <view class="user-details">
           <view class="username">shawn</view>
           <view class="user-id">取伙号：987627983 <text class="id-tag">🟠</text></view>
@@ -21,12 +21,12 @@
         <text class="action-btn">⚪</text>
       </view>
     </view>
-    
+
     <!-- 访客标识 -->
     <view class="visitor-badge">
       <text class="visitor-text">访客 ></text>
     </view>
-    
+
     <!-- 成为会员提示 -->
     <view class="member-section">
       <view class="member-content">
@@ -35,7 +35,7 @@
       </view>
       <view class="member-link">查看会员权益 ></view>
     </view>
-    
+
     <!-- 统计数据区域 -->
     <view class="stats-section">
       <view class="stats-item">
@@ -63,7 +63,7 @@
         <view class="star-btn">待领取</view>
       </view>
     </view>
-    
+
     <!-- 功能导航区 -->
     <view class="nav-section">
       <view class="nav-item">
@@ -83,7 +83,7 @@
         <text class="nav-label">设置</text>
       </view>
     </view>
-    
+
     <!-- 个人数据区 -->
     <view class="data-section">
       <view class="data-item">
@@ -103,7 +103,7 @@
         <view class="data-label">相册</view>
       </view>
     </view>
-    
+
     <!-- 圈子管理区域 -->
     <view class="circle-section">
       <view class="circle-header">
@@ -111,7 +111,7 @@
         <text class="circle-more">更多 ></text>
       </view>
       <view class="circle-item">
-        <image class="circle-cover" src="/static/real-madrid-ucl-1024x1024.jpg" mode="aspectFill"></image>
+        <image class="circle-cover" src="https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/real-madrid-ucl-1024x1024.jpg" mode="aspectFill"></image>
         <view class="circle-info">
           <view class="circle-name">皇马球迷足球活动</view>
           <view class="circle-stats">0活动 1成员</view>
@@ -120,13 +120,13 @@
         <view class="circle-top">置顶</view>
       </view>
     </view>
-    
+
     <!-- 底部发布按钮 -->
     <button class="publish-btn" @click="CreateActivity">
       <text class="publish-icon">+</text>
       <text class="publish-text">发布</text>
     </button>
-    
+
     <!-- 底部活动提示 -->
     <view class="activity-footer">
       <text class="footer-text">活动</text>
@@ -141,7 +141,7 @@ export default {
     return {
     };
   },
-  
+
   methods: {
 	CreateActivity(){
 		uni.navigateTo({

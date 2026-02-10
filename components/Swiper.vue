@@ -25,9 +25,9 @@ export default {
     swiperList: {
       type: Array,
       default: () => [
-		  {url:"/static/e_000102_r_ll.png"},
-		  {url:"/static/e_000103_r.png"},
-		  {url:"/static/e_000100_r_w.png"},
+		  {url:"https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000102_r_ll.png"},
+		  {url:"https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000103_r.png"},
+		  {url:"https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000100_r_w.png"},
 	  ]
     },
   },

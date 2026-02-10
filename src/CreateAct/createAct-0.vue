@@ -57,18 +57,7 @@
 		  <!-- 活动描述 -->
 		  <view class="form-item">
 			<text class="form-label">活动描述</text>
-			<editor
-			  id="descEditor"
-			  class="form-editor"
-			  placeholder="请详细描述活动内容，支持插入图片"
-			  show-img-size
-			  show-img-toolbar
-			  show-img-resize
-			  @ready="onEditorReady"
-			  @input="onDescInput"
-			></editor>
-			<button class="insert-img-btn" type="default" @click="insertDescImage">插入图片</button>
-			<!-- <view class="iconfont icon-charutupian" @tap="insertImage"></view> -->
+			<textarea class="form-textarea" placeholder="请详细描述活动内容" v-model="activityForm.description" rows="4"></textarea>
 		  </view>
 		</view>	        
 		<!-- 发布按钮 -->
@@ -92,7 +81,6 @@ export default {
         price: '',
         description: ''
       },
-      editorCtx: null,
       // 选择器控制
       showTypeSelector: false,
       showTimeSelector: false
@@ -108,42 +96,6 @@ export default {
 	selectCoverImage(){
 		// 这里可以添加选择图片的逻辑
 		console.log('选择活动封面');
-	},
-	onEditorReady() {
-		// 获取富文本编辑器上下文
-		uni.createSelectorQuery().in(this).select('#descEditor').context(res => {
-			this.editorCtx = res.context;
-			// 初始化时写入已有描述
-			if (this.activityForm.description) {
-				this.editorCtx.setContents({ html: this.activityForm.description });
-			}
-		}).exec();
-	},
-	onDescInput(e) {
-		// 同步富文本内容到表单
-		this.activityForm.description = e.detail.html || '';
-	},
-	insertDescImage() {
-		if (!this.editorCtx) {
-			uni.showToast({ title: '编辑器尚未就绪', icon: 'none' });
-			return;
-		}
-		uni.chooseImage({
-			count: 1,
-			sizeType: ['compressed'],
-			success: res => {
-				const filePath = res.tempFilePaths && res.tempFilePaths[0];
-				if (filePath) {
-					this.editorCtx.insertImage({
-						src: filePath,
-						alt: '活动图片'
-					});
-				}
-			},
-			fail: () => {
-				uni.showToast({ title: '选择图片失败', icon: 'none' });
-			}
-		});
 	},
 	submitActivity(){
 		// 这里可以添加提交活动的逻辑
@@ -292,26 +244,6 @@ export default {
 	  background-color: #fafafa;
 	  min-height: 200rpx;
 	  resize: none;
-	}
-	
-	.form-editor {
-	  width: 100%;
-	  min-height: 200rpx;
-	  padding: 20rpx;
-	  border: 1rpx solid #e8e8e8;
-	  border-radius: 8rpx;
-	  background-color: #fafafa;
-	  box-sizing: border-box;
-	}
-	
-	.insert-img-btn {
-	  margin-top: 16rpx;
-	  padding: 18rpx;
-	  font-size: 26rpx;
-	  color: #ff6b00;
-	  border: 1rpx solid #ff6b00;
-	  background-color: #fff7f0;
-	  border-radius: 8rpx;
 	}
 	
 	/* 发布按钮 */

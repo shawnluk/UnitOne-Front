@@ -1,7 +1,7 @@
 <template>
 	<view class="topIndex"><image class="topImg" src="https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/real-madrid-ucl-1024x1024.jpg" mode="widthFix"></image></view>
 	<view>message</view>
-	<image src="https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000103_r.png"></image>
+	<!-- <image src="https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000103_r.png"></image> -->
 	<!-- 配置轮播图属性 -->
 	<view class="banner">
 		<swiper

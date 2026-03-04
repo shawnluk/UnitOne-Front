@@ -1,10 +1,23 @@
 <template>
-	<view class="topIndex"><image class="topImg" src="https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/real-madrid-ucl-1024x1024.jpg" mode="widthFix"></image></view>
-	<view>moment</view>
-	<!-- <image src="https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000108_r.png"></image> -->
+	<view>
+		<view class="topIndex">
+			<image class="topImg" src="https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/real-madrid-ucl-1024x1024.jpg" mode="widthFix"></image>
+		</view>
+		<view>moment</view>
+
+		<!-- 自定义底部导航 -->
+		<BottomTabBar :current="1" />
+	</view>
 </template>
 
 <script>
+	import BottomTabBar from '@/components/BottomTabBar.vue'
+
+	export default {
+		components: {
+			BottomTabBar
+		}
+	}
 </script>
 
 <style>
@@ -14,6 +27,5 @@
 	}
 	.topImg{
 		width:100%;
-		/* height: rpx; */
 	}
 </style>

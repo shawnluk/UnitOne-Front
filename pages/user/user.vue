@@ -132,22 +132,30 @@
       <text class="footer-text">活动</text>
       <text class="footer-text">感兴趣的</text>
     </view>
+
+    <!-- 自定义底部导航 -->
+    <BottomTabBar :current="3" />
   </view>
 </template>
 
 <script>
+import BottomTabBar from '@/components/BottomTabBar.vue'
+
 export default {
+  components: {
+    BottomTabBar
+  },
   data() {
     return {
     };
   },
 
   methods: {
-	CreateActivity(){
-		uni.navigateTo({
-			url:"/src/CreateAct/createAct"
-		})
-	}
+    CreateActivity(){
+      uni.navigateTo({
+        url:"/src/CreateAct/createAct"
+      })
+    }
   }
 };
 </script>

@@ -33,6 +33,9 @@
 		<view class="activitylist">
 			<HomeActivityCard @select="onSelectCard" :items="NewActivityList"></HomeActivityCard>
 		</view>
+
+		<!-- 自定义底部导航 -->
+		<BottomTabBar :current="0" />
 	</view>
 
 
@@ -43,10 +46,11 @@
 	import HomeCategoryBar from '@/components/HomeCategoryBar.vue'
 	import HomeActivityCard from '@/components/HomeActivityCard.vue'
 	import Swiper from '@/components/Swiper.vue'
+	import BottomTabBar from '@/components/BottomTabBar.vue'
 
 
-	export default {
-		components:{ Swiper,HomeActivityCard, HomeCategoryBar },
+		export default {
+		components:{ Swiper,HomeActivityCard, HomeCategoryBar, BottomTabBar },
 		data() {
 			return {
 				title: 'Hello',

@@ -108,12 +108,12 @@
 	})
 	onLoad((option)=>{		
 		// console.log(item)
-		actDetail.data = JSON.parse(decodeURIComponent(option.item))
+		// actDetail.data = JSON.parse(decodeURIComponent(option.item))
 		// console.log(actDetail.data)
 	})
 	
 	const backTo = () => {
-			uni.switchTab({
+			uni.navigateTo({
 				url:"/pages/index/index"
 			})
 	};

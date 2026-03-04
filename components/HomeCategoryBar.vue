@@ -6,6 +6,7 @@
           v-for="(item, idx) in items"
           :key="idx"
           class="hc-item"
+		  :class="{'hc-item-active': item.isActive }"
           @click="$emit('select', item, idx)"
 		  :style="{color:item.isActive ? 'blue' : 'red'}"
         >
@@ -58,6 +59,16 @@ export default {
   width: 120rpx;
 }
 
+.hc-item-active{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	/* justify-content: space-between; */
+	width: 120rpx;
+	/* border: 1rpx dotted; */
+	background: #ebf1ff;
+}
+
 .hc-item::after {
   border: none;
 }
@@ -67,7 +78,7 @@ export default {
   width: 104rpx;
   height: 104rpx;
   border-radius: 28rpx;
-  background: #ffffff;
+  /* background: #ffffff; */
   box-shadow: 0 10rpx 26rpx rgba(0, 0, 0, 0.06);
   display: flex;
   align-items: center;

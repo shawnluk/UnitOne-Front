@@ -75,13 +75,17 @@ export default {
 <style scoped>
 .bottom-tabbar-wrapper {
   position: fixed;
-  left: 0;
-  right: 0;
+  left: 10rpx;
+  right: 10rpx;
   bottom: 30rpx;
   display: flex;
   justify-content: center;
   z-index: 999;
   pointer-events: none;
+  /* 外层做渐变圆角边框容器 */
+  padding: 2rpx;
+  border-radius: 80rpx;
+  background-image: linear-gradient(90deg, #8f41e9, #578aef);
 }
 
 .bottom-tabbar {

@@ -3,9 +3,23 @@
 		<view class="topIndex"><image class="topImg" src="https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/real-madrid-ucl-1024x1024.jpg" mode="widthFix"></image></view>
 		<view class="content">
 			<view class="nvgContent">
-				<button class="btn1">获取位置</button>
-				<image src="https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/R-C.jpg" class="btn2"></image>
-				<button class="btn3">搜索活动</button>
+				<picker :value="region" @change="onRegionChange">
+					<view class="cityBox">
+						<text class="cityText">{{ currentCity }}</text>
+						<text class="cityArrow">▾</text>
+					</view>
+				</picker>
+				<view class="searchBox">
+					<image class="searchIcon" src="/static/search.png" mode="aspectFit"></image>
+					<input
+						v-model="searchKeyword"
+						class="searchInput"
+						placeholder="搜索活动/圈子"
+						placeholder-class="searchPlaceholder"
+						confirm-type="search"
+						@confirm="onSearchConfirm"
+					/>
+				</view>
 			</view>
 		</view>
 
@@ -55,6 +69,10 @@
 			return {
 				title: 'Hello',
 				Number : 0,
+				currentCity: '深圳',
+				// 省 / 市 / 区 初始值
+				region: ['广东省', '深圳市', '南山区'],
+				searchKeyword: '',
 				categoryItems: [
 					{ acid:1,key: 'sport', text: '约球', icon: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/HomeCategoryBar-icon/ball-0.png' ,isActive:false},
 					{ acid:2,key: 'movie', text: '观影', icon: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/HomeCategoryBar-icon/movie-0.png' ,isActive:false},
@@ -183,6 +201,22 @@
 				this.NewActivityList = this.activityList
 		},
 		methods: {
+			onRegionChange(e) {
+				// e.detail.value 是 [省, 市, 区]
+				const value = e.detail.value || []
+				this.region = value
+				// 只显示城市名（第二个）
+				if (value.length >= 2) {
+					// 例如 value[1] 是 “杭州市”，只要“杭州”的话可以再去掉“市”
+					const city = value[1].replace(/市$/, '')
+					this.currentCity = city
+				}
+			},
+			onSearchConfirm() {
+				const keyword = (this.searchKeyword || '').trim()
+				if (!keyword) return
+				uni.showToast({ title: `搜索：${keyword}`, icon: 'none' })
+			},
 			onSelectCategory(item,index) {
 				this.NewActivityList=[]
 				this.Number = item.acid
@@ -232,23 +266,59 @@
 	.nvgContent{
 		display: flex;
 		margin-top: 20rpx;
+		align-items: center;
+		padding: 0 24rpx;
+		gap: 16rpx;
 	}
-	.nvgContent button {
-		height: 100rpx;
-		line-height: 100rpx;
+
+	.cityBox{
+		flex: 0 0 auto;
+		display: flex;
+		align-items: center;
+		height: 76rpx;
+		padding: 0 22rpx;
+		border-radius: 999rpx;
+		background: rgba(255, 255, 255, 0.75);
+		backdrop-filter: blur(12rpx);
+		border: 1rpx solid burlywood;
 	}
-	.btn1{
-		flex: 2;
-		margin-left: 20rpx;
+	.cityText{
+		font-size: 30rpx;
+		font-weight: 700;
+		color: #111;
 	}
-	.btn2{
-		flex: 4;
-		height: 100rpx;
-		margin: 0 10rpx;
+	.cityArrow{
+		margin-left: 10rpx;
+		font-size: 26rpx;
+		color: #777;
+		margin-top: 2rpx;
 	}
-	.btn3{
-		flex: 2;
-		margin-right: 20rpx;
+
+	.searchBox{
+		flex: 1;
+		display: flex;
+		align-items: center;
+		height: 76rpx;
+		padding: 0 22rpx;
+		border-radius: 999rpx;
+		background: rgba(255, 255, 255, 0.92);
+		border: 1rpx solid burlywood;
+	}
+	.searchIcon{
+		width: 34rpx;
+		height: 34rpx;
+		opacity: 0.7;
+		margin-right: 14rpx;
+	}
+	.searchInput{
+		flex: 1;
+		height: 76rpx;
+		line-height: 76rpx;
+		font-size: 28rpx;
+		color: #111;
+	}
+	.searchPlaceholder{
+		color: #bbb;
 	}
 	.section-head {
 		display: flex;

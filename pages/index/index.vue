@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="topIndex"><image class="topImg" src="https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/real-madrid-ucl-1024x1024.jpg" mode="widthFix"></image></view>
+		<TopBar></TopBar>
 		<view class="content">
 			<view class="nvgContent">
 				<picker :value="region" @change="onRegionChange">
@@ -56,7 +56,8 @@
 </template>
 
 <script>
-
+	
+	import TopBar from '@/components/TopBar.vue'
 	import HomeCategoryBar from '@/components/HomeCategoryBar.vue'
 	import HomeActivityCard from '@/components/HomeActivityCard.vue'
 	import Swiper from '@/components/Swiper.vue'
@@ -64,7 +65,7 @@
 
 
 		export default {
-		components:{ Swiper,HomeActivityCard, HomeCategoryBar, BottomTabBar },
+		components:{ TopBar,Swiper,HomeActivityCard, HomeCategoryBar, BottomTabBar },
 		data() {
 			return {
 				title: 'Hello',
@@ -305,8 +306,8 @@
 		border: 1rpx solid burlywood;
 	}
 	.searchIcon{
-		width: 34rpx;
-		height: 34rpx;
+		width: 55rpx;
+		height: 55rpx;
 		opacity: 0.7;
 		margin-right: 14rpx;
 	}

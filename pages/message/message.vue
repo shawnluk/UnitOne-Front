@@ -1,8 +1,6 @@
 <template>
 	<view>
-		<view class="topIndex">
-			<image class="topImg" src="https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/real-madrid-ucl-1024x1024.jpg" mode="widthFix"></image>
-		</view>
+		<TopBar></TopBar>
 		<view>message</view>
 		<!-- 配置轮播图属性 -->
 		<view class="banner">
@@ -25,18 +23,20 @@
 </template>
 
 <script>
+	import TopBar from '@/components/TopBar.vue'
 	import BottomTabBar from '@/components/BottomTabBar.vue'
 
 	export default {
 		components: {
+			TopBar,
 			BottomTabBar
 		},
 		data(){
 			return{
 				bannerList: [
-					{url:"https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000100_r_w.png"},
-					{url:"https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000102_r_ll.png"},
-					{url:"https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000103_r.png" }
+					{url:"https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/swiper/1.png"},
+					{url:"https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/swiper/2.png"},
+					{url:"https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/swiper/3.png" }
 				],
 			}
 		}

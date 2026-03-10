@@ -1,8 +1,10 @@
-
-
+/* 忽略的文件夹 */
+node_modules/
 uni_modules/
 unpackage/
-.project
-.DS_Store
 .hbuilderx/
 .idea/
+
+/* 忽略的文件 */
+.project
+.DS_Store

@@ -1,8 +1,6 @@
 <template>
 	<view>
-		<view class="topIndex">
-			<image class="topImg" src="https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/real-madrid-ucl-1024x1024.jpg" mode="widthFix"></image>
-		</view>
+		<TopBar></TopBar>
 		<view>moment</view>
 
 		<!-- 自定义底部导航 -->
@@ -12,9 +10,11 @@
 
 <script>
 	import BottomTabBar from '@/components/BottomTabBar.vue'
+	import TopBar from '@/components/TopBar.vue'
 
 	export default {
 		components: {
+			TopBar,
 			BottomTabBar
 		}
 	}

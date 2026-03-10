@@ -101,7 +101,7 @@ export default {
   methods: {
 	closeActivityModal(){
 		// this.showActivityModal = false;
-		uni.switchTab({
+		uni.navigateTo({
 			url:"/pages/user/user"
 		})
 	},

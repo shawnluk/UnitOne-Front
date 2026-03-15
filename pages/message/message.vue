@@ -44,11 +44,4 @@
 </script>
 
 <style>
-	.topIndex {
-		height: 200rpx;
-		overflow: hidden;
-	}
-	.topImg{
-		width:100%;
-	}
 </style>

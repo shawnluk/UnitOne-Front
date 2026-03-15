@@ -4,7 +4,12 @@
     <!-- 顶部用户信息区域 -->
 	<view class="user-header">
       <view class="user-info">
-        <image class="avatar" src="https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/helloworld_01.jpg" mode="aspectFill"></image>
+        <image
+          class="avatar"
+          :src="avatarUrl"
+          mode="aspectFill"
+          @click="onAvatarClick"
+        ></image>
         <view class="user-details">
           <view class="username">shawn</view>
           <view class="user-id">取伙号：987627983 <text class="id-tag">🟠</text></view>
@@ -135,22 +140,128 @@
 
     <!-- 自定义底部导航 -->
     <BottomTabBar :current="3" />
+
+    <!-- 头像裁剪弹窗，需要先在项目中安装 uni-cropper 组件 -->
+    <view v-if="showCropper" class="cropper-modal">
+      <view class="cropper-content">
+        <view class="cropper-header">裁剪头像</view>
+        <view class="cropper-body">
+          <!-- 如果已安装 uni-cropper，使用组件进行裁剪 -->
+          <uni-cropper
+            v-if="cropperImg"
+            ref="cropper"
+            :image-url="cropperImg"
+            :width="300"
+            :height="300"
+            :zoom="2"
+            :max-zoom="4"
+            :min-zoom="1"
+            :scale="2"
+            :disable-rotate="true"
+          />
+        </view>
+        <view class="cropper-footer">
+          <view class="cropper-btn cancel" @click="onCropperCancel">取消</view>
+          <view class="cropper-btn confirm" @click="onCropperConfirm">确认</view>
+        </view>
+      </view>
+    </view>
   </view>
 </template>
 
 <script>
 	import BottomTabBar from '@/components/BottomTabBar.vue'
+	import TopBar from '@/components/TopBar.vue'
 
 export default {
   components: {
-    BottomTabBar
+    BottomTabBar,
+	TopBar
   },
   data() {
     return {
+      // 头像地址（初始可以写死，后续可从接口获取）
+      avatarUrl: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/helloworld_01.jpg',
+      // 是否显示裁剪弹窗
+      showCropper: false,
+      // 待裁剪的本地临时图片路径
+      cropperImg: '',
     };
   },
 
   methods: {
+    // 点击头像，选择图片并进入裁剪
+    onAvatarClick() {
+      const that = this
+      uni.chooseImage({
+        count: 1,
+        sizeType: ['compressed'],
+        sourceType: ['album', 'camera'],
+        success(res) {
+          const tempFilePaths = res.tempFilePaths || res.tempFiles?.map(i => i.path) || []
+          if (!tempFilePaths.length) return
+          that.cropperImg = tempFilePaths[0]
+          that.showCropper = true
+        }
+      })
+    },
+
+    // 取消裁剪
+    onCropperCancel() {
+      this.showCropper = false
+      this.cropperImg = ''
+    },
+
+    // 确认裁剪
+	onCropperConfirm() {
+		this.avatarUrl = this.cropperImg
+		this.onCropperCancel()
+	},
+    // async onCropperConfirm() {
+    //   // 这里假设你已经安装了 uni-cropper 组件：
+    //   // uni_modules/uni-cropper/components/uni-cropper/uni-cropper.vue
+    //   if (!this.$refs.cropper) {
+    //     // 如果没有裁剪组件，可以在这里直接把原图设为头像
+    //     this.avatarUrl = this.cropperImg
+    //     this.onCropperCancel()
+    //     return
+    //   }
+    //   try {
+    //     const filePath = await this.$refs.cropper.getCropperImage()
+    //     if (filePath) {
+    //       // TODO：在这里调用接口上传头像到服务器
+    //       // await this.uploadAvatar(filePath)
+    //       this.avatarUrl = filePath
+    //     }
+    //   } catch (e) {
+    //     console.error('裁剪失败', e)
+    //   } finally {
+    //     this.onCropperCancel()
+    //   }
+    // },
+
+    // 示例：上传头像到后台（根据你自己的接口改）
+    // uploadAvatar(filePath) {
+    //   return new Promise((resolve, reject) => {
+    //     uni.uploadFile({
+    //       url: 'https://你的接口地址/api/uploadAvatar',
+    //       filePath,
+    //       name: 'file',
+    //       success: (uploadFileRes) => {
+    //         const data = JSON.parse(uploadFileRes.data || '{}')
+    //         // 后端返回的头像地址
+    //         if (data.url) {
+    //           this.avatarUrl = data.url
+    //           resolve(data)
+    //         } else {
+    //           reject(new Error('上传失败'))
+    //         }
+    //       },
+    //       fail: reject
+    //     })
+    //   })
+    // },
+
     CreateActivity(){
       uni.navigateTo({
         url:"/src/CreateAct/createAct"
@@ -188,7 +299,14 @@ export default {
 	  height: 120rpx;
 	  border-radius: 50%;
 	  border: 2rpx solid white;
+    overflow: hidden;
 	}
+
+  .avatar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
 
 	.user-details {
 	  flex: 1;
@@ -673,4 +791,62 @@ export default {
 	  border-radius: 12rpx;
 	  border: none;
 	}
+
+  /* 头像裁剪弹窗遮罩 */
+  .cropper-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .cropper-content {
+    width: 90%;
+    max-width: 650rpx;
+    background-color: #fff;
+    border-radius: 16rpx;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cropper-header {
+    padding: 24rpx 30rpx;
+    border-bottom: 1rpx solid #f0f0f0;
+    font-size: 30rpx;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .cropper-body {
+    padding: 20rpx;
+  }
+
+  .cropper-footer {
+    display: flex;
+    border-top: 1rpx solid #f0f0f0;
+  }
+
+  .cropper-btn {
+    flex: 1;
+    padding: 24rpx 0;
+    font-size: 30rpx;
+    text-align: center;
+  }
+
+  .cropper-btn.cancel {
+    color: #666;
+    border-right: 1rpx solid #f0f0f0;
+  }
+
+  .cropper-btn.confirm {
+    color: #ff6b00;
+    font-weight: bold;
+  }
 </style>

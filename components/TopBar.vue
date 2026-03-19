@@ -1,6 +1,6 @@
 <template>
 	<view class="topIndex">
-		<image class="topImg" src="https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/swiper/1.png" mode="widthFix"></image>
+		<image class="topImg" src="https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/TopBar/TopBar.png" mode="widthFix"></image>
 	</view>
 </template>
 

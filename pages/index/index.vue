@@ -60,7 +60,7 @@
 	import TopBar from '@/components/TopBar.vue'
 	import HomeCategoryBar from '@/components/HomeCategoryBar.vue'
 	import HomeActivityCard from '@/components/HomeActivityCard.vue'
-	import Swiper from '@/components/Swiper.vue'
+	import Swiper from '@/components/SwiperBar.vue'
 	import BottomTabBar from '@/components/BottomTabBar.vue'
 
 
@@ -230,7 +230,7 @@
 				uni.showToast({ title: '点击了筛选', icon: 'none' })
 			},
 			onSelectCard(item) {
-				uni.navigateTo({
+				uni.redirectTo({
 				  url: "/src/ActivityDetail/activity-detail?item=" + encodeURIComponent(JSON.stringify(item))
 				})
 				// console.log("/src/ActivityDetail/activity-detail?item=" + encodeURIComponent(JSON.stringify(item)))
@@ -242,12 +242,12 @@
 			},
 			goto(i){
 				if(i === 1){
-					uni.navigateTo({
+					uni.redirectTo({
 						url:"/components/ButtonList"
 					})
 				}
 				if(i === 2){
-					uni.navigateTo({
+					uni.redirectTo({
 						url:"/components/Swiper"
 					})
 				}

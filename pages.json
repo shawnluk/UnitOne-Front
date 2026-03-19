@@ -1,33 +1,13 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-		{
-			"path": "pages/index/index"
-			// "style": {
-			// 	"navigationBarTitleText": "toFindMore",
-			// 	"navigationStyle": "custom"
-			// }
-		},
-		{
-			"path": "pages/moment/moment"
-		},
-		{
-			"path": "pages/message/message"
-		},
-		{
-			"path": "pages/user/user"
-		},
-		{
-			"path": "components/ButtonList"
-		},
-		{
-			"path": "components/Swiper"
-		},
-		{
-			"path": "src/ActivityDetail/activity-detail"
-		},
-		{
-			"path": "src/CreateAct/createAct"
-		}
+		{"path": "pages/index/index"},
+		{"path": "pages/moment/moment"},
+		{"path": "pages/message/message"},
+		{"path": "pages/user/user"},
+		{"path": "components/ButtonList"},
+		{"path": "components/SwiperBar"},
+		{"path": "src/ActivityDetail/activity-detail"},
+		{"path": "src/CreateAct/createAct"}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

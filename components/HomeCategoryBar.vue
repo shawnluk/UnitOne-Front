@@ -55,7 +55,6 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* justify-content: space-between; */
   width: 120rpx;
 }
 
@@ -63,9 +62,7 @@ export default {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	/* justify-content: space-between; */
 	width: 120rpx;
-	/* border: 1rpx dotted; */
 	background: #ebf1ff;
 }
 
@@ -76,9 +73,8 @@ export default {
 .hc-icon-box {
   position: relative;
   width: 104rpx;
-  height: 104rpx;
+  height: 80rpx;
   border-radius: 28rpx;
-  /* background: #ffffff; */
   box-shadow: 0 10rpx 26rpx rgba(0, 0, 0, 0.06);
   display: flex;
   align-items: center;
@@ -86,15 +82,14 @@ export default {
 }
 
 .hc-icon {
-  width: 62rpx;
-  height: 62rpx;
+  width: 60rpx;
+  height: 60rpx;
 }
 
 .hc-text {
-  /* margin-top: 12rpx; */
-  font-size: 26rpx;
-  width: 62rpx;
-  /* color: #666; */
+  line-height: 30rpx;
+  font-size: 25rpx;
+  width: 60rpx;
 }
 
 .hc-badge {

@@ -8,7 +8,7 @@
           class="avatar"
           :src="avatarUrl"
           mode="aspectFill"
-          @click="onAvatarClick"
+          @click="handleCrop"
         ></image>
         <view class="user-details">
           <view class="username">shawn</view>
@@ -138,45 +138,32 @@
       <text class="footer-text">感兴趣的</text>
     </view>
 
-    <!-- 自定义底部导航 -->
-    <BottomTabBar :current="3" />
-
-    <!-- 头像裁剪弹窗，需要先在项目中安装 uni-cropper 组件 -->
-    <view v-if="showCropper" class="cropper-modal">
-      <view class="cropper-content">
-        <view class="cropper-header">裁剪头像</view>
-        <view class="cropper-body">
-          <!-- 如果已安装 uni-cropper，使用组件进行裁剪 -->
-          <uni-cropper
-            v-if="cropperImg"
-            ref="cropper"
-            :image-url="cropperImg"
-            :width="300"
-            :height="300"
-            :zoom="2"
-            :max-zoom="4"
-            :min-zoom="1"
-            :scale="2"
-            :disable-rotate="true"
-          />
-        </view>
-        <view class="cropper-footer">
-          <view class="cropper-btn cancel" @click="onCropperCancel">取消</view>
-          <view class="cropper-btn confirm" @click="onCropperConfirm">确认</view>
-        </view>
-      </view>
-    </view>
+    <!-- 自定义底部导航：裁剪时隐藏 -->
+    <BottomTabBar v-show="!showCropper" :current="3" />
+	
+    <QfImageCropper
+      v-if="showCropper"
+      ref="cropper"
+      :src="cropperImg"
+      :width="300"
+      :height="300"
+      :radius="150"
+      fileType="png"
+      @crop="onCropperCrop"
+    />
   </view>
 </template>
 
 <script>
 	import BottomTabBar from '@/components/BottomTabBar.vue'
 	import TopBar from '@/components/TopBar.vue'
-
+	import QfImageCropper from '@/uni_modules/qf-image-cropper/components/qf-image-cropper/qf-image-cropper.vue'
+	
 export default {
   components: {
     BottomTabBar,
-	TopBar
+	TopBar,
+	QfImageCropper
   },
   data() {
     return {
@@ -191,54 +178,22 @@ export default {
 
   methods: {
     // 点击头像，选择图片并进入裁剪
-    onAvatarClick() {
-      const that = this
-      uni.chooseImage({
-        count: 1,
-        sizeType: ['compressed'],
-        sourceType: ['album', 'camera'],
-        success(res) {
-          const tempFilePaths = res.tempFilePaths || res.tempFiles?.map(i => i.path) || []
-          if (!tempFilePaths.length) return
-          that.cropperImg = tempFilePaths[0]
-          that.showCropper = true
-        }
+    handleCrop() {
+      this.showCropper = true
+      this.cropperImg = ''
+      this.$nextTick(() => {
+        this.$refs.cropper && this.$refs.cropper.chooseImage()
       })
     },
 
-    // 取消裁剪
-    onCropperCancel() {
+    // 裁剪完成回调
+    onCropperCrop(e) {
+      if (e && e.tempFilePath) {
+        this.avatarUrl = e.tempFilePath
+      }
       this.showCropper = false
       this.cropperImg = ''
     },
-
-    // 确认裁剪
-	onCropperConfirm() {
-		this.avatarUrl = this.cropperImg
-		this.onCropperCancel()
-	},
-    // async onCropperConfirm() {
-    //   // 这里假设你已经安装了 uni-cropper 组件：
-    //   // uni_modules/uni-cropper/components/uni-cropper/uni-cropper.vue
-    //   if (!this.$refs.cropper) {
-    //     // 如果没有裁剪组件，可以在这里直接把原图设为头像
-    //     this.avatarUrl = this.cropperImg
-    //     this.onCropperCancel()
-    //     return
-    //   }
-    //   try {
-    //     const filePath = await this.$refs.cropper.getCropperImage()
-    //     if (filePath) {
-    //       // TODO：在这里调用接口上传头像到服务器
-    //       // await this.uploadAvatar(filePath)
-    //       this.avatarUrl = filePath
-    //     }
-    //   } catch (e) {
-    //     console.error('裁剪失败', e)
-    //   } finally {
-    //     this.onCropperCancel()
-    //   }
-    // },
 
     // 示例：上传头像到后台（根据你自己的接口改）
     // uploadAvatar(filePath) {
@@ -263,12 +218,12 @@ export default {
     // },
 
     CreateActivity(){
-      uni.navigateTo({
+      uni.redirectTo({
         url:"/src/CreateAct/createAct"
       })
     }
-  }
-};
+  },
+}
 </script>
 
 <style scoped>

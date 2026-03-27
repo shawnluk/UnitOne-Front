@@ -1,6 +1,7 @@
 <template>
 
   <view class="user-container">
+    <scroll-view class="user-scroll" scroll-y="true" :scroll-with-animation="true">
     <!-- 顶部用户信息区域 -->
 	<view class="user-header">
       <view class="user-info">
@@ -20,16 +21,6 @@
           </view>
         </view>
       </view>
-      <view class="header-actions">
-        <text class="action-btn">...</text>
-        <text class="action-btn">—</text>
-        <text class="action-btn">⚪</text>
-      </view>
-    </view>
-
-    <!-- 访客标识 -->
-    <view class="visitor-badge">
-      <text class="visitor-text">访客 ></text>
     </view>
 
     <!-- 成为会员提示 -->
@@ -126,20 +117,16 @@
       </view>
     </view>
 
-    <!-- 底部发布按钮 -->
-    <button class="publish-btn" @click="CreateActivity">
-      <text class="publish-icon">+</text>
-      <text class="publish-text">发布</text>
-    </button>
-
-    <!-- 底部活动提示 -->
-    <view class="activity-footer">
-      <text class="footer-text">活动</text>
-      <text class="footer-text">感兴趣的</text>
-    </view>
+	<view class="bottom-safe-gap"></view>
+    </scroll-view>
 
     <!-- 自定义底部导航：裁剪时隐藏 -->
     <BottomTabBar v-show="!showCropper" :current="3" />
+	<!-- 底部发布按钮 -->
+	<button class="publish-btn" @click="CreateActivity">
+	  <text class="publish-icon">+</text>
+	  <text class="publish-text">发布</text>
+	</button>
 	
     <QfImageCropper
       v-if="showCropper"
@@ -150,7 +137,9 @@
       :radius="150"
       fileType="png"
       @crop="onCropperCrop"
-    />
+    >
+      <view class="crop-cancel" @click="cancelCrop">取消</view>
+    </QfImageCropper>
   </view>
 </template>
 
@@ -173,6 +162,8 @@ export default {
       showCropper: false,
       // 待裁剪的本地临时图片路径
       cropperImg: '',
+      // 防止“取消时机与裁剪异步回调”竞态：取消后不再更新头像
+      cropCanceled: false,
     };
   },
 
@@ -181,18 +172,32 @@ export default {
     handleCrop() {
       this.showCropper = true
       this.cropperImg = ''
+      this.cropCanceled = false
       this.$nextTick(() => {
         this.$refs.cropper && this.$refs.cropper.chooseImage()
       })
     },
 
+    // 取消裁剪：关闭裁剪组件并保持原头像不变
+    cancelCrop() {
+      this.cropCanceled = true
+      // 尝试重置内部裁剪状态（如果组件方法可用）
+      if (this.$refs.cropper && this.$refs.cropper.resetData) {
+        this.$refs.cropper.resetData()
+      }
+      this.showCropper = false
+      this.cropperImg = ''
+    },
+
     // 裁剪完成回调
     onCropperCrop(e) {
+      if (this.cropCanceled) return
       if (e && e.tempFilePath) {
         this.avatarUrl = e.tempFilePath
       }
       this.showCropper = false
       this.cropperImg = ''
+      this.cropCanceled = false
     },
 
     // 示例：上传头像到后台（根据你自己的接口改）
@@ -229,18 +234,45 @@ export default {
 <style scoped>
 	.user-container {
 	  background-color: #f5f5f5;
-	  min-height: 100vh;
+	  height: 100vh;
+	  overflow: hidden;
 	  font-size: 28rpx;
+	}
+
+	.user-scroll {
+	  height: 100vh;
+	}
+
+	/* 给底部固定按钮/底栏留出滚动空间 */
+	.bottom-safe-gap {
+	  height: 260rpx;
 	}
 
 	/* 顶部用户信息区域 */
 	.user-header {
-	  background-color: #333;
+	  position: relative;
+	  background-image: url('https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/TopBar/TopBar.png');
+	  background-size: cover;
+	  background-position: center;
+	  background-repeat: no-repeat;
 	  color: white;
 	  padding: 40rpx 30rpx 30rpx;
 	  display: flex;
 	  justify-content: space-between;
 	  align-items: center;
+	  overflow: hidden;
+	}
+	/* 背景图遮罩，保证文字对比度 */
+	.user-header::before {
+	  content: '';
+	  position: absolute;
+	  inset: 0;
+	  background: rgba(0, 0, 0, 0.35);
+	  z-index: 0;
+	}
+	.user-header  {
+	  position: relative;
+	  z-index: 1;
 	}
 
 	.user-info {
@@ -559,8 +591,8 @@ export default {
 	/* 底部发布按钮 */
 	.publish-btn {
 	  position: fixed;
-	  bottom: 120rpx;
-	  right: 30rpx;
+	  bottom: 180rpx;
+	  left: 30rpx;
 	  background-color: #ff6b00;
 	  color: white;
 	  width: 120rpx;
@@ -803,5 +835,18 @@ export default {
   .cropper-btn.confirm {
     color: #ff6b00;
     font-weight: bold;
+  }
+
+  /* 裁剪弹窗取消按钮（显示在组件内部 slot 中） */
+  .crop-cancel {
+    position: fixed;
+    top: 30rpx;
+    right: 30rpx;
+    z-index: 1001;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    padding: 14rpx 20rpx;
+    border-radius: 999rpx;
+    font-size: 28rpx;
   }
 </style>

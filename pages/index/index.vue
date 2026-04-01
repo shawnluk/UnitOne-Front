@@ -3,14 +3,15 @@
 		<TopBar></TopBar>
 		<view class="content">
 			<view class="nvgContent">
-				<picker :value="region" @change="onRegionChange">
-					<view class="cityBox">
-						<text class="cityText">{{ currentCity }}</text>
-						<text class="cityArrow">▾</text>
-					</view>
-				</picker>
+				<image src="/static/logo.png" mode="aspectFit" class="logoIcon"></image>
 				<view class="searchBox">
-					<image class="searchIcon" src="/static/search.png" mode="aspectFit"></image>
+					<!-- <image class="searchIcon" src="/static/search.png" mode="aspectFit"></image> -->
+					<picker :value="region" @change="onRegionChange">
+						<view class="cityBox">
+							<text class="cityText">{{ currentCity }}</text>
+							<text class="cityArrow">▾</text>
+						</view>
+					</picker>
 					<input
 						v-model="searchKeyword"
 						class="searchInput"
@@ -259,7 +260,7 @@
 <style>
 	.nvgContent{
 		display: flex;
-		margin-top: 20rpx;
+		/* margin-top: 20rpx; */
 		align-items: center;
 		padding: 0 24rpx;
 		gap: 16rpx;
@@ -269,12 +270,12 @@
 		flex: 0 0 auto;
 		display: flex;
 		align-items: center;
-		height: 76rpx;
+		height: 50rpx;
 		padding: 0 22rpx;
 		border-radius: 999rpx;
 		background: rgba(255, 255, 255, 0.75);
 		backdrop-filter: blur(12rpx);
-		border: 1rpx solid burlywood;
+		/* border: 1rpx solid burlywood; */
 	}
 	.cityText{
 		font-size: 30rpx;
@@ -292,11 +293,19 @@
 		flex: 1;
 		display: flex;
 		align-items: center;
-		height: 76rpx;
+		height: 80rpx;
 		padding: 0 22rpx;
 		border-radius: 999rpx;
 		background: rgba(255, 255, 255, 0.92);
 		border: 1rpx solid burlywood;
+	}
+	.logoIcon{
+		/* margin-top: 20rpx; */
+		/* padding-top: 20rpx; */
+		width: 120rpx;
+		height: 120rpx;
+		/* opacity: 0.7; */
+		margin-right: 14rpx;
 	}
 	.searchIcon{
 		width: 55rpx;

@@ -227,7 +227,7 @@ export default {
         url:"/src/CreateAct/createAct"
       })
     }
-  },
+  }
 }
 </script>
 

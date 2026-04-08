@@ -537,19 +537,20 @@ export default {
 		},
 		initH5Events() {
 			const preview = document.getElementById('pic-preview');
-			preview?.addEventListener('mousedown', (e, ev) => {
+			if (!preview) return;
+			preview.addEventListener('mousedown', (e, ev) => {
 				mouseEvent = true;
 				this.touchstart(this.getTouchEvent(e));
 			});
-			preview?.addEventListener('mousemove', (e) => {
+			preview.addEventListener('mousemove', (e) => {
 				if (!mouseEvent) return;
 				this.touchmove(this.getTouchEvent(e));
 			});
-			preview?.addEventListener('mouseup', (e) => {
+			preview.addEventListener('mouseup', (e) => {
 				mouseEvent = false;
 				this.touchend(this.getTouchEvent(e))
 			});
-			preview?.addEventListener('mouseleave', (e) => {
+			preview.addEventListener('mouseleave', (e) => {
 				mouseEvent = false;
 				this.touchend(this.getTouchEvent(e))
 			});

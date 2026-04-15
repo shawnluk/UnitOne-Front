@@ -30,3 +30,9 @@ user.vue 顶部用户卡（头像、昵称、ID、badge）建议抽 UserProfileH
 浮动发布按钮组件
 user.vue 的 publish-btn 可独立成 FloatingActionButton.vue，支持 icon/text/position。
 后面活动页、圈子页、消息页都可能复用这个入口。
+
+<!-- 20260415 -->
+
+下一步可以继续把 user.vue 里已经无用的旧样式（原本内联区域样式）清理掉
+
+基本功能UI展示确定，考虑先建立虚拟数据库，对接口进行优化

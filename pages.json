@@ -1,9 +1,18 @@
 {
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	"pages": [
 		{"path": "pages/index/index"},
 		{"path": "pages/moment/moment"},
 		{"path": "pages/message/message"},
 		{"path": "pages/user/user"},
+		{
+			"path": "src/login/login",
+			"style": {
+				"navigationBarTitleText": "登录",
+				"navigationStyle": "default",
+				"navigationBarBackgroundColor": "#E8F4FF",
+				"navigationBarTextStyle": "black"
+			}
+		},
 		{"path": "components/ButtonList"},
 		{"path": "components/SwiperBar"},
 		{"path": "src/ActivityDetail/activity-detail"},
@@ -15,7 +24,6 @@
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8",
 		"navigationStyle": "custom"
-		}
 	},
 	"uniIdRouter": {}
 }

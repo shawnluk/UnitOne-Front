@@ -1,124 +1,22 @@
 <template>
-
+  <!-- 登录页：src/login/login，此处用 view 滚动区 -->
+  <view class="user-page">
   <view class="user-container">
-    <scroll-view class="user-scroll" scroll-y="true" :scroll-with-animation="true">
-    <!-- 顶部用户信息区域 -->
-	<view class="user-header">
-      <view class="user-info">
-        <image
-          class="avatar"
-          :src="avatarUrl"
-          mode="aspectFill"
-          @click="handleCrop"
-        ></image>
-        <view class="user-details">
-          <view class="username">shawn</view>
-          <view class="user-id">取伙号：987627983 <text class="id-tag">🟠</text></view>
-          <view class="user-badges">
-            <text class="badge">🔄1年</text>
-            <text class="badge">🎪</text>
-            <text class="badge">🛡️</text>
-          </view>
-        </view>
-      </view>
-    </view>
-
-    <!-- 成为会员提示 -->
-    <view class="member-section">
-      <view class="member-content">
-        <view class="member-title">成为会员</view>
-        <view class="member-desc">付费一场活动，立即成为取伙会员</view>
-      </view>
-      <view class="member-link">查看会员权益 ></view>
-    </view>
-
-    <!-- 统计数据区域 -->
-    <view class="stats-section">
-      <view class="stats-item">
-        <view class="stats-number">0</view>
-        <view class="stats-label">
-          <text class="stats-icon">🔥</text>
-          伙柴
-        </view>
-      </view>
-      <view class="stats-item">
-        <view class="stats-number">0</view>
-        <view class="stats-label">
-          <text class="stats-icon">🎫</text>
-          伙卡
-        </view>
-      </view>
-      <view class="stats-item star-item">
-        <view class="star-content">
-          <view class="star-title">
-            <text class="star-icon">⭐</text>
-            伙星
-          </view>
-          <view class="star-number">5</view>
-        </view>
-        <view class="star-btn">待领取</view>
-      </view>
-    </view>
-
-    <!-- 功能导航区 -->
-    <view class="nav-section">
-      <view class="nav-item">
-        <text class="nav-icon">📋</text>
-        <text class="nav-label">订单</text>
-      </view>
-      <view class="nav-item">
-        <text class="nav-icon">💰</text>
-        <text class="nav-label">钱包</text>
-      </view>
-      <view class="nav-item">
-        <text class="nav-icon">🎧</text>
-        <text class="nav-label">客服</text>
-      </view>
-      <view class="nav-item">
-        <text class="nav-icon">⚙️</text>
-        <text class="nav-label">设置</text>
-      </view>
-    </view>
-
-    <!-- 个人数据区 -->
-    <view class="data-section">
-      <view class="data-item">
-        <view class="data-number">4</view>
-        <view class="data-label">圈子</view>
-      </view>
-      <view class="data-item">
-        <view class="data-number">1</view>
-        <view class="data-label">好友</view>
-      </view>
-      <view class="data-item">
-        <view class="data-number">0</view>
-        <view class="data-label">历史活动</view>
-      </view>
-      <view class="data-item">
-        <view class="data-number">0</view>
-        <view class="data-label">相册</view>
-      </view>
-    </view>
-
-    <!-- 圈子管理区域 -->
-    <view class="circle-section">
-      <view class="circle-header">
-        <text class="circle-title">圈子管理 1</text>
-        <text class="circle-more">更多 ></text>
-      </view>
-      <view class="circle-item">
-        <image class="circle-cover" src="https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/real-madrid-ucl-1024x1024.jpg" mode="aspectFill"></image>
-        <view class="circle-info">
-          <view class="circle-name">皇马球迷足球活动</view>
-          <view class="circle-stats">0活动 1成员</view>
-        </view>
-        <view class="circle-badge">圈子主</view>
-        <view class="circle-top">置顶</view>
-      </view>
-    </view>
+    <view class="user-scroll">
+    <UserHeaderPanel
+      :avatar-url="avatarUrl"
+      :display-name="displayName"
+      :is-logged-in="isLoggedIn"
+      @avatar-click="handleCrop"
+      @username-click="onUsernameClick"
+    />
+    <UserStatsPanel :stats="userStats" :star-value="5" />
+    <UserQuickNav :items="quickNavItems" />
+    <UserDataPanel :items="profileDataItems" />
+    <UserCirclePanel :item="circleItem" />
 
 	<view class="bottom-safe-gap"></view>
-    </scroll-view>
+    </view>
 
     <!-- 自定义底部导航：裁剪时隐藏 -->
     <BottomTabBar v-show="!showCropper" :current="3" />
@@ -127,7 +25,7 @@
 	  <text class="publish-icon">+</text>
 	  <text class="publish-text">发布</text>
 	</button>
-	
+
     <QfImageCropper
       v-if="showCropper"
       ref="cropper"
@@ -141,17 +39,26 @@
       <view class="crop-cancel" @click="cancelCrop">取消</view>
     </QfImageCropper>
   </view>
+  </view>
 </template>
 
 <script>
 	import BottomTabBar from '@/components/BottomTabBar.vue'
-	import TopBar from '@/components/TopBar.vue'
+	import UserHeaderPanel from '@/components/user/UserHeaderPanel.vue'
+	import UserStatsPanel from '@/components/user/UserStatsPanel.vue'
+	import UserQuickNav from '@/components/user/UserQuickNav.vue'
+	import UserDataPanel from '@/components/user/UserDataPanel.vue'
+	import UserCirclePanel from '@/components/user/UserCirclePanel.vue'
 	import QfImageCropper from '@/uni_modules/qf-image-cropper/components/qf-image-cropper/qf-image-cropper.vue'
-	
+
 export default {
   components: {
     BottomTabBar,
-	TopBar,
+	UserHeaderPanel,
+	UserStatsPanel,
+	UserQuickNav,
+	UserDataPanel,
+	UserCirclePanel,
 	QfImageCropper
   },
   data() {
@@ -164,10 +71,58 @@ export default {
       cropperImg: '',
       // 防止“取消时机与裁剪异步回调”竞态：取消后不再更新头像
       cropCanceled: false,
+      isLoggedIn: false,
+      userStats: [
+        { icon: '🔥', label: '伙柴', value: 0 },
+        { icon: '🎫', label: '伙卡', value: 0 },
+      ],
+      quickNavItems: [
+        { icon: '📋', label: '订单' },
+        { icon: '💰', label: '钱包' },
+        { icon: '🎧', label: '客服' },
+        { icon: '⚙️', label: '设置' },
+      ],
+      profileDataItems: [
+        { label: '圈子', value: 4 },
+        { label: '好友', value: 1 },
+        { label: '历史活动', value: 0 },
+        { label: '相册', value: 0 },
+      ],
+      circleItem: {
+        cover: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/real-madrid-ucl-1024x1024.jpg',
+        name: '皇马球迷足球活动',
+        stats: '0活动 1成员',
+        badge: '圈子主',
+        topTag: '置顶',
+      },
     };
   },
 
+  computed: {
+    displayName() {
+      return this.isLoggedIn ? 'shawn' : 'HiGoer'
+    },
+  },
+
+  onLoad() {
+    // 仅内存态：页面重新加载后恢复未登录（不写本地存储）
+    this.isLoggedIn = false
+  },
+
   methods: {
+    onUsernameClick() {
+      if (this.isLoggedIn) return
+      uni.navigateTo({
+        url: '/src/login/login',
+        events: {
+          loginSuccess: () => {
+            this.isLoggedIn = true
+            uni.showToast({ title: '登录成功', icon: 'success' })
+          },
+        },
+      })
+    },
+
     // 点击头像，选择图片并进入裁剪
     handleCrop() {
       this.showCropper = true
@@ -232,6 +187,11 @@ export default {
 </script>
 
 <style scoped>
+	.user-page {
+	  position: relative;
+	  min-height: 100vh;
+	}
+
 	.user-container {
 	  background-color: #f5f5f5;
 	  height: 100vh;
@@ -241,6 +201,8 @@ export default {
 
 	.user-scroll {
 	  height: 100vh;
+	  overflow-y: auto;
+	  -webkit-overflow-scrolling: touch;
 	}
 
 	/* 给底部固定按钮/底栏留出滚动空间 */
@@ -303,6 +265,11 @@ export default {
 	  font-size: 36rpx;
 	  font-weight: bold;
 	  margin-bottom: 8rpx;
+	}
+
+	.username.guest {
+	  text-decoration: underline;
+	  opacity: 0.95;
 	}
 
 	.user-id {

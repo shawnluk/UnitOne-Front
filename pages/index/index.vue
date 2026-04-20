@@ -76,16 +76,16 @@
 				region: ['广东省', '深圳市', '南山区'],
 				searchKeyword: '',
 				categoryItems: [
-					{ acid:1,key: 'sport', text: '约球', icon: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/HomeCategoryBar-icon/ball-0.png' ,isActive:false},
-					{ acid:2,key: 'movie', text: '观影', icon: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/HomeCategoryBar-icon/movie-0.png' ,isActive:false},
-					{ acid:3,key: 'outdoor', text: '户外', icon: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/HomeCategoryBar-icon/traval-0.png' ,isActive:false},
-					{ acid:4,key: 'chat', text: '闲聊', icon: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/HomeCategoryBar-icon/table-0.png' ,isActive:false},
-					{ acid:5,key: 'art', text: '艺术', icon: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/HomeCategoryBar-icon/art-0.png',isActive:false},
-					{ acid:6,key: 'subscribe', text: '订阅', icon: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/HomeCategoryBar-icon/favor-0.png', badge: true,isActive:false },
+					{ categoryID:1,key: 'sport', text: '约球', icon: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/HomeCategoryBar-icon/ball-0.png' ,isActive:false},
+					{ categoryID:2,key: 'movie', text: '观影', icon: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/HomeCategoryBar-icon/movie-0.png' ,isActive:false},
+					{ categoryID:3,key: 'outdoor', text: '户外', icon: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/HomeCategoryBar-icon/traval-0.png' ,isActive:false},
+					{ categoryID:4,key: 'chat', text: '闲聊', icon: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/HomeCategoryBar-icon/table-0.png' ,isActive:false},
+					{ categoryID:5,key: 'art', text: '艺术', icon: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/HomeCategoryBar-icon/art-0.png',isActive:false},
+					{ categoryID:6,key: 'subscribe', text: '订阅', icon: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/HomeCategoryBar-icon/favor-0.png', badge: true,isActive:false },
 				],
 				activityList:[
 					{
-						acid:1,
+						categoryID:1,
 						name:"1-1",
 						isActive:false,
 						cover:"https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000109_r.png",
@@ -101,7 +101,7 @@
                         ],
 					},
 					{
-						acid:1,
+						categoryID:1,
 						name:"1-2",
 						isActive:false,
 						cover:"https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000109_r.png",
@@ -118,7 +118,7 @@
                         ],
 					},
 					{
-						acid:2,
+						categoryID:2,
 						name:"2-2",
 						isActive:false,
 						cover:"https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000109_r.png",
@@ -135,7 +135,7 @@
                         ],
 					},
 					{
-						acid:3,
+						categoryID:3,
 						name:"3-3",
 						isActive:false,
 						cover:"https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000109_r.png",
@@ -152,7 +152,7 @@
                         ],
 					},
 					{
-						acid:4,
+						categoryID:4,
 						name:"4-4",
 						isActive:false,
 						cover:"https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000109_r.png",
@@ -169,7 +169,7 @@
                         ],
 					},
 					{
-						acid:5,
+						categoryID:5,
 						name:"5-5",
 						isActive:false,
 						cover:"https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000109_r.png",
@@ -306,6 +306,8 @@
 		height: 120rpx;
 		/* opacity: 0.7; */
 		margin-right: 14rpx;
+		align-self: center;
+		margin-top: 10rpx;
 	}
 	.searchIcon{
 		width: 55rpx;

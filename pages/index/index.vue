@@ -3,7 +3,21 @@
 		<TopBar></TopBar>
 		<view class="content">
 			<view class="nvgContent">
-				<image src="/static/logo.png" mode="aspectFit" class="logoIcon"></image>
+				<view class="logoBubbleWrap" @click="onClickLogo">
+					<image src="/static/logo.png" mode="aspectFit" class="logoIcon"></image>
+					<view
+						v-for="bubble in bubbleList"
+						:key="bubble.id"
+						class="bubbleItem"
+						:style="{
+							left: bubble.left + 'rpx',
+							animationDelay: bubble.delay + 'ms',
+							animationDuration: bubble.duration + 'ms'
+						}"
+					>
+						HiGo
+					</view>
+				</view>
 				<view class="searchBox">
 					<!-- <image class="searchIcon" src="/static/search.png" mode="aspectFit"></image> -->
 					<picker :value="region" @change="onRegionChange">
@@ -47,6 +61,9 @@
 		<!-- 活动列表 -->
 		<view class="activitylist">
 			<HomeActivityCard @select="onSelectCard" :items="NewActivityList"></HomeActivityCard>
+			<view class="noMoreText" v-if="NewActivityList.length">
+				<text>没有更多了</text>
+			</view>
 		</view>
 
 		<!-- 自定义底部导航 -->
@@ -71,6 +88,8 @@
 			return {
 				title: 'Hello',
 				Number : 0,
+				bubbleSeed: 0,
+				bubbleList: [],
 				currentCity: '深圳',
 				// 省 / 市 / 区 初始值
 				region: ['广东省', '深圳市', '南山区'],
@@ -177,7 +196,7 @@
 						location_text:"深圳市福田区华强北街道 深业上城L2 艺术工坊",
 						time_text:"2026-04-27 10:00:00",
 						org_avatar: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/logo.png',
-						org_nameg:"木子画室",
+						org_name:"木子画室",
 						joinCount:14,
 						joinAvatars: [
 							'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/e_000100_r_w.png',
@@ -203,6 +222,24 @@
 				this.NewActivityList = this.activityList
 		},
 		methods: {
+			onClickLogo() {
+				const now = Date.now()
+				const bubbles = Array.from({ length: 6 }, (_, index) => {
+					const id = `${now}-${this.bubbleSeed + index}`
+					return {
+						id,
+						left: 10 + Math.round(Math.random() * 90),
+						delay: index * 45,
+						duration: 950 + Math.round(Math.random() * 300)
+					}
+				})
+				this.bubbleSeed += bubbles.length
+				this.bubbleList = [...this.bubbleList, ...bubbles]
+				setTimeout(() => {
+					const ids = new Set(bubbles.map((item) => item.id))
+					this.bubbleList = this.bubbleList.filter((item) => !ids.has(item.id))
+				}, 1400)
+			},
 			onRegionChange(e) {
 				// e.detail.value 是 [省, 市, 区]
 				const value = e.detail.value || []
@@ -309,6 +346,45 @@
 		align-self: center;
 		margin-top: 10rpx;
 	}
+	.logoBubbleWrap{
+		position: relative;
+		width: 120rpx;
+		height: 120rpx;
+		margin-top: 10rpx;
+		margin-right: 14rpx;
+		flex-shrink: 0;
+	}
+	.bubbleItem{
+		position: absolute;
+		bottom: 22rpx;
+		padding: 6rpx 16rpx;
+		border-radius: 999rpx;
+		font-size: 20rpx;
+		line-height: 1;
+		font-weight: 700;
+		color: #7f3dff;
+		background: rgba(255, 255, 255, 0.95);
+		border: 1rpx solid rgba(127, 61, 255, 0.25);
+		box-shadow: 0 10rpx 20rpx rgba(127, 61, 255, 0.15);
+		transform: translate(-50%, 0) scale(0.9);
+		pointer-events: none;
+		animation-name: logoBubbleFloat;
+		animation-timing-function: ease-out;
+		animation-fill-mode: forwards;
+	}
+	@keyframes logoBubbleFloat{
+		0%{
+			opacity: 0;
+			transform: translate(-50%, 0) scale(0.8);
+		}
+		15%{
+			opacity: 1;
+		}
+		100%{
+			opacity: 0;
+			transform: translate(-50%, -150rpx) scale(1.18);
+		}
+	}
 	.searchIcon{
 		width: 55rpx;
 		height: 55rpx;
@@ -375,5 +451,14 @@
 		flex-direction: column;
 		gap: 18rpx;
 		padding: 10rpx 24rpx 24rpx;
+		padding-bottom: calc(190rpx + env(safe-area-inset-bottom));
+	}
+	.noMoreText{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 16rpx 0 8rpx;
+		font-size: 24rpx;
+		color: #9b9b9b;
 	}
 </style>

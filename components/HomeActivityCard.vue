@@ -8,25 +8,25 @@
       </view>
 
       <view class="tag-row" v-if="data.tagText">
-        <text class="tag">{{ data.tagText }}</text>
+        <text class="tag">{{ data.tag_text }}</text>
       </view>
 
       <view class="meta">
         <view class="meta-row">
           <text class="meta-ico">⏰</text>
-          <text class="meta-text">{{ data.timeText }}</text>
+          <text class="meta-text">{{ data.time_text }}</text>
         </view>
         <view class="meta-row">
           <text class="meta-ico">📍</text>
-          <text class="meta-text" :number-of-lines="1">{{ data.locationText }}</text>
+          <text class="meta-text" :number-of-lines="1">{{ data.location_text }}</text>
         </view>
       </view>
     </view>
 
     <view class="footer">
       <view class="org">
-        <image class="org-ava" :src="data.orgAvatar" mode="aspectFill" />
-        <text class="org-name" :number-of-lines="1">{{ data.orgName }}</text>
+        <image class="org-ava" :src="data.org_avatar" mode="aspectFill" />
+        <text class="org-name" :number-of-lines="1">{{ data.org_name }}</text>
       </view>
 
       <view class="join">

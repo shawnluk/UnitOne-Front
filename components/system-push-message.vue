@@ -1,25 +1,25 @@
 <template>
-	<view class="system-message">
-		<view class="page-title">
-			<text class="title-text">{{ title }}</text>
-			<text class="title-desc">{{ description }}</text>
+	<view class="systemMessage">
+		<view class="pageTitle">
+			<text class="titleText">{{ title }}</text>
+			<text class="titleDesc">{{ description }}</text>
 		</view>
 
-		<view class="message-list">
-			<view class="message-card" v-for="item in list" :key="item.id">
-				<view class="message-head">
-					<view class="message-left">
-						<view class="unread-dot" v-if="!item.read"></view>
-						<text class="message-type">{{ item.type }}</text>
+		<view class="messageList">
+			<view class="messageCard" v-for="item in list" :key="item.id">
+				<view class="messageHead">
+					<view class="messageLeft">
+						<view class="unreadDot" v-if="!item.read"></view>
+						<text class="messageType">{{ item.type }}</text>
 					</view>
-					<text class="message-time">{{ item.time }}</text>
+					<text class="messageTime">{{ item.time }}</text>
 				</view>
 
-				<text class="message-title">{{ item.title }}</text>
-				<text class="message-content">{{ item.content }}</text>
+				<text class="messageTitle">{{ item.title }}</text>
+				<text class="messageContent">{{ item.content }}</text>
 
-				<view class="message-footer">
-					<text class="message-link">{{ detailText }}</text>
+				<view class="messageFooter">
+					<text class="messageLink">{{ detailText }}</text>
 				</view>
 			</view>
 		</view>
@@ -51,33 +51,33 @@
 </script>
 
 <style scoped>
-.system-message {
+.systemMessage {
 	width: 100%;
 }
 
-.page-title {
+.pageTitle {
 	padding: 24rpx 0 14rpx;
 	display: flex;
 	flex-direction: column;
 }
 
-.title-text {
+.titleText {
 	font-size: 38rpx;
 	font-weight: 700;
 	color: #1f2329;
 }
 
-.title-desc {
+.titleDesc {
 	margin-top: 8rpx;
 	font-size: 24rpx;
 	color: #8b919a;
 }
 
-.message-list {
+.messageList {
 	margin-top: 10rpx;
 }
 
-.message-card {
+.messageCard {
 	background: #ffffff;
 	border-radius: 16rpx;
 	padding: 20rpx 22rpx;
@@ -85,18 +85,18 @@
 	box-shadow: 0 6rpx 18rpx rgba(15, 23, 42, 0.05);
 }
 
-.message-head {
+.messageHead {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 }
 
-.message-left {
+.messageLeft {
 	display: flex;
 	align-items: center;
 }
 
-.unread-dot {
+.unreadDot {
 	width: 14rpx;
 	height: 14rpx;
 	border-radius: 50%;
@@ -104,7 +104,7 @@
 	margin-right: 10rpx;
 }
 
-.message-type {
+.messageType {
 	font-size: 24rpx;
 	color: #3f75ff;
 	background: #edf3ff;
@@ -112,12 +112,12 @@
 	border-radius: 999rpx;
 }
 
-.message-time {
+.messageTime {
 	font-size: 23rpx;
 	color: #9aa1ab;
 }
 
-.message-title {
+.messageTitle {
 	display: block;
 	margin-top: 14rpx;
 	font-size: 30rpx;
@@ -125,7 +125,7 @@
 	color: #222222;
 }
 
-.message-content {
+.messageContent {
 	display: block;
 	margin-top: 10rpx;
 	font-size: 26rpx;
@@ -133,13 +133,13 @@
 	color: #5d6470;
 }
 
-.message-footer {
+.messageFooter {
 	margin-top: 16rpx;
 	padding-top: 14rpx;
 	border-top: 1rpx solid #f0f1f3;
 }
 
-.message-link {
+.messageLink {
 	font-size: 24rpx;
 	color: #3f75ff;
 }

@@ -1,7 +1,7 @@
 <template>
-	<view class="moment-feed">
-		<view class="cover-section">
-			<image class="cover-image" :src="coverImage" mode="aspectFill"></image>
+	<view class="momentFeed">
+		<view class="coverSection">
+			<image class="coverImage" :src="coverImage" mode="aspectFill"></image>
 			<view class="profile">
 				<text class="nickname">{{ nickname }}</text>
 				<image class="avatar" :src="profileAvatar" mode="aspectFill"></image>
@@ -10,14 +10,14 @@
 
 		<view class="feed">
 			<view class="post" v-for="item in posts" :key="item.id">
-				<image class="post-avatar" :src="item.avatar" mode="aspectFill"></image>
-				<view class="post-body">
-					<text class="post-name">{{ item.name }}</text>
-					<text class="post-content">{{ item.content }}</text>
+				<image class="postAvatar" :src="item.avatar" mode="aspectFill"></image>
+				<view class="postBody">
+					<text class="postName">{{ item.name }}</text>
+					<text class="postContent">{{ item.content }}</text>
 
-					<view class="photo-grid" v-if="item.images && item.images.length">
+					<view class="photoGrid" v-if="item.images && item.images.length">
 						<image
-							class="photo-item"
+							class="photoItem"
 							v-for="(img, index) in item.images"
 							:key="item.id + '-' + index"
 							:src="img"
@@ -25,19 +25,19 @@
 						></image>
 					</view>
 
-					<view class="post-meta">
-						<text class="post-time">{{ item.time }}</text>
-						<view class="action-btn">···</view>
+					<view class="postMeta">
+						<text class="postTime">{{ item.time }}</text>
+						<view class="actionBtn">···</view>
 					</view>
 
 					<view class="interaction" v-if="item.likes.length || item.comments.length">
 						<view class="likes" v-if="item.likes.length">
 							<text class="icon">❤</text>
-							<text class="likes-text">{{ item.likes.join('、') }}</text>
+							<text class="likesText">{{ item.likes.join('、') }}</text>
 						</view>
 						<view class="comment" v-for="(comment, idx) in item.comments" :key="item.id + '-c-' + idx">
-							<text class="comment-name">{{ comment.user }}：</text>
-							<text class="comment-text">{{ comment.text }}</text>
+							<text class="commentName">{{ comment.user }}：</text>
+							<text class="commentText">{{ comment.text }}</text>
 						</view>
 					</view>
 				</view>
@@ -71,16 +71,16 @@
 </script>
 
 <style scoped>
-.moment-feed {
+.momentFeed {
 	width: 100%;
 }
 
-.cover-section {
+.coverSection {
 	position: relative;
 	margin-bottom: 24rpx;
 }
 
-.cover-image {
+.coverImage {
 	width: 100%;
 	height: 360rpx;
 }
@@ -118,7 +118,7 @@
 	border-bottom: 1rpx solid #e6e6e6;
 }
 
-.post-avatar {
+.postAvatar {
 	width: 76rpx;
 	height: 76rpx;
 	border-radius: 8rpx;
@@ -126,17 +126,17 @@
 	flex-shrink: 0;
 }
 
-.post-body {
+.postBody {
 	flex: 1;
 }
 
-.post-name {
+.postName {
 	color: #576b95;
 	font-size: 30rpx;
 	font-weight: 600;
 }
 
-.post-content {
+.postContent {
 	display: block;
 	margin-top: 10rpx;
 	color: #222222;
@@ -144,13 +144,13 @@
 	line-height: 1.6;
 }
 
-.photo-grid {
+.photoGrid {
 	margin-top: 14rpx;
 	display: flex;
 	flex-wrap: wrap;
 }
 
-.photo-item {
+.photoItem {
 	width: 190rpx;
 	height: 190rpx;
 	border-radius: 8rpx;
@@ -159,19 +159,19 @@
 	background-color: #ececec;
 }
 
-.post-meta {
+.postMeta {
 	margin-top: 12rpx;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 }
 
-.post-time {
+.postTime {
 	color: #9a9a9a;
 	font-size: 24rpx;
 }
 
-.action-btn {
+.actionBtn {
 	color: #576b95;
 	font-size: 34rpx;
 	line-height: 1;
@@ -197,7 +197,7 @@
 	margin-top: 2rpx;
 }
 
-.likes-text {
+.likesText {
 	color: #576b95;
 	font-size: 25rpx;
 	line-height: 1.5;
@@ -209,11 +209,11 @@
 	line-height: 1.5;
 }
 
-.comment-name {
+.commentName {
 	color: #576b95;
 }
 
-.comment-text {
+.commentText {
 	color: #333333;
 }
 </style>

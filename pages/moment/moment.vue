@@ -1,5 +1,5 @@
 <template>
-	<view class="moment-page">
+	<view class="momentPage">
 		<TopBar></TopBar>
 		<MomentFeed
 			:posts="posts"
@@ -74,7 +74,7 @@
 </script>
 
 <style scoped>
-.moment-page {
+.momentPage {
 	min-height: 100vh;
 	background-color: #f2f2f2;
 	padding-bottom: 140rpx;

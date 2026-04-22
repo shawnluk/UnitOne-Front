@@ -1,11 +1,11 @@
 <template>
-	<view class="button-container">
+	<view class="buttonContainer">
 		<button 
 			v-for="(item, index) in buttonList" 
 			:key="index"
 			@click="changeColor(index)"
 			:style="{ backgroundColor: item.isActive ? 'red' : '#f0f0f0' }"
-			class="custom-button"
+			class="customButton"
 		>
 			按钮 {{ index + 1 }}
 		</button>
@@ -35,14 +35,14 @@ export default {
 </script>
 
 <style scoped>
-.button-container {
+.buttonContainer {
 	display: flex;
 	flex-direction: column;
 	gap: 20rpx;
 	padding: 20rpx;
 }
 
-.custom-button {
+.customButton {
 	width: 100%;
 	height: 80rpx;
 	line-height: 80rpx;

@@ -2,10 +2,10 @@
 	<view>
 		<TopBar></TopBar>
 		<view class="indexContent">
-				<!-- logo吐泡泡 -->
-				<IndexLogoBubble></IndexLogoBubble>
-				<!-- 首页搜索框 -->
-				<IndexSearchBox @search="onSearch"></IndexSearchBox>
+			<!-- logo吐泡泡 -->
+			<IndexLogoBubble></IndexLogoBubble>
+			<!-- 首页搜索框 -->
+			<IndexSearchBox @search="onSearch"></IndexSearchBox>
 		</view>
 
 		<!-- 轮播图组件 -->
@@ -15,7 +15,7 @@
 		<HomeCategoryBar></HomeCategoryBar>
 
 		<!-- 活动列表 -->
-		<view class="activitylist">
+		<view class="activityList">
 			<HomeActivityCard></HomeActivityCard>
 			<view class="noMoreText">
 				<text>没有更多了</text>
@@ -61,7 +61,7 @@ export default {
 		gap: 12rpx;
 	}
 
-	.activitylist {
+	.activityList {
 		display: flex;
 		flex-direction: column;
 		gap: 18rpx;

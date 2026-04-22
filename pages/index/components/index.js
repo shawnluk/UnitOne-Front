@@ -1,3 +1,5 @@
-export { default as IndexLogoBubble } from './index-logo-bubble.vue'
-export { default as IndexSearchBox } from './index-search-box.vue'
-export { default as HomeCategoryBar } from './home-category-bar.vue'
+import IndexLogoBubble from './index-logo-bubble.vue'
+import IndexSearchBox from './index-search-box.vue'
+import HomeCategoryBar from './home-category-bar.vue'
+
+export { IndexLogoBubble, IndexSearchBox, HomeCategoryBar }

@@ -1,5 +1,5 @@
 <template>
-	<view class="message-page">
+	<view class="messagePage">
 		<TopBar></TopBar>
 
 		<SystemPushMessage :list="messageList"></SystemPushMessage>
@@ -62,7 +62,7 @@
 </script>
 
 <style scoped>
-.message-page {
+.messagePage {
 	min-height: 100vh;
 	background: #f4f5f7;
 	padding: 0 24rpx 140rpx;

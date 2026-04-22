@@ -19,31 +19,31 @@
 
 <script>
 export default {
-  name: 'Swiper',
-  props: {
-    // 轮播图数据
-    swiperList: {
-      type: Array,
-      default: () => [
-		  {url:"https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/swiper/1.png"},
-		  {url:"https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/swiper/2.png"},
-		  {url:"https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/swiper/3.png"},
-	  ]
-    },
-  },
-  data() {
-    return {
-      // currentIndex: 0
-    }
-  },
-  methods: {
-	  // 点击轮播图项
-	  onItemClick(item, index) {
-	    this.$emit('itemClick', {
-	      item,
-	      index
-	    })
-	  }
+	name: 'Swiper',
+	props: {
+		// 轮播图数据
+		swiperList: {
+			type: Array,
+			default: () => [
+			{url:"https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/swiper/1.png"},
+			{url:"https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/swiper/2.png"},
+			{url:"https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/swiper/3.png"},
+		]
+		},
+	},
+	data() {
+		return {
+			// currentIndex: 0
+		}
+	},
+	methods: {
+		// 点击轮播图项
+		onItemClick(item, index) {
+			this.$emit('itemClick', {
+				item,
+				index
+			})
+		}
 	}
 }
 </script>

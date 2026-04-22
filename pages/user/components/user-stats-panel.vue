@@ -23,15 +23,14 @@
 <script>
 export default {
   name: 'UserStatsPanel',
-  props: {
-    stats: {
-      type: Array,
-      default: () => [],
-    },
-    starValue: {
-      type: [String, Number],
-      default: 5,
-    },
+  data() {
+    return {
+      stats: [
+        { icon: '🔥', label: '伙柴', value: 0 },
+        { icon: '🎫', label: '伙卡', value: 0 },
+      ],
+      starValue: 5,
+    }
   },
 }
 </script>

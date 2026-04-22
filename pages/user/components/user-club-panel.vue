@@ -18,20 +18,19 @@
 
 <script>
 export default {
-  name: 'UserCirclePanel',
-  props: {
-    title: {
-      type: String,
-      default: '圈子管理 1',
-    },
-    moreText: {
-      type: String,
-      default: '更多 >',
-    },
-    item: {
-      type: Object,
-      required: true,
-    },
+  name: 'UserClubPanel',
+  data() {
+    return {
+      title: '圈子管理 1',
+      moreText: '更多 >',
+      item: {
+        cover: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/real-madrid-ucl-1024x1024.jpg',
+        name: '皇马球迷足球活动',
+        stats: '0活动 1成员',
+        badge: '圈子主',
+        topTag: '置顶',
+      },
+    }
   },
 }
 </script>

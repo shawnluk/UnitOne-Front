@@ -9,14 +9,14 @@
 		/>
 
 		<!-- 自定义底部导航 -->
-		<BottomTabBar :current="1" />
+		<BottomTabBar :current="1"></BottomTabBar>
 	</view>
 </template>
 
 <script>
-	import BottomTabBar from '@/components/BottomTabBar.vue'
-	import TopBar from '@/components/TopBar.vue'
-	import MomentFeed from '@/components/MomentFeed.vue'
+	import BottomTabBar from '@/components/bottom-tab-bar.vue'
+	import TopBar from '@/components/top-bar.vue'
+	import MomentFeed from '@/components/moment-feed.vue'
 
 	export default {
 		components: {

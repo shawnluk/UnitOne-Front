@@ -10,11 +10,15 @@
 <script>
 export default {
   name: 'UserDataPanel',
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
+  data() {
+    return {
+      items: [
+        { label: '圈子', value: 4 },
+        { label: '好友', value: 1 },
+        { label: '历史活动', value: 0 },
+        { label: '相册', value: 0 },
+      ],
+    }
   },
 }
 </script>
@@ -22,7 +26,7 @@ export default {
 <style scoped>
 .data-section {
   background-color: white;
-  margin: 0 20rpx 20rpx;
+  margin: 20rpx;
   padding: 30rpx;
   border-radius: 16rpx;
   display: flex;

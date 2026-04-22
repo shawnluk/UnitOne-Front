@@ -9,12 +9,16 @@
 
 <script>
 export default {
-  name: 'UserQuickNav',
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
+  name: 'UserServiceEntryPanel',
+  data() {
+    return {
+      items: [
+        { icon: '📋', label: '订单' },
+        { icon: '💰', label: '钱包' },
+        { icon: '🎧', label: '客服' },
+        { icon: '⚙️', label: '设置' },
+      ],
+    }
   },
 }
 </script>

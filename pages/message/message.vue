@@ -2,17 +2,17 @@
 	<view class="message-page">
 		<TopBar></TopBar>
 
-		<SystemPushMessage :list="messageList" />
+		<SystemPushMessage :list="messageList"></SystemPushMessage>
 
 		<!-- 自定义底部导航 -->
-		<BottomTabBar :current="2" />
+		<BottomTabBar :current="2"></BottomTabBar>
 	</view>
 </template>
 
 <script>
-	import TopBar from '@/components/TopBar.vue'
-	import BottomTabBar from '@/components/BottomTabBar.vue'
-	import SystemPushMessage from '@/components/SystemPushMessage.vue'
+	import TopBar from '@/components/top-bar.vue'
+	import BottomTabBar from '@/components/bottom-tab-bar.vue'
+	import SystemPushMessage from '@/components/system-push-message.vue'
 
 	export default {
 		components: {

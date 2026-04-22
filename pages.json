@@ -13,10 +13,8 @@
 				"navigationBarTextStyle": "black"
 			}
 		},
-		{"path": "components/ButtonList"},
-		{"path": "components/SwiperBar"},
-		{"path": "src/ActivityDetail/activity-detail"},
-		{"path": "src/CreateAct/createAct"}
+		{"path": "src/activity-detail/activity-detail"},
+		{"path": "src/create-activity/create-activity"}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

@@ -1,38 +1,84 @@
-19:30:22.950 [Vue warn]: Unhandled error during execution of async component loader \n at <AsyncComponentWrapper>\nat <PageBody>\nat <Page>\nat <Anonymous>\nat <KeepAlive>\nat <RouterView>\nat <Layout>\nat <App>
-19:30:23.007 ‍[⁠SyntaxError⁠]‍ {message: "Unexpected token ."}
-<!-- 更改裁剪组件-->
+## UnitOne Front（UniApp / Vue 3）
 
+UnitOne 的前端项目，基于 **uni-app（Vue 3）** 开发，可编译到 **微信小程序 / H5 / App（5+App）** 等多端。
 
-我先快速看一下你当前页面/组件分布，再给你一份“优先级排序”的可复用组件清单，尽量都是你现在就能落地的。
+---
 
-非常适合继续做组件化，你现在项目已经有这个趋势了。按复用价值给你一版建议（从高到低）：
+## 功能与页面
 
-页面容器骨架组件（最高优先）
-把 TopBar + 页面主体 + BottomTabBar 抽成统一壳组件，比如 components/PageScaffold.vue。
-你在 index/message/moment/user 都有类似结构，后续每页只管内容区，减少重复布局代码。
+路由与页面入口以 `pages.json` 为准。当前页面可以按“主 Tab / 业务功能页”这样理解：
 
-列表卡片基类组件
-你现在有 HomeActivityCard、SystemPushMessage、MomentFeed，都属于“列表 + 卡片项”。
-可以抽一个通用 BaseCardList（支持 v-for、empty 状态、loading、slot 自定义 item），业务组件只包一层样式和字段映射。
+```text
+pages.json
+├─ 主 Tab（底部导航）
+│  ├─ pages/index/index                首页
+│  ├─ pages/moment/moment              动态 / 圈子
+│  ├─ pages/message/message            消息
+│  └─ pages/user/user                  我的
+└─ 业务功能页
+   ├─ src/login/login                  登录
+   ├─ src/activity-detail/activity-detail  活动详情
+   └─ src/create-activity/create-activity  创建活动
+```
 
-通用 SectionHeader 组件
-index.vue 的“热门 MAX + 筛选”、user.vue 的“圈子管理 + 更多”是同一类模块头。
-建议做 components/SectionHeader.vue，支持左标题、副标、右操作文字/图标、点击事件。
+---
 
-统计宫格/功能宫格组件
-user.vue 里 stats-section、nav-section、data-section 都是“图标/数字+文案宫格”。
-可抽成 StatsGrid.vue / ActionGrid.vue，通过 items 配置渲染，页面只传数据。
+## 开发环境
 
-用户头部信息组件
-user.vue 顶部用户卡（头像、昵称、ID、badge）建议抽 UserProfileHeader.vue。
-这块通常会在“我的主页/他人主页/编辑资料”复用，后面接接口也更集中。
+- **HBuilderX**：建议使用最新版（支持 uni-app Vue3）
+- **微信开发者工具**：运行/预览微信小程序
+- **Node.js**：如需使用 uni-app CLI 或安装依赖（按你的团队工作流决定）
 
-浮动发布按钮组件
-user.vue 的 publish-btn 可独立成 FloatingActionButton.vue，支持 icon/text/position。
-后面活动页、圈子页、消息页都可能复用这个入口。
+> 说明：本仓库以 HBuilderX 打开即可运行；如后续引入 CLI 脚本，请在 README 增补对应命令。
 
-<!-- 20260415 -->
+---
 
-<!-- 下一步可以继续把 user.vue 里已经无用的旧样式（原本内联区域样式）清理掉 -->
+## 本地运行（推荐：HBuilderX）
 
-基本功能UI展示确定，考虑先建立虚拟数据库，对接口进行优化
+1. 用 HBuilderX 打开项目根目录（包含 `pages.json`、`manifest.json` 的目录）
+2. 运行到目标平台：
+   - 运行到 **微信开发者工具**
+   - 运行到 **浏览器（H5）**
+   - 运行到 **App（云打包/本地基座）**
+
+---
+
+## 配置说明
+
+- **应用基础信息**：`manifest.json`
+  - 项目名：`UnitOne`
+  - Vue 版本：`vueVersion: "3"`
+  - 微信小程序 AppID：见 `manifest.json -> mp-weixin -> appid`
+- **页面与全局样式**：`pages.json`
+  - 当前全局 `navigationStyle` 为 `custom`（页面自行实现 TopBar/导航栏样式）
+
+---
+
+## 开发约定（建议）
+
+- **导航栏**：既然全局使用 `custom`，各页面的顶部栏建议统一抽组件，避免重复实现与交互不一致
+- **列表页**：统一 empty/loading/error 状态与骨架屏，减少每页重复逻辑
+
+---
+
+## Roadmap（组件化优先级）
+
+下面是基于当前页面结构，按“复用价值从高到低”的组件化建议（从你之前的备忘整理而来）：
+
+1. **页面容器骨架**：`PageScaffold`（TopBar + 内容区 + BottomTabBar）
+2. **列表卡片基类**：`BaseCardList`（empty/loading/slot-item）
+3. **模块标题栏**：`SectionHeader`（左标题/副标/右侧操作）
+4. **统计/功能宫格**：`StatsGrid` / `ActionGrid`（items 配置驱动）
+5. **用户头部信息**：`UserProfileHeader`（头像/昵称/ID/badge）
+6. **浮动操作按钮**：`FloatingActionButton`（icon/text/position）
+
+同时建议逐步清理页面中已无用的旧样式（例如 `user` 页遗留的内联/旧区域样式）。
+
+---
+
+## 接口与数据
+
+当前以 UI 展示为主。下一步建议：
+
+- **先补一套可控的 Mock 数据层**（便于联调与状态管理落地）
+- 再逐步替换为真实接口，并统一错误码/重试/鉴权与缓存策略

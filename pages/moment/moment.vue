@@ -45,7 +45,13 @@
 						likes: ['李四', '王五', '赵六'],
 						comments: [
 							{ user: '李四', text: '构图绝了！' },
-							{ user: '王五', text: '下次活动继续约～' }
+							{ user: '王五', text: '下次活动继续约～' },
+							{
+								user: '摄影爱好者小陈',
+								text: '第三张的光影层次太舒服了，想问下是几点拍的？'
+							},
+							{ user: '赵六', text: '已收藏，周末也去滨江走走。' },
+							{ user: 'Anna', text: 'So good 👍 求原图当壁纸可以吗' }
 						]
 					},
 					{
@@ -54,11 +60,24 @@
 						avatar: 'https://picsum.photos/96/96?random=12',
 						activityTitle: '社区绿植工作坊',
 						content: '工作坊领回来的多肉摆好啦，房间一下子有了生气。',
-						images: ['https://picsum.photos/800/800?random=4'],
+						images: [
+							'https://picsum.photos/800/800?random=41',
+							'https://picsum.photos/800/800?random=42',
+							'https://picsum.photos/800/800?random=43',
+							'https://picsum.photos/800/800?random=44'
+						],
 						time: '1 小时前',
 						likeCount: 8,
 						likes: ['小明', '阿杰'],
-						comments: [{ user: '小明', text: '摆放得好有层次感。' }]
+						comments: [
+							{ user: '小明', text: '摆放得好有层次感。' },
+							{ user: '阿杰', text: '我家那盆怎么养都蔫，求教程！' },
+							{
+								user: '绿植课代表',
+								text: '陶粒垫底 + 少浇水多通风，两周浇一次就够啦。'
+							},
+							{ user: '小红', text: '哈哈课代表上线～' }
+						]
 					},
 					{
 						id: 3,
@@ -66,11 +85,25 @@
 						avatar: 'https://picsum.photos/96/96?random=13',
 						activityTitle: '咖啡品鉴局 · 同城',
 						content: '打卡活动合作咖啡馆，老板亲手拉的爱心拿铁，全场最佳。',
-						images: [],
+						images: [
+							'https://picsum.photos/800/800?random=51',
+							'https://picsum.photos/800/800?random=52',
+							'https://picsum.photos/800/800?random=53',
+							'https://picsum.photos/800/800?random=54',
+							'https://picsum.photos/800/800?random=55'
+						],
 						time: '昨天',
 						likeCount: 0,
 						likes: [],
-						comments: []
+						comments: [
+							{ user: '咖啡控_Mike', text: '这家店豆子偏酸还是偏苦？想冲一波。' },
+							{ user: '阿杰', text: '偏中深，奶咖很顺滑，手冲可以试日晒。' },
+							{
+								user: '同城探店酱',
+								text: '收藏了！下周带朋友去，有没有停车位呀大概多少钱一杯？'
+							},
+							{ user: '路人甲', text: '爱心拉花满分💯' }
+						]
 					}
 				]
 			}
@@ -81,7 +114,7 @@
 <style scoped>
 .momentPage {
 	min-height: 100vh;
-	background-color: #fafafa;
+	background: linear-gradient(180deg, #f4f5f7 0%, #f0f2ff 50%, #f4f5f7 100%);
 	padding-bottom: calc(140rpx + env(safe-area-inset-bottom));
 }
 </style>

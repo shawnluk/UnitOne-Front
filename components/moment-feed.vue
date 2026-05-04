@@ -1,23 +1,25 @@
 <template>
 	<view class="momentFeed">
 		<!-- Stories：与首页同源活动列表（封面 + 标题），首项为发布入口 -->
-		<scroll-view class="storiesScroll" scroll-x :show-scrollbar="false" enable-flex>
-			<view class="storiesRow">
-				<view
-					v-for="s in storyList"
-					:key="s.id"
-					class="storyCell"
-					@click="onStoryTap(s)"
-				>
-					<view class="storyRing" :class="{ storyRingAdd: s.isAdd }">
-						<image class="storyAvatar" :src="s.avatar" mode="aspectFill"></image>
+		<view class="storiesStrip">
+			<scroll-view class="storiesScroll" scroll-x :show-scrollbar="false" enable-flex>
+				<view class="storiesRow">
+					<view
+						v-for="s in storyList"
+						:key="s.id"
+						class="storyCell"
+						@click="onStoryTap(s)"
+					>
+						<view class="storyRing" :class="{ storyRingAdd: s.isAdd }">
+							<image class="storyAvatar" :src="s.avatar" mode="aspectFill"></image>
+						</view>
+						<text class="storyName">{{ s.name }}</text>
 					</view>
-					<text class="storyName">{{ s.name }}</text>
 				</view>
-			</view>
-		</scroll-view>
+			</scroll-view>
+		</view>
 
-		<view class="hairline"></view>
+		<view class="feedDivider"></view>
 
 		<!-- 信息流 -->
 		<view class="posts">
@@ -32,26 +34,28 @@
 						</view>
 					</view>
 					<view class="postMore" @click="onMore(item)">
-						<uni-icons type="more-filled" size="18" color="#262626"></uni-icons>
+						<uni-icons type="more-filled" size="18" color="#5d547f"></uni-icons>
 					</view>
 				</view>
 
-				<!-- 媒体区：多图轮播 / 单图 / 纯文字 -->
-				<view v-if="item.images && item.images.length > 1" class="mediaWrap">
+				<!-- 媒体区：多图可横滑切换；单图同用 swiper 保持布局一致 -->
+				<view v-if="item.images && item.images.length" class="mediaWrap">
 					<swiper
 						class="postSwiper"
-						:circular="false"
-						indicator-dots
+						:class="{ postSwiperPeek: item.images.length > 1 }"
+						:circular="item.images.length > 1"
+						:indicator-dots="item.images.length > 1"
 						indicator-color="rgba(255,255,255,0.45)"
 						indicator-active-color="#ffffff"
+						:duration="280"
+						:next-margin="item.images.length > 1 ? '28rpx' : '0'"
+						:previous-margin="item.images.length > 1 ? '28rpx' : '0'"
+						@touchmove.stop
 					>
 						<swiper-item v-for="(img, idx) in item.images" :key="item.id + '-img-' + idx">
 							<image class="postImage" :src="img" mode="aspectFill"></image>
 						</swiper-item>
 					</swiper>
-				</view>
-				<view v-else-if="item.images && item.images.length === 1" class="mediaWrap">
-					<image class="postImage" :src="item.images[0]" mode="aspectFill"></image>
 				</view>
 				<view v-else class="textOnlyWrap">
 					<text class="textOnlyBody">{{ item.content }}</text>
@@ -64,18 +68,18 @@
 							<uni-icons
 								:type="likedMap[item.id] ? 'heart-filled' : 'heart'"
 								size="26"
-								:color="likedMap[item.id] ? '#ff3040' : '#262626'"
+								:color="likedMap[item.id] ? '#ff5fb3' : '#5d547f'"
 							></uni-icons>
 						</view>
 						<view class="actionHit" @click="onCommentTap(item)">
-							<uni-icons type="chatbubble" size="24" color="#262626"></uni-icons>
+							<uni-icons type="chatbubble" size="24" color="#5d547f"></uni-icons>
 						</view>
 						<view class="actionHit" @click="onShareTap(item)">
-							<uni-icons type="paperplane" size="24" color="#262626"></uni-icons>
+							<uni-icons type="paperplane" size="24" color="#5d547f"></uni-icons>
 						</view>
 					</view>
 					<view class="actionHit" @click="onSaveTap(item)">
-						<uni-icons type="star" size="24" color="#262626"></uni-icons>
+						<uni-icons type="star" size="24" color="#5d547f"></uni-icons>
 					</view>
 				</view>
 
@@ -85,9 +89,13 @@
 				</view>
 
 				<!-- 配文（有图时显示用户名 + 文案） -->
-				<view v-if="item.images && item.images.length" class="captionBlock">
-					<text class="captionUser">{{ item.name }}</text>
-					<text class="captionText"> {{ item.content }}</text>
+				<view
+					v-if="item.images && item.images.length"
+					class="captionBlock"
+					:class="{ captionBlockDivided: item.comments && item.comments.length }"
+				>
+					<view class="captionUser">{{ item.name }}</view>
+					<view class="captionText">{{ item.content }}</view>
 				</view>
 
 				<!-- 评论预览 -->
@@ -104,8 +112,8 @@
 						:key="item.id + '-c-' + cidx"
 						class="commentRow"
 					>
-						<text class="commentUser">{{ c.user }}</text>
-						<text class="commentTxt"> {{ c.text }}</text>
+						<view class="commentUser">{{ c.user }}</view>
+						<view class="commentTxt">{{ c.text }}</view>
 					</view>
 				</view>
 
@@ -231,23 +239,35 @@
 </script>
 
 <style scoped>
+/* 与首页活动卡 / 分类栏一致的紫粉渐变与圆角体系 */
 .momentFeed {
 	width: 100%;
-	background-color: #fafafa;
+	background: linear-gradient(180deg, #f4f5f7 0%, #f0f2ff 55%, #f4f5f7 100%);
 	padding-bottom: 24rpx;
+	box-sizing: border-box;
+}
+
+.storiesStrip {
+	margin: 10rpx 24rpx 0;
+	padding: 4rpx 4rpx 2rpx;
+	border-radius: 24rpx;
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(248, 243, 255, 0.75) 100%);
+	border: 2rpx solid rgba(255, 255, 255, 0.9);
+	box-shadow: 0 10rpx 28rpx rgba(105, 62, 255, 0.1);
+	box-sizing: border-box;
 }
 
 .storiesScroll {
 	width: 100%;
-	background-color: #ffffff;
 	white-space: nowrap;
+	background-color: transparent;
 }
 
 .storiesRow {
 	display: flex;
 	flex-direction: row;
-	padding: 20rpx 16rpx 24rpx;
-	gap: 28rpx;
+	padding: 18rpx 14rpx 20rpx;
+	gap: 24rpx;
 }
 
 .storyCell {
@@ -265,19 +285,13 @@
 	border-radius: 50%;
 	padding: 4rpx;
 	box-sizing: border-box;
-	background: linear-gradient(
-		45deg,
-		#f09433 0%,
-		#e6683c 25%,
-		#dc2743 50%,
-		#cc2366 75%,
-		#bc1888 100%
-	);
+	background: linear-gradient(135deg, #7d5fff 0%, #b8a0ff 42%, #ff5fb3 100%);
+	box-shadow: 0 8rpx 20rpx rgba(125, 95, 255, 0.28);
 }
 
 .storyRingAdd {
-	background: #dbdbdb;
-	padding: 4rpx;
+	background: linear-gradient(145deg, #e8e4f5 0%, #f0eef8 100%);
+	box-shadow: 0 6rpx 14rpx rgba(50, 40, 90, 0.08);
 }
 
 .storyAvatar {
@@ -285,41 +299,72 @@
 	height: 100%;
 	border-radius: 50%;
 	border: 4rpx solid #ffffff;
-	background-color: #efefef;
+	background-color: #eae8f4;
 }
 
 .storyName {
 	margin-top: 10rpx;
 	font-size: 22rpx;
-	color: #262626;
+	color: #5d547f;
 	max-width: 132rpx;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	text-align: center;
+	font-weight: 500;
 }
 
-.hairline {
-	height: 1rpx;
-	background-color: #dbdbdb;
+.feedDivider {
+	height: 2rpx;
+	margin: 14rpx 24rpx 10rpx;
+	border-radius: 2rpx;
+	background: linear-gradient(
+		90deg,
+		rgba(125, 95, 255, 0) 0%,
+		rgba(125, 95, 255, 0.22) 50%,
+		rgba(125, 95, 255, 0) 100%
+	);
 }
 
 .posts {
-	background-color: #fafafa;
+	display: flex;
+	flex-direction: column;
+	gap: 18rpx;
+	padding: 10rpx 24rpx 24rpx;
+	background: transparent;
 }
 
 .postCard {
-	background-color: #ffffff;
-	margin-bottom: 16rpx;
+	position: relative;
+	overflow: hidden;
+	background: linear-gradient(145deg, #ffffff 0%, #f8f3ff 52%, #f0faff 100%);
+	border-radius: 28rpx;
 	padding-bottom: 20rpx;
-	border-bottom: 1rpx solid #efefef;
+	box-shadow: 0 20rpx 48rpx rgba(105, 62, 255, 0.13);
+	border: 2rpx solid rgba(255, 255, 255, 0.9);
+	box-sizing: border-box;
+}
+
+.postCard::before {
+	content: '';
+	position: absolute;
+	top: -48rpx;
+	right: -32rpx;
+	width: 160rpx;
+	height: 160rpx;
+	border-radius: 50%;
+	background: radial-gradient(circle, rgba(125, 95, 255, 0.2) 0%, rgba(125, 95, 255, 0) 68%);
+	pointer-events: none;
+	z-index: 0;
 }
 
 .postHead {
+	position: relative;
+	z-index: 1;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 20rpx 24rpx 16rpx;
+	padding: 20rpx 22rpx 14rpx;
 }
 
 .postHeadLeft {
@@ -333,9 +378,11 @@
 	width: 72rpx;
 	height: 72rpx;
 	border-radius: 50%;
-	margin-right: 20rpx;
+	margin-right: 18rpx;
 	flex-shrink: 0;
-	background-color: #efefef;
+	background-color: #eae8f4;
+	border: 2rpx solid rgba(255, 255, 255, 0.95);
+	box-shadow: 0 4rpx 12rpx rgba(50, 40, 90, 0.1);
 }
 
 .postHeadMeta {
@@ -347,13 +394,14 @@
 .postUserName {
 	font-size: 28rpx;
 	font-weight: 600;
-	color: #262626;
+	letter-spacing: 0.2rpx;
+	color: #1b1732;
 }
 
 .postActivity {
-	margin-top: 4rpx;
+	margin-top: 6rpx;
 	font-size: 22rpx;
-	color: #8e8e8e;
+	color: #6c6392;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -361,11 +409,14 @@
 
 .postMore {
 	padding: 8rpx 4rpx 8rpx 16rpx;
+	opacity: 0.9;
 }
 
 .mediaWrap {
+	position: relative;
+	z-index: 1;
 	width: 100%;
-	background-color: #000000;
+	background: linear-gradient(180deg, #0d0618 0%, #1a1430 100%);
 }
 
 .postSwiper {
@@ -373,101 +424,155 @@
 	height: 750rpx;
 }
 
+.postSwiperPeek {
+	touch-action: pan-x;
+}
+
 .postImage {
 	width: 100%;
 	height: 750rpx;
 	display: block;
-	background-color: #1a1a1a;
+	background-color: #120a24;
 }
 
 .textOnlyWrap {
-	margin: 0 24rpx 8rpx;
-	padding: 36rpx 28rpx;
-	background: linear-gradient(145deg, #f5f5f5 0%, #fafafa 100%);
-	border-radius: 8rpx;
-	border: 1rpx solid #efefef;
+	position: relative;
+	z-index: 1;
+	margin: 0 22rpx 8rpx;
+	padding: 32rpx 26rpx;
+	background: linear-gradient(
+		90deg,
+		rgba(125, 95, 255, 0.08) 0%,
+		rgba(255, 255, 255, 0.92) 40%,
+		rgba(95, 190, 255, 0.08) 100%
+	);
+	border-radius: 20rpx;
+	border: 2rpx solid rgba(125, 95, 255, 0.14);
+	box-shadow: 0 8rpx 22rpx rgba(105, 62, 255, 0.08);
 }
 
 .textOnlyBody {
 	font-size: 30rpx;
 	line-height: 1.55;
-	color: #262626;
+	color: #1b1732;
 }
 
 .actionRow {
+	position: relative;
+	z-index: 1;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 16rpx 16rpx 8rpx;
+	padding: 14rpx 14rpx 6rpx 18rpx;
+	margin-top: 2rpx;
 }
 
 .actionLeft {
 	display: flex;
 	align-items: center;
-	gap: 12rpx;
+	gap: 4rpx;
 }
 
 .actionHit {
 	padding: 8rpx 12rpx;
+	border-radius: 16rpx;
+}
+
+.actionHit:active {
+	background: rgba(125, 95, 255, 0.08);
 }
 
 .likeLine {
-	padding: 0 24rpx 8rpx;
+	position: relative;
+	z-index: 1;
+	padding: 0 22rpx 8rpx;
 }
 
 .likeLineText {
 	font-size: 26rpx;
 	font-weight: 600;
-	color: #262626;
+	color: #4a3f7d;
 }
 
 .captionBlock {
-	padding: 0 24rpx 8rpx;
+	position: relative;
+	z-index: 1;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	padding: 0 22rpx 8rpx;
 	font-size: 28rpx;
 	line-height: 1.5;
 }
 
 .captionUser {
+	flex-shrink: 0;
+	margin-right: 16rpx;
 	font-weight: 600;
-	color: #262626;
+	color: #5d37ff;
 }
 
 .captionText {
-	color: #262626;
+	flex: 1;
+	min-width: 0;
+	color: #1b1732;
+	overflow-wrap: anywhere;
+	word-break: break-word;
+}
+
+.captionBlockDivided {
+	padding-bottom: 16rpx;
+	margin-bottom: 8rpx;
+	border-bottom: 1rpx dashed rgba(125, 95, 255, 0.28);
 }
 
 .commentsPreview {
-	padding: 4rpx 24rpx 0;
+	position: relative;
+	z-index: 1;
+	padding: 4rpx 22rpx 0;
 }
 
 .viewAllComments {
 	display: block;
 	font-size: 26rpx;
-	color: #8e8e8e;
-	margin-bottom: 8rpx;
+	color: #7b65d9;
+	font-weight: 500;
+	margin-bottom: 10rpx;
 }
 
 .commentRow {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: flex-start;
 	font-size: 26rpx;
 	line-height: 1.45;
-	margin-bottom: 6rpx;
+	margin-bottom: 8rpx;
 }
 
 .commentUser {
+	flex-shrink: 0;
+	margin-right: 16rpx;
 	font-weight: 600;
-	color: #262626;
+	color: #5d37ff;
 }
 
 .commentTxt {
-	color: #262626;
+	flex: 1;
+	min-width: 0;
+	color: #1b1732;
+	overflow-wrap: anywhere;
+	word-break: break-word;
 }
 
 .timeRow {
+	position: relative;
+	z-index: 1;
 	display: block;
-	padding: 12rpx 24rpx 0;
+	padding: 12rpx 22rpx 0;
 	font-size: 22rpx;
-	color: #8e8e8e;
-	text-transform: uppercase;
-	letter-spacing: 0.5rpx;
+	color: #8b919a;
+	letter-spacing: 0.3rpx;
 }
 </style>

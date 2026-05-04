@@ -1,35 +1,37 @@
 <template>
-	<view>
-		<view class="userHeader">
-			<view class="userInfo">
-				<image
-					class="avatar"
-					:src="avatarUrl"
-					mode="aspectFill"
-					@click="$emit('avatar-click')"
-				></image>
-				<view class="userDetails">
-					<view
-						class="username"
-						:class="{ guest: !isLoggedIn }"
-						@click="$emit('username-click')"
-					>{{ displayName }}</view>
-					<view class="userId">取伙号：987627983 <text class="idTag">🟠</text></view>
-					<view class="userBadges">
-						<text class="badge">🔄1年</text>
-						<text class="badge">🎪</text>
-						<text class="badge">🛡️</text>
+	<view class="profileCard">
+		<view class="profileInner">
+			<view class="profileHeader">
+				<view class="userInfo">
+					<image
+						class="avatar"
+						:src="avatarUrl"
+						mode="aspectFill"
+						@click="$emit('avatar-click')"
+					/>
+					<view class="userDetails">
+						<view
+							class="username"
+							:class="{ guest: !isLoggedIn }"
+							@click="$emit('username-click')"
+						>{{ displayName }}</view>
+						<view class="userId">取伙号：987627983 <text class="idTag">🟠</text></view>
+						<view class="userBadges">
+							<text class="badge">🔄1年</text>
+							<text class="badge">🎪</text>
+							<text class="badge">🛡️</text>
+						</view>
 					</view>
 				</view>
 			</view>
-		</view>
 
-		<view class="memberSection">
-			<view class="memberContent">
-				<view class="memberTitle">成为会员</view>
-				<view class="memberDesc">付费一场活动，立即成为取伙会员</view>
+			<view class="memberStrip">
+				<view class="memberText">
+					<text class="memberTitle">成为会员</text>
+					<text class="memberDesc">付费一场活动，立即成为取伙会员</text>
+				</view>
+				<text class="memberLink">查看会员权益 ›</text>
 			</view>
-			<view class="memberLink">查看会员权益 ></view>
 		</view>
 	</view>
 </template>
@@ -55,66 +57,75 @@ export default {
 </script>
 
 <style scoped>
-.userHeader {
+/* 与首页 HomeActivityCard 默认主题同系 */
+.profileCard {
 	position: relative;
-	background-image: url('https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/TopBar/TopBar.png');
-	background-size: cover;
-	background-position: center;
-	background-repeat: no-repeat;
-	color: white;
-	padding: 40rpx 30rpx 30rpx;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
 	overflow: hidden;
+	background: linear-gradient(145deg, #ffffff 0%, #f8f3ff 52%, #f0faff 100%);
+	border-radius: 32rpx;
+	box-shadow: 0 20rpx 48rpx rgba(105, 62, 255, 0.13);
+	border: 2rpx solid rgba(255, 255, 255, 0.9);
 }
 
-.userHeader::before {
+.profileCard::before {
 	content: '';
 	position: absolute;
-	inset: 0;
-	background: rgba(0, 0, 0, 0.35);
-	z-index: 0;
+	top: -60rpx;
+	right: -40rpx;
+	width: 180rpx;
+	height: 180rpx;
+	border-radius: 50%;
+	background: radial-gradient(circle, rgba(125, 95, 255, 0.22) 0%, rgba(125, 95, 255, 0) 70%);
+	pointer-events: none;
 }
 
-.userHeader {
+.profileInner {
 	position: relative;
 	z-index: 1;
+}
+
+.profileHeader {
+	padding: 26rpx 22rpx 20rpx;
 }
 
 .userInfo {
 	display: flex;
 	align-items: center;
-	gap: 20rpx;
+	gap: 22rpx;
 }
 
 .avatar {
 	width: 120rpx;
 	height: 120rpx;
 	border-radius: 50%;
-	border: 2rpx solid white;
+	border: 3rpx solid rgba(255, 255, 255, 0.95);
+	box-shadow: 0 14rpx 28rpx rgba(50, 40, 90, 0.2);
 	overflow: hidden;
 }
 
 .userDetails {
 	flex: 1;
+	min-width: 0;
 }
 
 .username {
 	font-size: 36rpx;
-	font-weight: bold;
+	font-weight: 700;
+	color: #1b1732;
 	margin-bottom: 8rpx;
+	letter-spacing: 0.2rpx;
 }
 
 .username.guest {
 	text-decoration: underline;
-	opacity: 0.95;
+	text-underline-offset: 6rpx;
+	color: #5d37ff;
 }
 
 .userId {
 	font-size: 24rpx;
-	opacity: 0.8;
-	margin-bottom: 10rpx;
+	color: #6c6392;
+	margin-bottom: 12rpx;
 }
 
 .idTag {
@@ -123,43 +134,60 @@ export default {
 
 .userBadges {
 	display: flex;
-	gap: 12rpx;
+	flex-wrap: wrap;
+	gap: 10rpx;
 }
 
 .badge {
-	font-size: 20rpx;
-	background-color: rgba(255, 255, 255, 0.2);
-	padding: 4rpx 8rpx;
-	border-radius: 12rpx;
-}
-
-.memberSection {
-	background-color: #e6f7ff;
-	margin: 20rpx;
-	padding: 30rpx;
-	border-radius: 16rpx;
-	display: flex;
-	justify-content: space-between;
+	display: inline-flex;
 	align-items: center;
+	height: 40rpx;
+	font-size: 22rpx;
+	font-weight: 600;
+	color: #ffffff;
+	background: linear-gradient(90deg, #7d5fff 0%, #ff5fb3 100%);
+	padding: 0 16rpx;
+	border-radius: 20rpx;
+	box-shadow: 0 8rpx 18rpx rgba(125, 95, 255, 0.28);
 }
 
-.memberContent {
+.memberStrip {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 20rpx;
+	padding: 20rpx 22rpx 22rpx;
+	margin: 0 6rpx 8rpx;
+	border-radius: 24rpx;
+	background: linear-gradient(90deg, rgba(125, 95, 255, 0.12) 0%, rgba(255, 95, 179, 0.1) 100%);
+	border: 1rpx solid rgba(125, 95, 255, 0.22);
+	box-shadow: 0 8rpx 20rpx rgba(125, 95, 255, 0.12);
+}
+
+.memberText {
 	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 8rpx;
 }
 
 .memberTitle {
-	font-size: 32rpx;
-	font-weight: bold;
-	margin-bottom: 10rpx;
+	font-size: 30rpx;
+	font-weight: 700;
+	color: #1b1732;
 }
 
 .memberDesc {
 	font-size: 24rpx;
-	color: #666;
+	color: #6c6392;
+	line-height: 1.45;
 }
 
 .memberLink {
-	color: #1890ff;
+	flex-shrink: 0;
 	font-size: 24rpx;
+	font-weight: 700;
+	color: #5d37ff;
 }
 </style>

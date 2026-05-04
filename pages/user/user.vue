@@ -1,7 +1,7 @@
 <template>
-	<!-- 登录页：src/login/login，此处用 view 滚动区 -->
-	<view class="userContainer">
-		<view class="userScroll">
+	<view>
+		<TopBar />
+		<view class="userList">
 			<UserHeaderPanel
 				:avatar-url="avatarUrl"
 				:display-name="displayName"
@@ -9,18 +9,14 @@
 				@avatar-click="handleCrop"
 				@username-click="onUsernameClick"
 			/>
-			<UserStatsPanel></UserStatsPanel>
-			<UserDataPanel></UserDataPanel>
-			<UserServiceEntryPanel></UserServiceEntryPanel>
-			<UserClubPanel></UserClubPanel>
-
-			<view class="bottomSafeGap"></view>
+			<UserStatsPanel />
+			<UserDataPanel />
+			<UserServiceEntryPanel />
+			<UserClubPanel />
 		</view>
 
-		<!-- 自定义底部导航：裁剪时隐藏 -->
-		<BottomTabBar v-show="!showCropper" :current="3"></BottomTabBar>
-		<!-- 底部发布按钮 -->
-		<UserPublishButton :isBubbling="isBubbling" @click="createActivity"></UserPublishButton>
+		<BottomTabBar v-show="!showCropper" :current="3" />
+		<UserPublishButton :isBubbling="isBubbling" @click="createActivity" />
 
 		<QfImageCropper
 			v-if="showCropper"
@@ -38,6 +34,7 @@
 </template>
 
 <script>
+import TopBar from '@/components/top-bar.vue'
 import BottomTabBar from '@/components/bottom-tab-bar.vue'
 import UserHeaderPanel from './components/user-header-panel.vue'
 import UserStatsPanel from './components/user-stats-panel.vue'
@@ -49,6 +46,7 @@ import QfImageCropper from '@/uni_modules/qf-image-cropper/components/qf-image-c
 
 export default {
 	components: {
+		TopBar,
 		BottomTabBar,
 		UserHeaderPanel,
 		UserStatsPanel,
@@ -60,13 +58,9 @@ export default {
 	},
 	data() {
 		return {
-			// 头像地址（初始可以写死，后续可从接口获取）
 			avatarUrl: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/helloworld_01.jpg',
-			// 是否显示裁剪弹窗
 			showCropper: false,
-			// 待裁剪的本地临时图片路径
 			cropperImg: '',
-			// 防止“取消时机与裁剪异步回调”竞态：取消后不再更新头像
 			cropCanceled: false,
 			isLoggedIn: false,
 			isBubbling: false,
@@ -82,7 +76,6 @@ export default {
 	},
 
 	onLoad() {
-		// 仅内存态：页面重新加载后恢复未登录（不写本地存储）
 		this.isLoggedIn = false
 	},
 
@@ -100,7 +93,6 @@ export default {
 			})
 		},
 
-		// 点击头像，选择图片并进入裁剪
 		handleCrop() {
 			this.showCropper = true
 			this.cropperImg = ''
@@ -110,10 +102,8 @@ export default {
 			})
 		},
 
-		// 取消裁剪：关闭裁剪组件并保持原头像不变
 		cancelCrop() {
 			this.cropCanceled = true
-			// 尝试重置内部裁剪状态（如果组件方法可用）
 			if (this.$refs.cropper && this.$refs.cropper.resetData) {
 				this.$refs.cropper.resetData()
 			}
@@ -121,7 +111,6 @@ export default {
 			this.cropperImg = ''
 		},
 
-		// 裁剪完成回调
 		onCropperCrop(e) {
 			if (this.cropCanceled) return
 			if (e && e.tempFilePath) {
@@ -141,7 +130,6 @@ export default {
 		//       name: 'file',
 		//       success: (uploadFileRes) => {
 		//         const data = JSON.parse(uploadFileRes.data || '{}')
-		//         // 后端返回的头像地址
 		//         if (data.url) {
 		//           this.avatarUrl = data.url
 		//           resolve(data)
@@ -187,35 +175,25 @@ export default {
 }
 </script>
 
-<style scoped>
-	.userContainer {
-		background-color: #f5f5f5;
-		height: 100vh;
-		overflow: hidden;
-		font-size: 28rpx;
-	}
+<style>
+/* 与首页 activityList 一致，底部多留一截给悬浮「发布」 */
+.userList {
+	display: flex;
+	flex-direction: column;
+	gap: 18rpx;
+	padding: 10rpx 24rpx 24rpx;
+	padding-bottom: calc(260rpx + env(safe-area-inset-bottom));
+}
 
-	.userScroll {
-		height: 100vh;
-		overflow-y: auto;
-		-webkit-overflow-scrolling: touch;
-	}
-
-	/* 给底部固定按钮/底栏留出滚动空间 */
-	.bottomSafeGap {
-		height: 260rpx;
-	}
-
-	/* 裁剪弹窗取消按钮（显示在组件内部 slot 中） */
-	.cropCancel {
-		position: fixed;
-		top: 30rpx;
-		right: 30rpx;
-		z-index: 1001;
-		background-color: rgba(0, 0, 0, 0.5);
-		color: #fff;
-		padding: 14rpx 20rpx;
-		border-radius: 999rpx;
-		font-size: 28rpx;
-	}
+.cropCancel {
+	position: fixed;
+	top: 30rpx;
+	right: 30rpx;
+	z-index: 1001;
+	background-color: rgba(0, 0, 0, 0.5);
+	color: #fff;
+	padding: 14rpx 20rpx;
+	border-radius: 999rpx;
+	font-size: 28rpx;
+}
 </style>

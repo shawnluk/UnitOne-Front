@@ -2,20 +2,19 @@
 	<view class="hcWrap">
 		<scroll-view scroll-x class="hcScroll" :show-scrollbar="false">
 			<view class="hcRow">
-				<button
+				<view
 					v-for="(item, idx) in items"
 					:key="idx"
 					class="hcItem"
 					:class="{ hcItemActive: item.isActive }"
 					@click="handleSelect(item, idx)"
-					:style="{color:item.isActive ? 'blue' : 'red'}"
 				>
 					<view class="hcIconBox">
-						<image class="hcIcon" :src="item.icon" />
-						<view v-if="item.badge" class="hcBadge"></view>
+						<image class="hcIcon" :src="item.icon" mode="aspectFit" />
+						<view v-if="item.badge" class="hcBadge" />
 					</view>
 					<text class="hcText">{{ item.text }}</text>
-				</button>
+				</view>
 			</view>
 		</scroll-view>
 	</view>
@@ -55,8 +54,8 @@ export default {
 
 <style scoped>
 .hcWrap {
-	padding: 18rpx 24rpx 8rpx;
-	background: #fff;
+	padding: 12rpx 24rpx 18rpx;
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(248, 243, 255, 0.45) 100%);
 }
 
 .hcScroll {
@@ -65,60 +64,82 @@ export default {
 
 .hcRow {
 	display: flex;
-	align-items: center;
-	gap: 18rpx;
-	padding-right: 12rpx;
+	align-items: flex-start;
+	gap: 16rpx;
+	padding-right: 8rpx;
 }
 
 .hcItem {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	width: 120rpx;
+	width: 124rpx;
+	flex-shrink: 0;
+	padding: 10rpx 6rpx 12rpx;
+	border-radius: 24rpx;
+	background: rgba(255, 255, 255, 0.72);
+	border: 2rpx solid rgba(255, 255, 255, 0.9);
+	box-shadow: 0 10rpx 28rpx rgba(105, 62, 255, 0.08);
+	transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.hcItemActive{
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	width: 120rpx;
-	background: #ebf1ff;
-}
-
-.hcItem::after {
-	border: none;
+.hcItemActive {
+	background: linear-gradient(145deg, #ffffff 0%, rgba(125, 95, 255, 0.14) 48%, rgba(255, 95, 179, 0.1) 100%);
+	border-color: rgba(125, 95, 255, 0.35);
+	box-shadow: 0 14rpx 32rpx rgba(125, 95, 255, 0.22);
 }
 
 .hcIconBox {
 	position: relative;
-	width: 104rpx;
-	height: 80rpx;
-	border-radius: 28rpx;
-	box-shadow: 0 10rpx 26rpx rgba(0, 0, 0, 0.06);
+	width: 100rpx;
+	height: 76rpx;
+	border-radius: 22rpx;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 242, 255, 0.9) 100%);
+	border: 1rpx solid rgba(125, 95, 255, 0.18);
+	box-shadow: 0 8rpx 20rpx rgba(125, 95, 255, 0.12);
+}
+
+.hcItemActive .hcIconBox {
+	background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(232, 224, 255, 0.95) 100%);
+	border-color: rgba(125, 95, 255, 0.32);
+	box-shadow: 0 10rpx 22rpx rgba(125, 95, 255, 0.2);
 }
 
 .hcIcon {
-	width: 60rpx;
-	height: 60rpx;
+	width: 56rpx;
+	height: 56rpx;
 }
 
 .hcText {
-	line-height: 30rpx;
-	font-size: 25rpx;
-	width: 60rpx;
+	margin-top: 10rpx;
+	font-size: 24rpx;
+	line-height: 1.2;
+	font-weight: 500;
+	color: #6c6392;
+	text-align: center;
+	max-width: 112rpx;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.hcItemActive .hcText {
+	font-weight: 600;
+	color: #5d37ff;
 }
 
 .hcBadge {
 	position: absolute;
-	top: 10rpx;
-	right: 14rpx;
-	width: 16rpx;
-	height: 16rpx;
+	top: 8rpx;
+	right: 10rpx;
+	width: 14rpx;
+	height: 14rpx;
 	border-radius: 50%;
-	background: #ff3b30;
-	border: 3rpx solid #fff;
+	background: linear-gradient(135deg, #ff5fb3 0%, #ff3b6e 100%);
+	border: 2rpx solid #fff;
+	box-shadow: 0 4rpx 10rpx rgba(255, 95, 179, 0.45);
 }
 </style>

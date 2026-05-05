@@ -172,6 +172,8 @@
 </template>
 
 <script>
+import { createActivity } from '@/api/modules/activity.js'
+
 export default {
 	data() {
 		return {
@@ -322,19 +324,32 @@ export default {
 				},
 			})
 		},
-		submitActivity() {
-			console.log('提交活动', this.activityForm)
-			this.timeDatePart = ''
-			this.timeClockPart = ''
-			this.coverTempPath = ''
-			this.activityForm = {
-				title: '',
-				type: '',
-				time: '',
-				location: '',
-				price: '',
-				description: '',
-				cover: '',
+		async submitActivity() {
+			const title = (this.activityForm.title || '').trim()
+			if (!title) {
+				uni.showToast({ title: '请填写活动标题', icon: 'none' })
+				return
+			}
+			try {
+				await createActivity({ ...this.activityForm })
+				uni.showToast({ title: '发布成功', icon: 'success' })
+				this.timeDatePart = ''
+				this.timeClockPart = ''
+				this.coverTempPath = ''
+				this.activityForm = {
+					title: '',
+					type: '',
+					time: '',
+					location: '',
+					price: '',
+					description: '',
+					cover: '',
+				}
+			} catch (e) {
+				uni.showToast({
+					title: (e && e.message) || '发布失败',
+					icon: 'none',
+				})
 			}
 		},
 	},

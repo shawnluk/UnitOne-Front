@@ -62,6 +62,8 @@
 </template>
 
 <script>
+import { loginWithPassword } from '@/api/modules/auth.js'
+
 export default {
 	data() {
 		return {
@@ -83,21 +85,31 @@ export default {
 		onPasswordInput(e) {
 			this.form.password = this.inputValue(e)
 		},
-		handleSubmit() {
+		async handleSubmit() {
 			const u = (this.form.username || '').trim()
 			const p = (this.form.password || '').trim()
 			if (!u || !p) {
 				uni.showToast({ title: '用户名和密码都要填哦', icon: 'none' })
 				return
 			}
-			const ec =
-				typeof this.getOpenerEventChannel === 'function'
-					? this.getOpenerEventChannel()
-					: null
-			if (ec && ec.emit) {
-				ec.emit('loginSuccess', { displayName: 'shawn' })
+			try {
+				const res = await loginWithPassword({ username: u, password: p })
+				const ec =
+					typeof this.getOpenerEventChannel === 'function'
+						? this.getOpenerEventChannel()
+						: null
+				const name =
+					(res && res.displayName) ? res.displayName : u
+				if (ec && ec.emit) {
+					ec.emit('loginSuccess', { displayName: name })
+				}
+				uni.navigateBack()
+			} catch (e) {
+				uni.showToast({
+					title: (e && e.message) || '登录失败',
+					icon: 'none'
+				})
 			}
-			uni.navigateBack()
 		},
 	},
 }

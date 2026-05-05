@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { HOME_ACTIVITY_LIST } from '@/data/activity-list.js'
+import { fetchHomeActivityList } from '@/api/modules/activity.js'
 
 export default {
 	name: 'HomeActivityCard',
@@ -79,12 +79,12 @@ export default {
 	},
 	data() {
 		return {
-			activityList: HOME_ACTIVITY_LIST,
+			activityList: [],
 			filteredItems: [],
 		}
 	},
-	created() {
-		this.filteredItems = this.activityList.map(item => ({ ...item, isActive: true }))
+	async created() {
+		await this.loadActivities()
 		if (uni && typeof uni.$on === 'function') {
 			uni.$on('index:category-change', this.handleCategoryFilter)
 		}
@@ -100,15 +100,33 @@ export default {
 		},
 	},
 	methods: {
-		handleCategoryFilter(payload) {
-			const categoryId = payload && payload.categoryId ? payload.categoryId : null
+		async loadActivities() {
+			try {
+				const list = await fetchHomeActivityList()
+				this.activityList = Array.isArray(list) ? list : []
+				this.applyCategoryFilter(null)
+			} catch (e) {
+				uni.showToast({
+					title: (e && e.message) || '活动列表加载失败',
+					icon: 'none',
+				})
+			}
+		},
+		applyCategoryFilter(categoryId) {
 			if (!categoryId) {
-				this.filteredItems = this.activityList.map(item => ({ ...item, isActive: true }))
+				this.filteredItems = this.activityList.map((item) => ({
+					...item,
+					isActive: true,
+				}))
 				return
 			}
 			this.filteredItems = this.activityList
-				.filter(item => item.category_id === categoryId)
-				.map(item => ({ ...item, isActive: true }))
+				.filter((item) => item.category_id === categoryId)
+				.map((item) => ({ ...item, isActive: true }))
+		},
+		handleCategoryFilter(payload) {
+			const categoryId = payload && payload.categoryId ? payload.categoryId : null
+			this.applyCategoryFilter(categoryId)
 		},
 		handleCardClick(item) {
 			uni.redirectTo({

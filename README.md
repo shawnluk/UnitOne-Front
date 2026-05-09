@@ -12,13 +12,14 @@ UnitOne 的前端项目，基于 **uni-app（Vue 3）** 开发，可编译到 **
 pages.json
 ├─ 主 Tab（底部导航）
 │  ├─ pages/index/index                首页
-│  ├─ pages/moment/moment              动态 / 圈子
+│  ├─ pages/moment/moment              动态 / 时刻
 │  ├─ pages/message/message            消息
 │  └─ pages/user/user                  我的
 └─ 业务功能页
    ├─ src/login/login                  登录
    ├─ src/activity-detail/activity-detail  活动详情
-   └─ src/create-activity/create-activity  创建活动
+   ├─ src/create-activity/create-activity  创建活动
+   └─ src/create-unit/create-unit          创建小队 / 单元（占位）
 ```
 
 ---
@@ -82,3 +83,14 @@ pages.json
 
 - **先补一套可控的 Mock 数据层**（便于联调与状态管理落地）
 - 再逐步替换为真实接口，并统一错误码/重试/鉴权与缓存策略
+
+---
+
+## 改动日志
+
+### 2026-05-09- **主 Tab 骨架**：新增 `components/page-scaffold.vue`（顶栏 + 内容 slot + 底栏），首页、动态、消息、我的等 Tab 页改为使用该骨架，布局与导航一致。
+- **我的页**：移除 `user-club-panel`，新增 `user-squad-panel` 小队相关区域；`user-data-panel` 等随结构调整。
+- **创建小队**（`src/create-unit/create-unit.vue`）：完善表单与校验；`pages.json` 中为该页配置独立导航栏标题「创建小队」等样式。
+- **小队名称规则**：新增 `utils/squad-name.js`（展示宽度：汉字 2、英文/数字/空格 1，总宽上限 16）；名称输入支持「已用 / 16」计数、非法字符过滤、超宽截断与提示；受控 `input` 在多端（含小程序）缩短显示不一致时通过 `key` 强制同步展示。
+- **小队简介**：上限 **100 个字符**（`maxlength` + 输入截断 + 提交校验），并补充说明文案。
+- **工程整理**：删除 `components/index.js`、`pages/index/components/index.js`、`pages/user/components/index.js` 等聚合导出；`api/http.js`、`pages/index/components/index-search-box.vue`、`project.private.config.json` 等小幅调整。

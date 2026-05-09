@@ -15,7 +15,7 @@ export default {
 	data() {
 		return {
 			items: [
-				{ label: '圈子', value: 4 },
+				{ label: '小队', value: 4 },
 				{ label: '好友', value: 1 },
 				{ label: '历史活动', value: 0 },
 				{ label: '相册', value: 0 },

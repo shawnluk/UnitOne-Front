@@ -9,7 +9,7 @@
 		<input
 			:value="innerKeyword"
 			class="searchInput"
-			placeholder="搜索活动/圈子"
+			placeholder="搜索活动/小队"
 			placeholder-class="searchPlaceholder"
 			confirm-type="search"
 			@input="handleSearchInput"

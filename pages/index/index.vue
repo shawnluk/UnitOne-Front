@@ -1,6 +1,5 @@
 <template>
-	<view>
-		<TopBar></TopBar>
+	<PageScaffold :tab-index="0">
 		<view class="indexContent">
 			<!-- logo吐泡泡 -->
 			<IndexLogoBubble></IndexLogoBubble>
@@ -21,23 +20,19 @@
 				<text>没有更多了</text>
 			</view>
 		</view>
-
-		<!-- 自定义底部导航 -->
-		<BottomTabBar :current="0"></BottomTabBar>
-	</view>
+	</PageScaffold>
 </template>
 
 <script>
-import TopBar from '@/components/top-bar.vue'
+import PageScaffold from '@/components/page-scaffold.vue'
 import HomeActivityCard from '@/components/home-activity-card.vue'
 import SwiperBar from '@/components/swiper-bar.vue'
-import BottomTabBar from '@/components/bottom-tab-bar.vue'
 import IndexLogoBubble from './components/index-logo-bubble.vue'
 import IndexSearchBox from './components/index-search-box.vue'
 import HomeCategoryBar from './components/home-category-bar.vue'
 
 export default {
-	components: { TopBar, SwiperBar, HomeActivityCard, HomeCategoryBar, BottomTabBar, IndexLogoBubble, IndexSearchBox },
+	components: { PageScaffold, SwiperBar, HomeActivityCard, HomeCategoryBar, IndexLogoBubble, IndexSearchBox },
 	data() {
 		return {
 			title: 'Hello',

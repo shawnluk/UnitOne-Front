@@ -1,21 +1,20 @@
 <template>
 	<view>
-		<TopBar />
-		<view class="userList">
-			<UserHeaderPanel
-				:avatar-url="avatarUrl"
-				:display-name="displayName"
-				:is-logged-in="isLoggedIn"
-				@avatar-click="handleCrop"
-				@username-click="onUsernameClick"
-			/>
-			<UserStatsPanel />
-			<UserDataPanel />
-			<UserServiceEntryPanel />
-			<UserClubPanel />
-		</view>
-
-		<BottomTabBar v-show="!showCropper" :current="3" />
+		<PageScaffold :tab-index="3" :show-bottom-tab-bar="!showCropper">
+			<view class="userList">
+				<UserHeaderPanel
+					:avatar-url="avatarUrl"
+					:display-name="displayName"
+					:is-logged-in="isLoggedIn"
+					@avatar-click="handleCrop"
+					@username-click="onUsernameClick"
+				/>
+				<UserStatsPanel />
+				<UserDataPanel />
+				<UserServiceEntryPanel />
+				<UserSquadPanel />
+			</view>
+		</PageScaffold>
 		<UserPublishButton :isBubbling="isBubbling" @click="createActivity" />
 
 		<QfImageCropper
@@ -34,25 +33,23 @@
 </template>
 
 <script>
-import TopBar from '@/components/top-bar.vue'
-import BottomTabBar from '@/components/bottom-tab-bar.vue'
+import PageScaffold from '@/components/page-scaffold.vue'
 import UserHeaderPanel from './components/user-header-panel.vue'
 import UserStatsPanel from './components/user-stats-panel.vue'
 import UserServiceEntryPanel from './components/user-service-entry-panel.vue'
 import UserDataPanel from './components/user-data-panel.vue'
-import UserClubPanel from './components/user-club-panel.vue'
+import UserSquadPanel from './components/user-squad-panel.vue'
 import UserPublishButton from './components/user-publish-button.vue'
 import QfImageCropper from '@/uni_modules/qf-image-cropper/components/qf-image-cropper/qf-image-cropper.vue'
 
 export default {
 	components: {
-		TopBar,
-		BottomTabBar,
+		PageScaffold,
 		UserHeaderPanel,
 		UserStatsPanel,
 		UserServiceEntryPanel,
 		UserDataPanel,
-		UserClubPanel,
+		UserSquadPanel,
 		UserPublishButton,
 		QfImageCropper
 	},

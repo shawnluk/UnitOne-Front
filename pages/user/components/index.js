@@ -1,6 +1,0 @@
-export { default as UserHeaderPanel } from './user-header-panel.vue'
-export { default as UserStatsPanel } from './user-stats-panel.vue'
-export { default as UserServiceEntryPanel } from './user-service-entry-panel.vue'
-export { default as UserDataPanel } from './user-data-panel.vue'
-export { default as UserClubPanel } from './user-club-panel.vue'
-export { default as UserPublishButton } from './user-publish-button.vue'

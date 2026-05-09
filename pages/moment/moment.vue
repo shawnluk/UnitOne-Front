@@ -1,27 +1,22 @@
 <template>
-	<view class="momentPage">
-		<TopBar></TopBar>
+	<PageScaffold class="momentPage" :tab-index="1">
 		<MomentFeed
 			:posts="posts"
 			:profile-avatar="profileAvatar"
 			:activities="activityListForStories"
 		/>
-
-		<BottomTabBar :current="1"></BottomTabBar>
-	</view>
+	</PageScaffold>
 </template>
 
 <script>
-	import BottomTabBar from '@/components/bottom-tab-bar.vue'
-	import TopBar from '@/components/top-bar.vue'
+	import PageScaffold from '@/components/page-scaffold.vue'
 	import MomentFeed from '@/components/moment-feed.vue'
 	import { fetchHomeActivityList } from '@/api/modules/activity.js'
 	import { fetchMomentPosts } from '@/api/modules/moment.js'
 
 	export default {
 		components: {
-			TopBar,
-			BottomTabBar,
+			PageScaffold,
 			MomentFeed
 		},
 		data() {

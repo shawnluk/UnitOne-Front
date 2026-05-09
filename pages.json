@@ -14,7 +14,16 @@
 			}
 		},
 		{"path": "src/activity-detail/activity-detail"},
-		{"path": "src/create-activity/create-activity"}
+		{"path": "src/create-activity/create-activity"},
+		{
+			"path": "src/create-unit/create-unit",
+			"style": {
+				"navigationBarTitleText": "创建小队",
+				"navigationStyle": "default",
+				"navigationBarBackgroundColor": "#E8F4FF",
+				"navigationBarTextStyle": "black"
+			}
+		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

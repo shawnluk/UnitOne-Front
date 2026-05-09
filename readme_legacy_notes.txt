@@ -1,4 +1,4 @@
-【从 readme.md 迁移的内容】
+【从 README.md 迁移的内容】
 说明：该文件用于保留原先 README 中的运行报错与临时备忘，便于后续排查与继续落地，不作为对外展示文档。
 
 ====================
@@ -25,7 +25,7 @@
 可以抽一个通用 BaseCardList（支持 v-for、empty 状态、loading、slot 自定义 item），业务组件只包一层样式和字段映射。
 
 通用 SectionHeader 组件
-index.vue 的“热门 MAX + 筛选”、user.vue 的“圈子管理 + 更多”是同一类模块头。
+index.vue 的“热门 MAX + 筛选”、user.vue 的“小队管理 + 更多”是同一类模块头。
 建议做 components/SectionHeader.vue，支持左标题、副标、右操作文字/图标、点击事件。
 
 统计宫格/功能宫格组件
@@ -38,7 +38,7 @@ user.vue 顶部用户卡（头像、昵称、ID、badge）建议抽 UserProfileH
 
 浮动发布按钮组件
 user.vue 的 publish-btn 可独立成 FloatingActionButton.vue，支持 icon/text/position。
-后面活动页、圈子页、消息页都可能复用这个入口。
+后面活动页、小队相关页、消息页都可能复用这个入口。
 
 <!-- 20260415 -->
 

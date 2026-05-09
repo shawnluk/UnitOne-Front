@@ -52,7 +52,7 @@ export function request(options) {
 			url: buildUrl(url),
 			method,
 			data,
-			timeout: timeout ?? env.requestTimeoutMs,
+			timeout: timeout != null ? timeout : env.requestTimeoutMs,
 			header: {
 				'Content-Type': 'application/json',
 				...authHeaders(),

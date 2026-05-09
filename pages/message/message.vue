@@ -1,24 +1,17 @@
 <template>
-	<view class="messagePage">
-		<TopBar></TopBar>
-
+	<PageScaffold class="messagePage" :tab-index="2">
 		<SystemPushMessage :list="messageList"></SystemPushMessage>
-
-		<!-- 自定义底部导航 -->
-		<BottomTabBar :current="2"></BottomTabBar>
-	</view>
+	</PageScaffold>
 </template>
 
 <script>
-	import TopBar from '@/components/top-bar.vue'
-	import BottomTabBar from '@/components/bottom-tab-bar.vue'
+	import PageScaffold from '@/components/page-scaffold.vue'
 	import SystemPushMessage from '@/components/system-push-message.vue'
 	import { fetchMessageList } from '@/api/modules/message.js'
 
 	export default {
 		components: {
-			TopBar,
-			BottomTabBar,
+			PageScaffold,
 			SystemPushMessage
 		},
 		data() {

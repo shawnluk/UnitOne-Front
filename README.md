@@ -4,23 +4,98 @@ UnitOne 的前端项目，基于 **uni-app（Vue 3）** 开发，可编译到 **
 
 ---
 
-## 功能与页面
+## 目录说明
 
-路由与页面入口以 `pages.json` 为准。当前页面可以按“主 Tab / 业务功能页”这样理解：
+两种粒度：**仓库总树**（物理目录与入口文件）、**路由子树**（`pages.json` 里 `pages[]` 的顺序与导航样式）。有说明的行在「路径」与「说明」之间只用**空格**补到同一列起点；说明若占多行，**续行左侧空格的宽度 = 路径列最大宽度 + 2**，在等宽字体下与**首行说明的第一个字**对齐。未列出 `.gitignore`、`.editorconfig` 等通用文件。
+
+### 仓库总树（工程布局）
 
 ```text
-pages.json
-├─ 主 Tab（底部导航）
-│  ├─ pages/index/index                首页
-│  ├─ pages/moment/moment              动态 / 时刻
-│  ├─ pages/message/message            消息
-│  └─ pages/user/user                  我的
-└─ 业务功能页
-   ├─ src/login/login                  登录
-   ├─ src/activity-detail/activity-detail  活动详情
-   ├─ src/create-activity/create-activity  创建活动
-   └─ src/create-unit/create-unit          创建小队 / 单元（占位）
+UnitOne-Front/
+│
+├─ App.vue                      应用根组件；onLaunch / onShow / onHide；
+                                可选全局样式
+├─ main.js                      应用 JS 入口；
+                                Vue 3 导出 createApp（含条件编译的 Vue 2 分支）
+├─ pages.json                   路由与窗口样式（详见下一小节「路由子树」）
+├─ manifest.json                应用清单；名称、版本、vueVersion、
+                                各端 AppID / 权限 / 打包
+├─ index.html                   H5 入口 HTML
+├─ uni.scss                     全局 SCSS 变量与混入（可与 uni_modules 内主题配合）
+├─ uni.promisify.adaptor.js     部分 uni API Promise 化；由 main.js 条件引入
+├─ project.config.json          微信开发者工具：项目级配置
+├─ project.private.config.json  微信开发者工具：本机私有覆盖
+│
+├─ api/
+│  ├─ http.js                   uni.request 封装、鉴权头、业务体解包
+│  ├─ index.js                  对各 modules 的聚合导出
+│  └─ modules/                  auth、activity、message、moment 等接口模块
+├─ components/                  跨页公共 Vue 组件（top-bar、bottom-tab-bar、
+                                page-scaffold 等）
+├─ config/
+│  └─ env.js                    API 根地址、useMock、请求超时等
+├─ constants/
+│  └─ api-paths.js              接口路径常量
+├─ mock/
+│  ├─ activity-list.js          活动列表等假数据
+│  ├─ messages.js               消息假数据
+│  └─ moment-feed.js            动态流假数据
+├─ pages/                       主包内页面（多为底部 Tab）；
+                                子目录 components 为页内私有组件
+│  ├─ index/
+│  │  ├─ index.vue              首页
+│  │  └─ components/            首页专用子组件
+│  ├─ moment/
+│  │  └─ moment.vue             动态 / 时刻
+│  ├─ message/
+│  │  └─ message.vue            消息
+│  └─ user/
+│     ├─ user.vue               我的
+│     └─ components/            我的页专用子组件
+├─ scripts/
+│  └─ generate-changelog.js     变更说明等维护脚本（非运行时依赖）
+├─ src/                         主包内、非 Tab 业务子页（均在 pages.json 注册）
+│  ├─ login/
+│  │  └─ login.vue              登录
+│  ├─ activity-detail/
+│  │  └─ activity-detail.vue    活动详情
+│  ├─ create-activity/
+│  │  └─ create-activity.vue    创建活动
+│  └─ create-unit/
+│     └─ create-unit.vue        创建小队
+├─ uni_modules/                 插件市场依赖（icons、scss、load-more、图片裁剪等）
+└─ utils/
+   ├─ json.js                   JSON 工具
+   └─ squad-name.js             小队名称展示宽度与校验等
 ```
+
+### 路由子树（pages.json）
+
+`pages[]` **数组顺序**即路由声明顺序，**首条为默认启动页**。全局 `globalStyle.navigationStyle` 为 **`custom`**（自绘顶栏、`PageScaffold` 等）；仅在单页 `style` 里写 **`navigationStyle: "default"`** 时使用系统导航栏（当前为登录、创建小队）。
+
+```text
+pages.json → pages[]
+│
+├─ 主 Tab 区（未单独写 style → 继承 custom）
+│  ├─ [1] pages/index/index                    首页
+│  ├─ [2] pages/moment/moment                  动态 / 时刻
+│  ├─ [3] pages/message/message                消息
+│  └─ [4] pages/user/user                      我的
+│
+└─ 业务功能页
+   ├─ [5] src/login/login                      登录（default 导航栏；
+                                               标题「登录」）
+   ├─ [6] src/activity-detail/activity-detail  活动详情（继承 custom）
+   ├─ [7] src/create-activity/create-activity  创建活动（继承 custom）
+   └─ [8] src/create-unit/create-unit          创建小队（default；
+                                               标题「创建小队」）
+```
+
+---
+
+## 功能与页面
+
+路由顺序与导航样式见上文**「目录说明 → 路由子树」**。产品称呼对照：**首页** `pages/index/index`，**动态** `pages/moment/moment`，**消息** `pages/message/message`，**我的** `pages/user/user`；**登录 / 活动详情 / 创建活动 / 创建小队** 对应 `src/` 下同名目录中的页面。
 
 ---
 
@@ -94,3 +169,4 @@ pages.json
 - **小队名称规则**：新增 `utils/squad-name.js`（展示宽度：汉字 2、英文/数字/空格 1，总宽上限 16）；名称输入支持「已用 / 16」计数、非法字符过滤、超宽截断与提示；受控 `input` 在多端（含小程序）缩短显示不一致时通过 `key` 强制同步展示。
 - **小队简介**：上限 **100 个字符**（`maxlength` + 输入截断 + 提交校验），并补充说明文案。
 - **工程整理**：删除 `components/index.js`、`pages/index/components/index.js`、`pages/user/components/index.js` 等聚合导出；`api/http.js`、`pages/index/components/index-search-box.vue`、`project.private.config.json` 等小幅调整。
+- **README**：「仓库总树」改为 `<pre><code>` 包裹，项目根目录下各一级文件夹名（`api/`、`components/`、`config/` 等）使用 `<span style="color: red;">` 标红显示。

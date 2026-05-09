@@ -1,5 +1,4 @@
 import { request } from '@/api/http.js'
-import { getEnv } from '@/config/env.js'
 import { ApiPaths } from '@/constants/api-paths.js'
 
 /**
@@ -7,21 +6,14 @@ import { ApiPaths } from '@/constants/api-paths.js'
  * @returns {Promise<{ token?: string, displayName?: string }>}
  */
 export async function loginWithPassword(credentials) {
-	const { useMock } = getEnv()
-	if (useMock) {
-		const token = 'mock-token-dev'
-		try {
-			uni.setStorageSync('token', token)
-		} catch (_) {}
-		return {
-			token,
-			displayName: credentials.username || '用户',
-		}
-	}
 	const data = await request({
 		url: ApiPaths.authLogin,
 		method: 'POST',
 		data: credentials,
+		mock: () => ({
+			token: 'mock-token-dev',
+			displayName: credentials.username || '用户',
+		}),
 	})
 	if (data && data.token) {
 		try {
@@ -29,11 +21,4 @@ export async function loginWithPassword(credentials) {
 		} catch (_) {}
 	}
 	return data
-}
-
-/** 退出登录时清除本地 token */
-export function logoutLocal() {
-	try {
-		uni.removeStorageSync('token')
-	} catch (_) {}
 }

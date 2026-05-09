@@ -27,18 +27,30 @@
 			}
 		},
 		async onLoad() {
+			await this.loadFeed()
+		},
+		async onPullDownRefresh() {
 			try {
-				const [activities, posts] = await Promise.all([
-					fetchHomeActivityList(),
-					fetchMomentPosts()
-				])
-				this.activityListForStories = Array.isArray(activities) ? activities : []
-				this.posts = Array.isArray(posts) ? posts : []
-			} catch (e) {
-				uni.showToast({
-					title: (e && e.message) || '加载失败',
-					icon: 'none'
-				})
+				await this.loadFeed()
+			} finally {
+				uni.stopPullDownRefresh()
+			}
+		},
+		methods: {
+			async loadFeed() {
+				try {
+					const [activities, posts] = await Promise.all([
+						fetchHomeActivityList(),
+						fetchMomentPosts()
+					])
+					this.activityListForStories = Array.isArray(activities) ? activities : []
+					this.posts = Array.isArray(posts) ? posts : []
+				} catch (e) {
+					uni.showToast({
+						title: (e && e.message) || '加载失败',
+						icon: 'none'
+					})
+				}
 			}
 		}
 	}

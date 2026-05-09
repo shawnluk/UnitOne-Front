@@ -20,14 +20,26 @@
 			}
 		},
 		async onLoad() {
+			await this.loadMessages()
+		},
+		async onPullDownRefresh() {
 			try {
-				const list = await fetchMessageList()
-				this.messageList = Array.isArray(list) ? list : []
-			} catch (e) {
-				uni.showToast({
-					title: (e && e.message) || '消息加载失败',
-					icon: 'none'
-				})
+				await this.loadMessages()
+			} finally {
+				uni.stopPullDownRefresh()
+			}
+		},
+		methods: {
+			async loadMessages() {
+				try {
+					const list = await fetchMessageList()
+					this.messageList = Array.isArray(list) ? list : []
+				} catch (e) {
+					uni.showToast({
+						title: (e && e.message) || '消息加载失败',
+						icon: 'none'
+					})
+				}
 			}
 		}
 	}

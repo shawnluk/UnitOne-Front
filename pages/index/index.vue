@@ -15,7 +15,7 @@
 
 		<!-- 活动列表 -->
 		<view class="activityList">
-			<HomeActivityCard></HomeActivityCard>
+			<HomeActivityCard ref="activityCard"></HomeActivityCard>
 			<view class="noMoreText">
 				<text>没有更多了</text>
 			</view>
@@ -33,9 +33,14 @@ import HomeCategoryBar from './components/home-category-bar.vue'
 
 export default {
 	components: { PageScaffold, SwiperBar, HomeActivityCard, HomeCategoryBar, IndexLogoBubble, IndexSearchBox },
-	data() {
-		return {
-			title: 'Hello',
+	async onPullDownRefresh() {
+		try {
+			const card = this.$refs.activityCard
+			if (card && typeof card.refresh === 'function') {
+				await card.refresh()
+			}
+		} finally {
+			uni.stopPullDownRefresh()
 		}
 	},
 	methods: {

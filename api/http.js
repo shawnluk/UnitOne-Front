@@ -1,4 +1,5 @@
 import { getEnv } from '@/config/env.js'
+import { cloneJson } from '@/utils/json.js'
 
 function unwrapBusinessBody(body) {
 	if (!body || typeof body !== 'object') return body
@@ -35,17 +36,46 @@ function authHeaders() {
 }
 
 /**
+ * Mock 拦截：`getEnv().useMock === true` 时不发起网络请求，仅解析 mock 并深拷贝返回。
+ * @param {unknown | ((ctx: MockContext) => unknown)} mock
+ * @param {MockContext} ctx
+ */
+function resolveMock(mock, ctx) {
+	if (typeof mock === 'function') return mock(ctx)
+	return mock
+}
+
+/**
+ * @typedef {{ url: string, method: string, data?: Record<string, unknown> }} MockContext
+ */
+
+/**
  * @param {object} options
  * @param {string} options.url 相对路径（推荐）或完整 https URL
  * @param {string} [options.method]
  * @param {object} [options.data] query / body
  * @param {object} [options.header]
  * @param {number} [options.timeout]
- * @returns {Promise<any>} 已按约定解包后的业务数据（通常是 data 字段）
+ * @param {unknown | ((ctx: MockContext) => unknown)} [options.mock]
+ *   useMock 为 true 时必填；静态数据或与请求上下文相关的工厂函数，返回值会经 cloneJson 再交给调用方
+ * @returns {Promise<any>} 已按约定解包后的业务数据（通常是 data 字段）；mock 模式下为深拷贝后的 mock 结果
  */
 export function request(options) {
 	const env = getEnv()
-	const { url, method = 'GET', data, header = {}, timeout } = options
+	const { url, method = 'GET', data, header = {}, timeout, mock } = options
+
+	if (env.useMock) {
+		if (mock === undefined) {
+			return Promise.reject(
+				new Error(`request: useMock 已开启但未提供 mock（${method} ${url}）`),
+			)
+		}
+		return Promise.resolve().then(() => {
+			const ctx = { url, method, data }
+			const payload = resolveMock(mock, ctx)
+			return cloneJson(payload)
+		})
+	}
 
 	return new Promise((resolve, reject) => {
 		uni.request({

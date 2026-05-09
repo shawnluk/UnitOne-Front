@@ -1,8 +1,26 @@
 {
 	"pages": [
-		{"path": "pages/index/index"},
-		{"path": "pages/moment/moment"},
-		{"path": "pages/message/message"},
+		{
+			"path": "pages/index/index",
+			"style": {
+				"enablePullDownRefresh": true,
+				"backgroundTextStyle": "dark"
+			}
+		},
+		{
+			"path": "pages/moment/moment",
+			"style": {
+				"enablePullDownRefresh": true,
+				"backgroundTextStyle": "dark"
+			}
+		},
+		{
+			"path": "pages/message/message",
+			"style": {
+				"enablePullDownRefresh": true,
+				"backgroundTextStyle": "dark"
+			}
+		},
 		{"path": "pages/user/user"},
 		{
 			"path": "src/login/login",

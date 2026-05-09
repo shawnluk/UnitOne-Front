@@ -1,5 +1,0 @@
-export * from '@/api/modules/activity.js'
-export * from '@/api/modules/auth.js'
-export * from '@/api/modules/message.js'
-export * from '@/api/modules/moment.js'
-export { request } from '@/api/http.js'

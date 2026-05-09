@@ -118,27 +118,6 @@ export default {
 			this.cropCanceled = false
 		},
 
-		// 示例：上传头像到后台（根据你自己的接口改）
-		// uploadAvatar(filePath) {
-		//   return new Promise((resolve, reject) => {
-		//     uni.uploadFile({
-		//       url: 'https://你的接口地址/api/uploadAvatar',
-		//       filePath,
-		//       name: 'file',
-		//       success: (uploadFileRes) => {
-		//         const data = JSON.parse(uploadFileRes.data || '{}')
-		//         if (data.url) {
-		//           this.avatarUrl = data.url
-		//           resolve(data)
-		//         } else {
-		//           reject(new Error('上传失败'))
-		//         }
-		//       },
-		//       fail: reject
-		//     })
-		//   })
-		// },
-
 		createActivity() {
 			if (this.isNavigating) return
 

@@ -6,7 +6,7 @@
 export const SQUAD_NAME_MAX_WIDTH = 16
 
 /** @param {string} ch 单字符 */
-export function squadNameCharWidth(ch) {
+function squadNameCharWidth(ch) {
 	if (!ch || ch.length === 0) return 0
 	if (ch === ' ') return 1
 	if (/^[0-9]$/.test(ch)) return 1

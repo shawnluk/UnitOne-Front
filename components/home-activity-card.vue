@@ -81,6 +81,8 @@ export default {
 		return {
 			activityList: [],
 			filteredItems: [],
+			/** 当前选中的分类，下拉刷新后沿用 */
+			currentCategoryId: null,
 		}
 	},
 	async created() {
@@ -100,11 +102,15 @@ export default {
 		},
 	},
 	methods: {
+		/** 供首页下拉刷新调用，会保留当前分类筛选状态 */
+		async refresh() {
+			await this.loadActivities()
+		},
 		async loadActivities() {
 			try {
 				const list = await fetchHomeActivityList()
 				this.activityList = Array.isArray(list) ? list : []
-				this.applyCategoryFilter(null)
+				this.applyCategoryFilter(this.currentCategoryId)
 			} catch (e) {
 				uni.showToast({
 					title: (e && e.message) || '活动列表加载失败',
@@ -126,6 +132,7 @@ export default {
 		},
 		handleCategoryFilter(payload) {
 			const categoryId = payload && payload.categoryId ? payload.categoryId : null
+			this.currentCategoryId = categoryId
 			this.applyCategoryFilter(categoryId)
 		},
 		handleCardClick(item) {

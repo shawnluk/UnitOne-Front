@@ -1,0 +1,151 @@
+## 📋 UnitOne-Front 项目优化建议
+### 一、架构与代码组织 1. 统一页面目录结构
+当前页面分散在 pages/ 和 src/ 两个目录下，建议统一：
+
+```
+src/
+├── pages/          # 所有页面统一放这里
+│   ├── index/
+│   ├── moment/
+│   ├── message/
+│   ├── user/
+│   ├── login/
+│   ├── activity-detail/
+│   ├── create-activity/
+│   └── create-unit/
+``` 2. 引入状态管理（Pinia）
+目前数据完全通过组件内部 data 和 props 传递，跨页面共享数据（如登录状态、用户信息）非常不便。建议引入 Pinia ：
+
+- 用户登录状态、token、用户信息统一管理
+- 活动列表缓存，避免重复请求
+- 消息未读数全局共享
+参考 user.vue 中 isLoggedIn 通过 getOpenerEventChannel 回传的方式非常脆弱，用 Pinia 后可以直接响应式共享。
+ 3. API 层重构 — 分离 Mock 逻辑
+当前每个 API 函数内部都混入了 mock 判断逻辑，如 activity.js ：
+
+```
+if (useMock) {
+    return cloneJson(HOME_ACTIVITY_LIST)
+}
+```
+建议使用 拦截器模式 ，在 http.js 的 request 函数中统一处理 mock 开关，API 模块只关心业务逻辑。
+ 4. 引入 TypeScript（渐进式）
+项目已经是 Vue 3，完全支持 TypeScript。建议：
+
+- 先为核心模块（API 接口、数据模型）添加类型定义
+- 定义 Activity 、 MomentPost 、 User 等核心类型
+- 后续逐步迁移组件
+### 二、性能优化 5. 图片优化
+当前大量使用外部图片源（Unsplash、picsum），存在以下问题：
+
+- 加载速度不可控
+- 小程序可能需要配置 download 域名白名单
+- 无缓存策略
+建议：
+
+- 使用 uni-app 的 image 组件 lazy-load 属性
+- 对列表图片使用缩略图 + 原图两级加载
+- 考虑使用腾讯云 COS 的图片处理（缩放、裁剪、WebP 转换） 6. 长列表虚拟滚动
+home-activity-card.vue 和 moment-feed.vue 中的列表在数据量大时会有性能问题。建议：
+
+- 使用 uni-load-more 实现分页加载（项目已引入该组件但未使用）
+- 对于超长列表考虑虚拟列表（如 recycle-view ） 7. 页面懒加载
+在 pages.json 中为子页面添加预加载配置，减少首屏包体积。微信小程序已配置 "lazyCodeLoading": "requiredComponents" ，但 uni-app 层面还可以对非 tab 页面做分包处理：
+
+```
+{
+  "subPackages": [
+    {
+      "root": "subpages",
+      "pages": [
+        {"path": "login/login"},
+        {"path": "activity-detail/activity-detail"},
+        {"path": "create-activity/create-activity"},
+        {"path": "create-unit/create-unit"}
+      ]
+    }
+  ]
+}
+``` 8. 减少不必要的 reLaunch
+bottom-tab-bar.vue 使用 uni.reLaunch 切换 tab，这会销毁并重建整个页面。建议改用 uni.switchTab 或使用 uni-app 原生 tabBar 配置，可以保留页面状态，避免重复请求。
+
+### 三、用户体验 9. 添加骨架屏 / Loading 状态
+当前页面数据加载时没有任何过渡效果，用户看到的是空白。建议：
+
+- 为活动卡片、动态列表、消息列表添加骨架屏
+- 使用 uni-load-more 组件显示加载状态 10. 添加下拉刷新
+所有列表页面（首页、时刻、消息）都应该支持下拉刷新：
+
+```
+// pages/index/index.vue
+onPullDownRefresh() {
+    this.loadActivities().then(() => {
+        uni.stopPullDownRefresh()
+    })
+}
+``` 11. 全局错误处理
+当前 App.vue 只有 console.log ，建议添加：
+
+- 全局 uni.onError 错误捕获
+- API 请求统一错误提示（避免每个页面重复 uni.showToast ）
+- 网络异常时的重试机制 12. 请求去重与缓存
+多个页面可能同时请求相同数据（如活动列表在首页和时刻页都会用到），建议：
+
+- 添加请求去重（同一请求进行中时不重复发起）
+- 添加短时缓存（如 30 秒内的相同请求直接返回缓存）
+### 四、代码质量 13. 清理无用代码
+- button-list.vue 明显是测试组件，建议删除
+- swiper-bar.vue 中 data() 返回了空的 currentIndex 注释，应清理
+- user.vue 中注释掉的 uploadAvatar 方法应删除或实现 14. 消除硬编码
+- user-header-panel.vue 中 取伙号：987627983 硬编码
+- user-stats-panel.vue 中统计数据硬编码为 0
+- 建议统一提取到常量文件或从接口获取 15. 添加代码规范工具
+- 配置 ESLint + Prettier
+- 添加 Git pre-commit hooks（husky + lint-staged）
+- 统一 CSS 命名规范（目前混用了 camelCase 和 kebab-case） 16. SCSS 变量统一
+项目已有 uni.scss 和 uni_modules/uni-scss ，但各组件中大量使用硬编码颜色值（如 #5d547f 、 #1b1732 、 #1677ff ）。建议：
+
+- 在 uni.scss 中扩展项目专属的颜色、间距、圆角变量
+- 组件中统一引用变量，方便后续换肤
+### 五、安全与工程化 17. Token 安全管理
+当前 token 明文存储在 uni.setStorageSync('token', token) ，建议：
+
+- 考虑使用加密存储或至少做简单混淆
+- 添加 token 过期检测和自动刷新机制
+- 在 http.js 中添加 401 拦截，自动跳转登录页 18. 环境配置管理
+env.js 中 apiBaseUrl 和 useMock 目前是硬编码的，建议：
+
+- 通过构建变量或配置文件区分 dev/staging/prod 环境
+- 生产环境确保 useMock: false 且不打包 mock 数据 19. 添加 CI/CD
+- 配置 GitHub Actions / 工蜂 CI 实现自动构建
+- 上传到微信小程序 CI 自动预览/发布
+### 六、优先级建议
+优先级 优化项 影响范围 🔴 高 引入 Pinia 状态管理 全局架构 🔴 高 清理 button-list.vue 等无用代码 代码质量 🔴 高 添加骨架屏和下拉刷新 用户体验 🟡 中 API 层 Mock 逻辑分离 可维护性 🟡 中 页面分包懒加载 性能 🟡 中 统一页面目录结构 可维护性 🟡 中 图片懒加载与缩略图策略 性能 🟢 低 TypeScript 渐进引入 代码质量 🟢 低 ESLint/Prettier 配置 代码规范 🟢 低 SCSS 变量统一 可维护性 🟢 低 CI/CD 配置 工程化
+
+
+
+
+工程与协作
+补齐 CLI 工程元数据：根目录未检出 package.json（若你们是 HBuilderX 纯 GUI 开发可忽略；否则建议加上）以便统一 lint、build、CI，并与 README 中的「现代前端工具链」叙述一致。
+代码规范：当前未见 ESLint/Prettier 配置，建议在可 npm 化的前提下补一套，减少 Options API / 缩进混用（如 user.vue 里分号风格不一致）带来的噪音。
+配置与环境
+config/env.js：apiBaseUrl 仍是占位地址、useMock: true，上线前需要 按环境拆分（开发/预发/正式），并用构建替换或远端下发配置，避免误连错误环境。
+微信小程序 manifest.json：urlCheck: false 方便本地联调，上线前应收紧域名白名单，否则存在合规与安全风险。
+网络层（api/http.js）
+错误模型：现在多为 throw new Error(message)，可扩展为带 code / httpStatus 的错误类型，便于页面区分「网络失败 / 业务失败 / 未登录」。
+鉴权：已有 Bearer token；若后端支持 refresh，可集中处理 401 刷新或登出，避免各页重复写 uni.navigateTo 登录。
+可观测性：开发环境可对请求耗时、requestId 打日志；生产可接埋点或监控 SDK（按你们栈选型）。
+状态与组件数据流
+全局状态：登录态、用户信息等若多处使用，可考虑 Pinia（与 Vue 3 官方推荐一致），减少事件总线 uni.$on / $off（例如 home-activity-card.vue 中的分类联动）在页面销毁、重复订阅场景下的边界问题。
+home-activity-card.vue：activityList 与 filteredItems 双份列表可通过 computed + 当前 category 收敛，减少同步遗漏风险（属于可读性/正确性优化，非必须大改）。
+性能与包体
+manifest.json 已启用 mp-weixin.lazyCodeLoading: "requiredComponents"，方向正确。
+后续页面变多时：把 src/ 下非首屏页 放进 subPackages 分包，减轻主包体积与首屏解析。
+列表与封面图：对大图使用合适 mode、必要时 懒加载/占位图；长列表考虑分页或虚拟列表（视列表长度而定）。
+体验与健壮性
+加载与空态：列表接口失败已有 toast，可补充 骨架屏 / loading，空列表友好文案。
+App.vue：onLaunch / onShow 里仍有 console.log，生产构建建议去掉或条件编译，避免泄露调试信息、略微减小开销。
+原生权限与安全（App）
+manifest.json Android 里包含 READ_LOGS 等敏感权限，若无明确需求，打包前应逐项裁剪，否则审核与用户感知都可能变差。
+小结
+最值得先做的一般是：环境配置与 mock 开关的生产策略、网络层错误与登录态的统一处理、分包与图片/列表性能（随用户量与页面增多再加重）。若你希望落到「具体改哪些文件、用什么结构」，可以指定一端优先（例如微信小程序首发），我可以按该端给出更细的改造清单。

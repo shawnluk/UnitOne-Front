@@ -15,11 +15,9 @@
 							:class="{ guest: !isLoggedIn }"
 							@click="$emit('username-click')"
 						>{{ displayName }}</view>
-						<view class="userId">取伙号：987627983 <text class="idTag">🟠</text></view>
+						<view class="userId">取伙号：{{ partnerId }} <text class="idTag">{{ partnerIdTag }}</text></view>
 						<view class="userBadges">
-							<text class="badge">🔄1年</text>
-							<text class="badge">🎪</text>
-							<text class="badge">🛡️</text>
+							<text v-for="(badge, idx) in badges" :key="idx" class="badge">{{ badge }}</text>
 						</view>
 					</view>
 				</view>
@@ -27,16 +25,18 @@
 
 			<view class="memberStrip">
 				<view class="memberText">
-					<text class="memberTitle">成为会员</text>
-					<text class="memberDesc">付费一场活动，立即成为取伙会员</text>
+					<text class="memberTitle">{{ memberTitle }}</text>
+					<text class="memberDesc">{{ memberDesc }}</text>
 				</view>
-				<text class="memberLink">查看会员权益 ›</text>
+				<text class="memberLink">{{ memberLink }}</text>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+import { MOCK_USER_HEADER } from '@/mock/user-display.js'
+
 export default {
 	name: 'UserHeaderPanel',
 	props: {
@@ -52,6 +52,13 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+	},
+	data() {
+		const { badges, ...rest } = MOCK_USER_HEADER
+		return {
+			...rest,
+			badges: [...badges],
+		}
 	},
 }
 </script>

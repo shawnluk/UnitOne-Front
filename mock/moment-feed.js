@@ -77,3 +77,7 @@ export const MOCK_MOMENT_POSTS = [
 		]
 	}
 ]
+
+/** Stories 无头像、无活动封面时的占位图（与活动 Mock 中 org 头像同源便于替换） */
+export const MOCK_MOMENT_STORY_FALLBACK_AVATAR =
+	'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/logo.png'

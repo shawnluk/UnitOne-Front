@@ -12,7 +12,12 @@
 					<text class="squadMore">{{ moreText }}</text>
 				</view>
 			</view>
-			<view class="squadItem">
+			<view
+				class="squadItem squadItem--clickable"
+				hover-class="squadItem--hover"
+				hover-stay-time="120"
+				@tap.stop="goSquadDetail"
+			>
 				<image class="squadCover" :src="item.cover" mode="aspectFill" />
 				<view class="squadInfo">
 					<view class="squadName">{{ item.name }}</view>
@@ -28,19 +33,16 @@
 </template>
 
 <script>
+import { MOCK_USER_SQUAD_PANEL } from '@/mock/user-display.js'
+
 export default {
 	name: 'UserSquadPanel',
 	data() {
+		const { title, moreText, item } = MOCK_USER_SQUAD_PANEL
 		return {
-			title: '小队管理',
-			moreText: '更多 >',
-			item: {
-				cover: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/real-madrid-ucl-1024x1024.jpg',
-				name: '皇马球迷足球活动',
-				stats: '0活动 1成员',
-				badge: '小队长',
-				topTag: '置顶',
-			},
+			title,
+			moreText,
+			item: { ...item },
 		}
 	},
 	methods: {
@@ -52,12 +54,24 @@ export default {
 				},
 			})
 		},
+
+		goSquadDetail() {
+			const id = this.item && this.item.id ? this.item.id : ''
+			const q = id ? `?squadId=${encodeURIComponent(id)}` : ''
+			uni.navigateTo({
+				url: `/pages/user/components/squad-detail${q}`,
+				fail: () => {
+					uni.showToast({ title: '页面打开失败', icon: 'none' })
+				},
+			})
+		},
 	},
 }
 </script>
 
 <style scoped>
 .squadSection {
+	margin-top: 30rpx;
 	position: relative;
 	overflow: hidden;
 	background: linear-gradient(145deg, #ffffff 0%, #f8f3ff 52%, #f0faff 100%);
@@ -129,6 +143,16 @@ export default {
 	box-shadow: 0 8rpx 22rpx rgba(50, 40, 90, 0.08);
 }
 
+/* H5：卡片可点，与「创建小队」区分 */
+.squadItem--clickable {
+	cursor: pointer;
+}
+
+.squadItem--hover {
+	background: rgba(255, 255, 255, 0.92);
+	box-shadow: 0 10rpx 28rpx rgba(125, 95, 255, 0.14);
+}
+
 .squadCover {
 	width: 120rpx;
 	height: 120rpx;
@@ -143,6 +167,7 @@ export default {
 }
 
 .squadName {
+	margin-left: 20rpx;
 	font-size: 28rpx;
 	font-weight: 600;
 	color: #1b1732;
@@ -150,6 +175,7 @@ export default {
 }
 
 .squadStats {
+	margin-left: 20rpx;
 	font-size: 22rpx;
 	color: #6c6392;
 }
@@ -176,6 +202,7 @@ export default {
 }
 
 .squadTop {
+	margin-top: 10rpx;
 	font-size: 20rpx;
 	font-weight: 600;
 	color: #5d37ff;

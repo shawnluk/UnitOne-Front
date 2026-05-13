@@ -9,7 +9,7 @@
 					@avatar-click="handleCrop"
 					@username-click="onUsernameClick"
 				/>
-				<UserStatsPanel />
+				<!-- <UserStatsPanel /> -->
 				<UserDataPanel />
 				<UserServiceEntryPanel />
 				<UserSquadPanel />
@@ -35,18 +35,23 @@
 <script>
 import PageScaffold from '@/components/page-scaffold.vue'
 import UserHeaderPanel from './components/user-header-panel.vue'
-import UserStatsPanel from './components/user-stats-panel.vue'
+// import UserStatsPanel from './components/user-stats-panel.vue'
 import UserServiceEntryPanel from './components/user-service-entry-panel.vue'
 import UserDataPanel from './components/user-data-panel.vue'
 import UserSquadPanel from './components/user-squad-panel.vue'
 import UserPublishButton from './components/user-publish-button.vue'
 import QfImageCropper from '@/uni_modules/qf-image-cropper/components/qf-image-cropper/qf-image-cropper.vue'
+import {
+	MOCK_USER_DEFAULT_AVATAR,
+	MOCK_USER_DISPLAY_NAME_GUEST,
+	MOCK_USER_DISPLAY_NAME_LOGGED_IN,
+} from '@/mock/user-display.js'
 
 export default {
 	components: {
 		PageScaffold,
 		UserHeaderPanel,
-		UserStatsPanel,
+		// UserStatsPanel,
 		UserServiceEntryPanel,
 		UserDataPanel,
 		UserSquadPanel,
@@ -55,7 +60,7 @@ export default {
 	},
 	data() {
 		return {
-			avatarUrl: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/helloworld_01.jpg',
+			avatarUrl: MOCK_USER_DEFAULT_AVATAR,
 			showCropper: false,
 			cropperImg: '',
 			cropCanceled: false,
@@ -68,7 +73,9 @@ export default {
 
 	computed: {
 		displayName() {
-			return this.isLoggedIn ? 'shawn' : 'HiGoer'
+			return this.isLoggedIn
+				? MOCK_USER_DISPLAY_NAME_LOGGED_IN
+				: MOCK_USER_DISPLAY_NAME_GUEST
 		},
 	},
 

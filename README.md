@@ -188,6 +188,13 @@ pages.json → pages[]
 
 ## 改动日志
 
+### 2026-05-13
+
+- **个人页 · 小队管理**：`pages/user/components/user-squad-panel.vue` 中小队主卡片可点击进入详情（`squadId` 查询参数）；H5 使用手型光标，各端带按压态；右上角「创建小队」仍跳转 `src/create-unit`。
+- **小队详情页**：新增 `pages/user/components/squad-detail.vue`，沿用个人页卡片式 UI（渐变统计卡、白底区块、紫粉强调色），展示头图、创建时间、小队活动/成员数、简介、成员列表、近期活动（当前 Mock 为空时展示空状态）与底部提示。
+- **Mock**：`mock/user-display.js` 为面板小队条目增加 `id`；新增 `MOCK_USER_SQUAD_DEFAULT_ID`、`MOCK_USER_SQUAD_DETAILS` 与 `getMockUserSquadDetail()`，供详情页按 id 读取（未知 id 回退默认小队）。
+- **路由**：`pages.json` 注册 `pages/user/components/squad-detail`，单页使用 `navigationStyle: "default"`，标题「小队详情」。
+
 ### 2026-05-09（补充）
 
 - **Mock 拦截**：在 **`api/http.js`** 的 **`request`** 中统一处理 **`useMock`**；各 **`api/modules/*.js`** 仅传入 **`mock`** 与真实请求参数，逻辑更清晰。

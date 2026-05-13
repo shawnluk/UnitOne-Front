@@ -23,6 +23,15 @@
 		},
 		{"path": "pages/user/user"},
 		{
+			"path": "pages/user/components/squad-detail",
+			"style": {
+				"navigationBarTitleText": "小队详情",
+				"navigationStyle": "default",
+				"navigationBarBackgroundColor": "#E8F4FF",
+				"navigationBarTextStyle": "black"
+			}
+		},
+		{
 			"path": "src/login/login",
 			"style": {
 				"navigationBarTitleText": "登录",

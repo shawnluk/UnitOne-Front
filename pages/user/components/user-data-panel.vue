@@ -10,16 +10,13 @@
 </template>
 
 <script>
+import { MOCK_USER_DATA_ITEMS } from '@/mock/user-display.js'
+
 export default {
 	name: 'UserDataPanel',
 	data() {
 		return {
-			items: [
-				{ label: '小队', value: 4 },
-				{ label: '好友', value: 1 },
-				{ label: '历史活动', value: 0 },
-				{ label: '相册', value: 0 },
-			],
+			items: MOCK_USER_DATA_ITEMS.map((row) => ({ ...row })),
 		}
 	},
 }
@@ -27,6 +24,7 @@ export default {
 
 <style scoped>
 .dataSection {
+	margin-top: 30rpx;
 	position: relative;
 	overflow: hidden;
 	background: linear-gradient(145deg, #ffffff 0%, #f8f3ff 52%, #f0faff 100%);

@@ -10,16 +10,13 @@
 </template>
 
 <script>
+import { MOCK_USER_SERVICE_ENTRIES } from '@/mock/user-display.js'
+
 export default {
 	name: 'UserServiceEntryPanel',
 	data() {
 		return {
-			items: [
-				{ icon: '📋', label: '订单' },
-				{ icon: '💰', label: '钱包' },
-				{ icon: '🎧', label: '客服' },
-				{ icon: '⚙️', label: '设置' },
-			],
+			items: MOCK_USER_SERVICE_ENTRIES.map((row) => ({ ...row })),
 		}
 	},
 }
@@ -27,6 +24,7 @@ export default {
 
 <style scoped>
 .navSection {
+	margin-top: 30rpx;
 	position: relative;
 	overflow: hidden;
 	background: linear-gradient(145deg, #ffffff 0%, #f8f3ff 52%, #f0faff 100%);

@@ -124,6 +124,8 @@
 </template>
 
 <script>
+	import { MOCK_MOMENT_STORY_FALLBACK_AVATAR } from '@/mock/moment-feed.js'
+
 	export default {
 		name: 'MomentFeed',
 		props: {
@@ -148,9 +150,7 @@
 		},
 		computed: {
 			storyList() {
-				const fallbackAva =
-					this.profileAvatar ||
-					'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/logo.png'
+				const fallbackAva = this.profileAvatar || MOCK_MOMENT_STORY_FALLBACK_AVATAR
 				const head = [
 					{
 						id: '__publish__',

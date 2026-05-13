@@ -23,15 +23,14 @@
 </template>
 
 <script>
+import { MOCK_USER_STATS_ITEMS, MOCK_USER_STAR_VALUE } from '@/mock/user-display.js'
+
 export default {
 	name: 'UserStatsPanel',
 	data() {
 		return {
-			stats: [
-				{ icon: '🔥', label: '伙柴', value: 0 },
-				{ icon: '🎫', label: '伙卡', value: 0 },
-			],
-			starValue: 5,
+			stats: MOCK_USER_STATS_ITEMS.map((row) => ({ ...row })),
+			starValue: MOCK_USER_STAR_VALUE,
 		}
 	},
 }

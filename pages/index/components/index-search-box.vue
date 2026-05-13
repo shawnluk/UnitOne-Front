@@ -19,16 +19,18 @@
 </template>
 
 <script>
+import { MOCK_INDEX_INITIAL_CITY, MOCK_INDEX_INITIAL_REGION } from '@/mock/index-page.js'
+
 export default {
 	name: 'IndexSearchBox',
 	props: {
 		initialCity: {
 			type: String,
-			default: '深圳',
+			default: MOCK_INDEX_INITIAL_CITY,
 		},
 		initialRegion: {
 			type: Array,
-			default: () => ['广东省', '深圳市', '南山区'],
+			default: () => [...MOCK_INDEX_INITIAL_REGION],
 		},
 		initialKeyword: {
 			type: String,

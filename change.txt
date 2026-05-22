@@ -149,3 +149,27 @@ App.vue：onLaunch / onShow 里仍有 console.log，生产构建建议去掉或�
 manifest.json Android 里包含 READ_LOGS 等敏感权限，若无明确需求，打包前应逐项裁剪，否则审核与用户感知都可能变差。
 小结
 最值得先做的一般是：环境配置与 mock 开关的生产策略、网络层错误与登录态的统一处理、分包与图片/列表性能（随用户量与页面增多再加重）。若你希望落到「具体改哪些文件、用什么结构」，可以指定一端优先（例如微信小程序首发），我可以按该端给出更细的改造清单。
+
+
+
+chatgpt5.5 ==》
+看了一圈，项目整体已经有组件化雏形，但最值得优化的不是细枝末节 UI，而是发布安全、导航状态、数据流和工程化。当前我没有改文件。
+优先问题
+P0 环境配置仍是硬编码 mock：config/env.js (line 5) 默认 apiBaseUrl: 'https://your-api.example.com' 且 useMock: true。上线前很容易误打 mock 包。建议拆 dev/staging/prod 配置，并让生产构建强制 useMock: false。
+
+P1 自定义底栏用 uni.reLaunch 切主页面：components/bottom-tab-bar.vue (line 63)。这会清空页面栈、重建页面、重复请求，也丢状态。当前 pages.json (line 1) 没有原生 tabBar，建议补 tabBar 后改 switchTab，或做单页壳层切换。
+
+P1 活动详情把整个活动对象塞进 URL：components/home-activity-card.vue (line 138)、components/moment-feed.vue (line 216)、src/activity-detail/activity-detail.vue (line 208)。图片、描述一多就可能超 URL 限制，也会让详情数据不可刷新。建议只传 activityId，详情页按 id 拉接口或读缓存。
+
+P1 Vue 3 项目里还有 beforeDestroy：components/home-activity-card.vue (line 88)、pages/user/user.vue (line 142)。这类清理事件/定时器的逻辑建议改成 beforeUnmount 或页面 onUnload，否则配合 reLaunch 容易留下事件监听或定时器。
+
+P2 请求层还缺统一 401/登录态处理：api/http.js (line 91) 现在只做状态码和业务体解包；api/modules/auth.js (line 18) token 直接落本地。建议加 401 跳登录、refresh token、统一 toast/错误码映射。
+
+P2 发布配置偏开发态：manifest.json (line 52) 微信小程序 urlCheck: false；project.config.json (line 17) uploadWithSourceMap: true。上线前建议收紧域名白名单，生产关闭 sourcemap 上传。
+
+P2 远程图片和 mock 图源较散：components/top-bar.vue (line 3)、components/swiper-bar.vue (line 27)、pages/moment/moment.vue (line 24)。建议把图片域名、默认图、CDN 资源集中配置，并避免生产依赖 picsum/unsplash 这类 mock 图源。
+
+P2 README 说有主题令牌 $uo-* 和 constants/uo-theme.js，但实际缺失：README.md (line 136)、uni.scss (line 15)。同时很多页面硬编码渐变和颜色。建议先补主题 token，再逐步替换重复色值。
+
+P3 工程卫生可以再收一轮：project.private.config.json、change.txt、readme_legacy_notes.txt 已被 Git 跟踪；仓库没有 package.json，也没有 lint/test 脚本。建议补最小 CLI 校验，至少覆盖 utils/squad-name.js 这种规则函数。
+我建议下一步先落地 4 个收益最高的改动：环境配置拆分、活动详情改传 id、Vue3 生命周期清理、请求层 401 统一处理。这几处改完，项目会稳很多。

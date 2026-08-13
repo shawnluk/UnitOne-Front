@@ -152,7 +152,7 @@ manifest.json Android 里包含 READ_LOGS 等敏感权限，若无明确需求�
 
 
 
-chatgpt5.5 ==》
+chatgpt5.5 ==》 2026.06.05
 看了一圈，项目整体已经有组件化雏形，但最值得优化的不是细枝末节 UI，而是发布安全、导航状态、数据流和工程化。当前我没有改文件。
 优先问题
 P0 环境配置仍是硬编码 mock：config/env.js (line 5) 默认 apiBaseUrl: 'https://your-api.example.com' 且 useMock: true。上线前很容易误打 mock 包。建议拆 dev/staging/prod 配置，并让生产构建强制 useMock: false。
@@ -173,3 +173,32 @@ P2 README 说有主题令牌 $uo-* 和 constants/uo-theme.js，但实际缺失�
 
 P3 工程卫生可以再收一轮：project.private.config.json、change.txt、readme_legacy_notes.txt 已被 Git 跟踪；仓库没有 package.json，也没有 lint/test 脚本。建议补最小 CLI 校验，至少覆盖 utils/squad-name.js 这种规则函数。
 我建议下一步先落地 4 个收益最高的改动：环境配置拆分、活动详情改传 id、Vue3 生命周期清理、请求层 401 统一处理。这几处改完，项目会稳很多。
+
+
+我按实际目录 HiGo-Frontend / HiGo-Backend 看了一圈。整体基础不错：前端已经有统一请求封装、Mock 开关、页面骨架；后端 smoke test 也能跑通。更值得改的是这些：
+前端优先改
+环境配置拆分：现在 API 地址写死在 config/env.js (line 8)。建议拆 dev / staging / prod，生产构建强制关闭 mock，避免误连本机或测试环境。
+
+活动详情不要把整个对象塞进 URL：home-activity-card.vue (line 140)、moment-feed.vue (line 221)、activity-detail.vue (line 210)。建议只传 activityId，详情页通过接口或本地缓存取详情，稳定很多。
+
+请求层补 401 和错误模型：api/http.js (line 91) 目前只返回 HTTP xxx。建议统一处理未登录、token 过期、业务错误码、重试和跳登录。
+
+自定义底栏现在用 reLaunch：bottom-tab-bar.vue (line 67)，会重建页面、丢状态。建议补原生 tabBar 后用 switchTab，或做一个真正的主页面壳层。
+
+Vue 3 生命周期清理：还有 beforeDestroy，如 home-activity-card.vue (line 94)、user.vue (line 153)。建议换成 beforeUnmount，避免事件监听和定时器边界问题。
+
+主题系统补齐：README 说有 $uo-* 和 constants/uo-theme.js，但 uni.scss (line 15) 还只有 uni 默认变量。建议先补主题 token，再逐步替换组件里的硬编码颜色。
+
+后端优先改
+数据持久化：活动现在存在内存里，activity-service.js (line 4) 启动即重置。建议至少接 SQLite / MySQL / MongoDB，或开发期文件存储。
+
+认证安全：登录目前只校验非空，并签一个 token，auth-service.js (line 17)；默认密钥在 config.js (line 11)。建议加用户表、密码哈希、token 校验中间件、受保护接口。
+
+补详情接口：当前活动只有列表和创建，routes/activities.js (line 5)。建议加 GET /api/v1/activities/:id，正好配合前端详情页改造。
+
+输入校验加强：创建活动只校验标题，activity-service.js (line 86)。建议校验时间、类型、价格、地点、描述长度，并返回稳定错误码。
+
+生产安全配置：CORS 默认 *，lib/http.js (line 4)。建议生产限制来源，并加 requestId、访问日志、基础限流。
+
+我建议先做四件事：环境配置拆分、活动详情改传 id、请求层 401 统一处理、后端加活动详情接口。这四个改完，前后端联调会稳一大截。
+验证了一下：HiGo-Backend 下的 npm test 已通过。

@@ -7,7 +7,7 @@ export function getEnv () {
 		/** 后端 API 根地址，末尾不要斜杠 */
 		apiBaseUrl: 'http://127.0.0.1:3001',
 		/** true：不走网络，使用 mock；false：使用 uni.request */
-		useMock: false,
+		useMock: true,
 		requestTimeoutMs: 15000,
 	}
 }

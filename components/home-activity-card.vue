@@ -135,7 +135,9 @@ export default {
 			this.currentCategoryId = categoryId
 			this.applyCategoryFilter(categoryId)
 		},
+		
 		handleCardClick(item) {
+			console.log(item)
 			uni.redirectTo({
 				url: "/src/activity-detail/activity-detail?item=" + encodeURIComponent(JSON.stringify(item))
 			})

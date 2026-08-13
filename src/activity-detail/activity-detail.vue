@@ -145,7 +145,7 @@ function normalizeActivity(raw) {
 		detail_paragraphs: Array.isArray(raw.detail_paragraphs) ? raw.detail_paragraphs : [],
 		fee_note: raw.fee_note || raw.feeNote || '',
 		category_id: raw.category_id,
-		name: raw.name || '',
+		activity_id: raw.activity_id || '',
 	}
 }
 

@@ -161,7 +161,7 @@
 				]
 				const list = Array.isArray(this.activities) ? this.activities : []
 				const rest = list.map((a, i) => ({
-					id: String(a.name || a.id || `activity-${i}`),
+					id: String(a.activity_id || a.id || `activity-${i}`),
 					name: this.shortStoryTitle(a.title),
 					avatar: a.cover || a.org_avatar || fallbackAva,
 					isAdd: false,

@@ -5,7 +5,7 @@
 export const HOME_ACTIVITY_LIST = [
 	{
 		category_id: 1,
-		name: '1-1',
+		activity_id: 1,
 		isActive: false,
 		tagText: '约球',
 		cover:
@@ -30,7 +30,7 @@ export const HOME_ACTIVITY_LIST = [
 	},
 	{
 		category_id: 1,
-		name: '1-2',
+		activity_id: 2,
 		isActive: false,
 		tagText: '约球',
 		cover:
@@ -55,7 +55,7 @@ export const HOME_ACTIVITY_LIST = [
 	},
 	{
 		category_id: 2,
-		name: '2-2',
+		activity_id: 3,
 		isActive: false,
 		tagText: '观影',
 		cover:
@@ -80,7 +80,7 @@ export const HOME_ACTIVITY_LIST = [
 	},
 	{
 		category_id: 3,
-		name: '3-3',
+		activity_id: 4,
 		isActive: false,
 		tagText: '户外',
 		cover:
@@ -105,7 +105,7 @@ export const HOME_ACTIVITY_LIST = [
 	},
 	{
 		category_id: 4,
-		name: '4-4',
+		activity_id: 5,
 		isActive: false,
 		tagText: '闲聊',
 		cover:
@@ -130,7 +130,7 @@ export const HOME_ACTIVITY_LIST = [
 	},
 	{
 		category_id: 5,
-		name: '5-5',
+		activity_id: 6,
 		isActive: false,
 		tagText: '艺术',
 		cover:

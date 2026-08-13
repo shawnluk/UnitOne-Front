@@ -2,7 +2,7 @@
 	<view class="cardList">
 		<view
 			v-for="(data, index) in filteredItems"
-			:key="data.name || data.id || index"
+			:key="data.activity_id || data.id || index"
 			:class="['card', themeClass]"
 			@click="handleCardClick(data)"
 		>

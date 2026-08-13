@@ -135,7 +135,7 @@ export default {
 			this.currentCategoryId = categoryId
 			this.applyCategoryFilter(categoryId)
 		},
-		
+		// NOTE:item对象改为传 id
 		handleCardClick(item) {
 			console.log(item)
 			uni.redirectTo({

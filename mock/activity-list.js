@@ -19,7 +19,7 @@ export const HOME_ACTIVITY_LIST = [
 			'请穿运动鞋入场；自带拍或现场租借均可，羽球费用当场分摊。',
 			'开始前 15 分钟在场馆入口集合，迟到请在群里说一声方便留位。',
 		],
-		org_avatar: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/logo.png',
+		org_avatar: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/TopBar/logo.png',
 		org_name: '阿Ken',
 		joinCount: 10,
 		joinAvatars: [
@@ -44,7 +44,7 @@ export const HOME_ACTIVITY_LIST = [
 			'请自备饮用水与毛巾；分队随机抽签，打到闭馆或体力耗尽为止。',
 			'雨天若露天场地关闭，会提前 2 小时在群里通知并改期。',
 		],
-		org_avatar: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/logo.png',
+		org_avatar: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/TopBar/logo.png',
 		org_name: 'Mia篮球手',
 		joinCount: 10,
 		joinAvatars: [
@@ -69,7 +69,7 @@ export const HOME_ACTIVITY_LIST = [
 			'禁止屏摄；观影后可自愿一起去楼下咖啡聊聊剧情。',
 			'临时跳车请提前一天说明，方便补位。',
 		],
-		org_avatar: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/logo.png',
+		org_avatar: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/TopBar/logo.png',
 		org_name: '电影小牧',
 		joinCount: 11,
 		joinAvatars: [
@@ -94,7 +94,7 @@ export const HOME_ACTIVITY_LIST = [
 			'请穿防滑徒步鞋，带够水和帽子；日落时段山顶风大注意保暖。',
 			'集合请准时，迟到会在北门牌坊处留人等 10 分钟。',
 		],
-		org_avatar: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/logo.png',
+		org_avatar: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/TopBar/logo.png',
 		org_name: '山野阿泽',
 		joinCount: 12,
 		joinAvatars: [
@@ -119,7 +119,7 @@ export const HOME_ACTIVITY_LIST = [
 			'不设固定议程，欢迎带一个问题或一个小案例来聊。',
 			'店内座位先到先得，若满座可换隔壁咖啡店继续。',
 		],
-		org_avatar: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/logo.png',
+		org_avatar: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/TopBar/logo.png',
 		org_name: 'Luna产品喵',
 		joinCount: 13,
 		joinAvatars: [
@@ -144,7 +144,7 @@ export const HOME_ACTIVITY_LIST = [
 			'画室提供围裙与颜料，建议穿深色上衣以防沾染。',
 			'作品可当日带走；如需烘干装裱可现场加购。',
 		],
-		org_avatar: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test/logo.png',
+		org_avatar: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/TopBar/logo.png',
 		org_name: '木子画室',
 		joinCount: 14,
 		joinAvatars: [

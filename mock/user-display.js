@@ -2,10 +2,10 @@
  * 个人中心等页面的展示用 Mock（原写死在各组件内，与接口对齐后可逐步替换）。
  */
 
-const COS_TEST = 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/test'
+const COS_TEST = 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/TopBar'
 
 /** 用户页默认头像（未裁剪前） */
-export const MOCK_USER_DEFAULT_AVATAR = `${COS_TEST}/helloworld_01.jpg`
+export const MOCK_USER_DEFAULT_AVATAR = `${COS_TEST}/logo.png`
 
 /** 未登录 / 已登录展示昵称（开发占位） */
 export const MOCK_USER_DISPLAY_NAME_GUEST = 'HiGoer'
@@ -13,7 +13,7 @@ export const MOCK_USER_DISPLAY_NAME_LOGGED_IN = 'shawn'
 
 /** 头部资料卡：取伙号、徽章、会员条文案 */
 export const MOCK_USER_HEADER = {
-	partnerId: '987627983',
+	partnerId: '000001',
 	partnerIdTag: '🟠',
 	// badges: ['🔄1年', '🎪', '🛡️'],
 	badges: ['1年'],

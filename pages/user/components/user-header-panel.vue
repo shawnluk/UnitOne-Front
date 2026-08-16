@@ -15,7 +15,7 @@
 							:class="{ guest: !isLoggedIn }"
 							@click="$emit('username-click')"
 						>{{ displayName }}</view>
-						<view class="userId">取伙号：{{ partnerId }} <text class="idTag">{{ partnerIdTag }}</text></view>
+						<view class="userId">趣玩号：{{ partnerId }} <text class="idTag">{{ partnerIdTag }}</text></view>
 						<view class="userBadges">
 							<text v-for="(badge, idx) in badges" :key="idx" class="badge">{{ badge }}</text>
 						</view>

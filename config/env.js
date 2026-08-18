@@ -5,9 +5,10 @@
 export function getEnv () {
 	return {
 		/** 后端 API 根地址，末尾不要斜杠 */
-		apiBaseUrl: 'http://127.0.0.1:3001',
+		// apiBaseUrl: 'http://127.0.0.1:3001',
+		apiBaseUrl: 'http://0.0.0.0:3000',
 		/** true：不走网络，使用 mock；false：使用 uni.request */
-		useMock: true,
+		useMock: false,
 		requestTimeoutMs: 15000,
 	}
 }

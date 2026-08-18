@@ -109,7 +109,8 @@ export default {
 		async loadActivities() {
 			try {
 				const list = await fetchHomeActivityList()
-				this.activityList = Array.isArray(list) ? list : []
+				this.activityList = Array.isArray(list) ? list : [],
+				console.log(this.activityList)
 				this.applyCategoryFilter(this.currentCategoryId)
 			} catch (e) {
 				uni.showToast({

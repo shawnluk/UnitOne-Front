@@ -135,15 +135,15 @@ function normalizeActivity(raw) {
 		...raw,
 		cover: raw.cover || '',
 		title: raw.title || '活动',
-		location_text: raw.location_text || raw.locationText || '',
-		time_text: raw.time_text || raw.timeText || raw.time || '',
-		org_avatar: raw.org_avatar || raw.orgAvatar || '',
-		org_name: raw.org_name || raw.orgName || '',
+		location_text: raw.location_text || '',
+		time_text: raw.time_text || '',
+		org_avatar: raw.org_avatar || '',
+		org_name: raw.org_name || '',
 		joinCount: Number(raw.joinCount) || joinAvatars.length || 0,
 		joinAvatars,
-		tagText: raw.tagText || raw.tag_text || '',
-		detail_paragraphs: Array.isArray(raw.detail_paragraphs) ? raw.detail_paragraphs : [],
-		fee_note: raw.fee_note || raw.feeNote || '',
+		tag_text: raw.tag_text || '',
+		description: raw.description || '',
+		fee_note: raw.fee_note || '',
 		category_id: raw.category_id,
 		activity_id: raw.activity_id || '',
 	}
@@ -167,7 +167,7 @@ const joinList = computed(() => {
 })
 
 const tagLabel = computed(() => {
-	const t = detail.value.tagText
+	const t = detail.value.tag_text
 	if (t) return t
 	const id = detail.value.category_id
 	return id != null ? CATEGORY_TAG[id] || '' : ''
@@ -183,8 +183,10 @@ const statusHint = computed(() => {
 })
 
 const detailLines = computed(() => {
-	const ps = detail.value.detail_paragraphs
-	if (Array.isArray(ps) && ps.length) return ps
+	const desc = detail.value.description
+	if (desc && typeof desc === 'string') {
+		return desc.split('\n').filter(line => line.trim())
+	}
 	const title = detail.value.title || '本场活动'
 	return [
 		`欢迎参加「${title}」。以下为活动简介，具体安排以现场为准。`,

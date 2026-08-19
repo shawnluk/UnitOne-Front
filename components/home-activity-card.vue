@@ -19,8 +19,8 @@
 				<text class="title" :number-of-lines="2">{{ data.title }}</text>
 			</view>
 
-			<view class="tagRow" v-if="data.tagText || data.tag_text">
-				<text class="tag">{{ data.tagText || data.tag_text }}</text>
+			<view class="tagRow" v-if="data.tag_text">
+				<text class="tag">{{ data.tag_text }}</text>
 			</view>
 
 			<view class="meta">

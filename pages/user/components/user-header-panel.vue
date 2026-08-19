@@ -52,13 +52,30 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-	},
-	data() {
-		const { badges, ...rest } = MOCK_USER_HEADER
-		return {
-			...rest,
-			badges: [...badges],
-		}
+		partnerId: {
+			type: String,
+			default: MOCK_USER_HEADER.partnerId,
+		},
+		partnerIdTag: {
+			type: String,
+			default: MOCK_USER_HEADER.partnerIdTag,
+		},
+		badges: {
+			type: Array,
+			default: () => [...MOCK_USER_HEADER.badges],
+		},
+		memberTitle: {
+			type: String,
+			default: MOCK_USER_HEADER.memberTitle,
+		},
+		memberDesc: {
+			type: String,
+			default: MOCK_USER_HEADER.memberDesc,
+		},
+		memberLink: {
+			type: String,
+			default: MOCK_USER_HEADER.memberLink,
+		},
 	},
 }
 </script>

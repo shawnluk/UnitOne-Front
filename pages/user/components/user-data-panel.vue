@@ -14,10 +14,11 @@ import { MOCK_USER_DATA_ITEMS } from '@/mock/user-display.js'
 
 export default {
 	name: 'UserDataPanel',
-	data() {
-		return {
-			items: MOCK_USER_DATA_ITEMS.map((row) => ({ ...row })),
-		}
+	props: {
+		items: {
+			type: Array,
+			default: () => MOCK_USER_DATA_ITEMS.map((row) => ({ ...row })),
+		},
 	},
 }
 </script>

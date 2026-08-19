@@ -9,30 +9,30 @@ export const MOCK_USER_DEFAULT_AVATAR = `${COS_TEST}/logo.png`
 
 /** 未登录 / 已登录展示昵称（开发占位） */
 export const MOCK_USER_DISPLAY_NAME_GUEST = 'HiGoer'
-export const MOCK_USER_DISPLAY_NAME_LOGGED_IN = 'shawn'
+export const MOCK_USER_DISPLAY_NAME_LOGGED_IN = 'HiGoer'
 
 /** 头部资料卡：取伙号、徽章、会员条文案 */
 export const MOCK_USER_HEADER = {
 	partnerId: '000001',
 	partnerIdTag: '🟠',
 	// badges: ['🔄1年', '🎪', '🛡️'],
-	badges: ['1年'],
+	badges: [''],
 	memberTitle: '成为会员',
 	memberDesc: '付费一场活动，立即成为HiGo会员',
 	memberLink: '查看会员权益 ›',
 }
 
 /** 伙柴 / 伙卡 / 伙星（统计条） */
-// export const MOCK_USER_STATS_ITEMS = [
-// 	{ icon: '🔥', label: '伙柴', value: 0 },
-// 	{ icon: '🎫', label: '伙卡', value: 0 },
-// ]
-// export const MOCK_USER_STAR_VALUE = 5
+export const MOCK_USER_STATS_ITEMS = [
+	{ icon: '🔥', label: '伙柴', value: 0 },
+	{ icon: '🎫', label: '伙卡', value: 0 },
+]
+export const MOCK_USER_STAR_VALUE = 5
 
 /** 数据宫格：小队 / 好友等 */
 export const MOCK_USER_DATA_ITEMS = [
-	{ label: '小队', value: 4 },
-	{ label: '好友', value: 1 },
+	{ label: '小队', value: 0 },
+	{ label: '好友', value: 0 },
 	{ label: '历史活动', value: 0 },
 	{ label: '相册', value: 0 },
 ]
@@ -46,7 +46,7 @@ export const MOCK_USER_SERVICE_ENTRIES = [
 ]
 
 /** 默认小队 id（个人页卡片与详情页 Mock 共用） */
-export const MOCK_USER_SQUAD_DEFAULT_ID = 'demo-squad-1'
+export const MOCK_USER_SQUAD_DEFAULT_ID = ''
 
 /** 小队管理区块默认一条（占位） */
 export const MOCK_USER_SQUAD_PANEL = {
@@ -54,9 +54,10 @@ export const MOCK_USER_SQUAD_PANEL = {
 	moreText: '点击创建小队>>',
 	item: {
 		id: MOCK_USER_SQUAD_DEFAULT_ID,
-		cover: `${COS_TEST}/real-madrid-ucl-1024x1024.jpg`,
-		name: '皇马球迷足球活动',
-		stats: '0活动 1成员',
+		// cover: `${COS_TEST}/real-madrid-ucl-1024x1024.jpg`,
+		cover: '',
+		name: '',
+		stats: '0活动 0成员',
 		badge: '小队长',
 		topTag: '置顶',
 	},
@@ -68,20 +69,22 @@ export const MOCK_USER_SQUAD_PANEL = {
 export const MOCK_USER_SQUAD_DETAILS = {
 	[MOCK_USER_SQUAD_DEFAULT_ID]: {
 		id: MOCK_USER_SQUAD_DEFAULT_ID,
-		cover: `${COS_TEST}/real-madrid-ucl-1024x1024.jpg`,
-		name: '皇马球迷足球活动',
+		// cover: `${COS_TEST}/real-madrid-ucl-1024x1024.jpg`,
+		cover: '',
+		name: '',
 		badge: '小队长',
 		topTag: '置顶',
 		activityCount: 0,
-		memberCount: 1,
-		createdAtLabel: '2025-11-02 创建',
+		memberCount: 0,
+		createdAtLabel: '',
 		intro:
-			'同城皇马球迷线下约球、观赛与闲聊。欢迎新面孔加入，活动以业余养生局为主，安全第一。',
+			'',
 		members: [
 			{
-				name: 'shawn',
+				name: '',
 				role: '小队长',
-				avatar: `${COS_TEST}/helloworld_01.jpg`,
+				// avatar: `${COS_TEST}/helloworld_01.jpg`,
+				avatar: '',
 			},
 		],
 		/** 近期小队活动（占位，空数组时详情页展示空状态） */

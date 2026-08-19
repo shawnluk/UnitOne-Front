@@ -14,10 +14,11 @@ import { MOCK_USER_SERVICE_ENTRIES } from '@/mock/user-display.js'
 
 export default {
 	name: 'UserServiceEntryPanel',
-	data() {
-		return {
-			items: MOCK_USER_SERVICE_ENTRIES.map((row) => ({ ...row })),
-		}
+	props: {
+		items: {
+			type: Array,
+			default: () => MOCK_USER_SERVICE_ENTRIES.map((row) => ({ ...row })),
+		},
 	},
 }
 </script>

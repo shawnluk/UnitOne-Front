@@ -11,7 +11,7 @@ export async function fetchHomeActivityList(query = {}) {
 		url: ApiPaths.activities,
 		method: 'GET',
 		data: query,
-		mock: () => HOME_ACTIVITY_LIST,
+		// mock: () => HOME_ACTIVITY_LIST,
 	})
 }
 

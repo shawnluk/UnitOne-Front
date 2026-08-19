@@ -6,13 +6,26 @@
 					:avatar-url="avatarUrl"
 					:display-name="displayName"
 					:is-logged-in="isLoggedIn"
+					:partner-id="header.partnerId"
+					:partner-id-tag="header.partnerIdTag"
+					:badges="header.badges"
+					:member-title="header.memberTitle"
+					:member-desc="header.memberDesc"
+					:member-link="header.memberLink"
 					@avatar-click="handleCrop"
 					@username-click="onUsernameClick"
 				/>
-				<!-- <UserStatsPanel /> -->
-				<UserDataPanel />
+				<!-- <UserStatsPanel
+					:stats="statsItems"
+					:star-value="starValue"
+				/> -->
+				<UserDataPanel :items="dataItems" />
 				<UserServiceEntryPanel />
-				<UserSquadPanel />
+				<UserSquadPanel
+					:title="squad.title"
+					:more-text="squad.moreText"
+					:item="squad.item"
+				/>
 			</view>
 		</PageScaffold>
 		<UserPublishButton :isBubbling="isBubbling" @click="createActivity" />
@@ -35,7 +48,7 @@
 <script>
 import PageScaffold from '@/components/page-scaffold.vue'
 import UserHeaderPanel from './components/user-header-panel.vue'
-// import UserStatsPanel from './components/user-stats-panel.vue'
+import UserStatsPanel from './components/user-stats-panel.vue'
 import UserServiceEntryPanel from './components/user-service-entry-panel.vue'
 import UserDataPanel from './components/user-data-panel.vue'
 import UserSquadPanel from './components/user-squad-panel.vue'
@@ -45,13 +58,20 @@ import {
 	MOCK_USER_DEFAULT_AVATAR,
 	MOCK_USER_DISPLAY_NAME_GUEST,
 	MOCK_USER_DISPLAY_NAME_LOGGED_IN,
+	MOCK_USER_HEADER,
+	MOCK_USER_DATA_ITEMS,
+	MOCK_USER_SQUAD_PANEL,
 } from '@/mock/user-display.js'
+import {
+	fetchUserProfile,
+	fetchUserSquadPanel,
+} from '@/api/modules/user.js'
 
 export default {
 	components: {
 		PageScaffold,
 		UserHeaderPanel,
-		// UserStatsPanel,
+		UserStatsPanel,
 		UserServiceEntryPanel,
 		UserDataPanel,
 		UserSquadPanel,
@@ -61,6 +81,11 @@ export default {
 	data() {
 		return {
 			avatarUrl: MOCK_USER_DEFAULT_AVATAR,
+			displayNameGuest: MOCK_USER_DISPLAY_NAME_GUEST,
+			displayNameLoggedIn: MOCK_USER_DISPLAY_NAME_LOGGED_IN,
+			header: { ...MOCK_USER_HEADER },
+			dataItems: MOCK_USER_DATA_ITEMS.map((row) => ({ ...row })),
+			squad: { ...MOCK_USER_SQUAD_PANEL },
 			showCropper: false,
 			cropperImg: '',
 			cropCanceled: false,
@@ -74,16 +99,42 @@ export default {
 	computed: {
 		displayName() {
 			return this.isLoggedIn
-				? MOCK_USER_DISPLAY_NAME_LOGGED_IN
-				: MOCK_USER_DISPLAY_NAME_GUEST
+				? this.displayNameLoggedIn
+				: this.displayNameGuest
 		},
 	},
 
 	onLoad() {
 		this.isLoggedIn = false
+		this.loadUserData()
 	},
 
 	methods: {
+		async loadUserData() {
+			try {
+				const profile = await fetchUserProfile()
+				if (profile) {
+					this.avatarUrl = profile.avatarUrl || this.avatarUrl
+					this.displayNameGuest = profile.displayNameGuest || this.displayNameGuest
+					this.displayNameLoggedIn = profile.displayNameLoggedIn || this.displayNameLoggedIn
+					this.isLoggedIn = profile.isLoggedIn || false
+					if (profile.header) {
+						this.header = { ...this.header, ...profile.header }
+					}
+					if (Array.isArray(profile.dataItems) && profile.dataItems.length) {
+						this.dataItems = profile.dataItems
+					}
+				}
+			} catch (_) {}
+
+			try {
+				const squad = await fetchUserSquadPanel()
+				if (squad) {
+					this.squad = { ...this.squad, ...squad }
+				}
+			} catch (_) {}
+		},
+
 		onUsernameClick() {
 			if (this.isLoggedIn) return
 			uni.navigateTo({

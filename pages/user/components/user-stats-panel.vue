@@ -27,11 +27,15 @@ import { MOCK_USER_STATS_ITEMS, MOCK_USER_STAR_VALUE } from '@/mock/user-display
 
 export default {
 	name: 'UserStatsPanel',
-	data() {
-		return {
-			stats: MOCK_USER_STATS_ITEMS.map((row) => ({ ...row })),
-			starValue: MOCK_USER_STAR_VALUE,
-		}
+	props: {
+		stats: {
+			type: Array,
+			default: () => MOCK_USER_STATS_ITEMS.map((row) => ({ ...row })),
+		},
+		starValue: {
+			type: Number,
+			default: MOCK_USER_STAR_VALUE,
+		},
 	},
 }
 </script>

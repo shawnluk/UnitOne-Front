@@ -5,4 +5,8 @@ export const ApiPaths = {
 	messages: '/api/v1/messages',
 	momentPosts: '/api/v1/moment/posts',
 	authLogin: '/api/v1/auth/login',
+	userProfile: '/api/v1/user/profile',
+	userSquad: '/api/v1/user/squad',
+	squadDetail: '/api/v1/squad',
+	categories: '/api/v1/categories',
 }

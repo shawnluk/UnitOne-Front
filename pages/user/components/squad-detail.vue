@@ -74,6 +74,7 @@
 
 <script>
 import { getMockUserSquadDetail, MOCK_USER_SQUAD_DEFAULT_ID } from '@/mock/user-display.js'
+import { fetchSquadDetail } from '@/api/modules/user.js'
 
 export default {
 	name: 'UserSquadDetail',
@@ -88,6 +89,17 @@ export default {
 		const id = decodeURIComponent(raw) || MOCK_USER_SQUAD_DEFAULT_ID
 		this.squadId = id
 		this.detail = getMockUserSquadDetail(id)
+		this.loadSquadDetail(id)
+	},
+	methods: {
+		async loadSquadDetail(id) {
+			try {
+				const data = await fetchSquadDetail(id)
+				if (data) {
+					this.detail = data
+				}
+			} catch (_) {}
+		},
 	},
 }
 </script>

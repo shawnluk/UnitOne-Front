@@ -110,7 +110,7 @@ export default {
 			try {
 				const list = await fetchHomeActivityList()
 				this.activityList = Array.isArray(list) ? list : [],
-				console.log(this.activityList)
+				console.log(this.activityList[0])
 				this.applyCategoryFilter(this.currentCategoryId)
 			} catch (e) {
 				uni.showToast({

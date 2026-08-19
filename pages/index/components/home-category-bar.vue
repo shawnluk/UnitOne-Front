@@ -13,7 +13,7 @@
 						<image class="hcIcon" :src="item.icon" mode="aspectFit" />
 						<view v-if="item.badge" class="hcBadge" />
 					</view>
-					<text class="hcText">{{ item.text }}</text>
+					<text class="hcText">{{ item.name }}</text>
 				</view>
 			</view>
 		</scroll-view>
@@ -21,21 +21,48 @@
 </template>
 
 <script>
+import { fetchCategories } from '@/api/modules/category.js'
+
+function normalizeCategory(item) {
+	if (!item || typeof item !== 'object') return null
+	return {
+		category_id: item.category_id || item.id,
+		category_key: item.category_key || '',
+		name: item.text || item.name || '',
+		icon: item.icon || item.icon_url || '',
+		badge: Boolean(item.badge),
+		isActive: false,
+	}
+}
+
 export default {
 	name: 'HomeCategoryBar',
 	data() {
 		return {
-			items: [
-				{ category_id: 1, key: 'sport', text: '约球', icon: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/HomeCategoryBar-icon/ball-0.png', isActive: false },
-				{ category_id: 2, key: 'movie', text: '观影', icon: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/HomeCategoryBar-icon/movie-0.png', isActive: false },
-				{ category_id: 3, key: 'outdoor', text: '户外', icon: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/HomeCategoryBar-icon/traval-0.png', isActive: false },
-				{ category_id: 4, key: 'chat', text: '闲聊', icon: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/HomeCategoryBar-icon/table-0.png', isActive: false },
-				{ category_id: 5, key: 'art', text: '艺术', icon: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/HomeCategoryBar-icon/art-0.png', isActive: false },
-				{ category_id: 6, key: 'subscribe', text: '订阅', icon: 'https://unitone-1310134019.cos.ap-guangzhou.myqcloud.com/HomeCategoryBar-icon/favor-0.png', badge: true, isActive: false },
-			],
+			items: [],
 		}
 	},
+	async created() {
+		await this.loadCategories()
+	},
 	methods: {
+		async loadCategories() {
+			try {
+				const list = await fetchCategories()
+				if (Array.isArray(list) && list.length) {
+					const mapped = list.map(normalizeCategory).filter(Boolean)
+					if (mapped.length) {
+						this.items = mapped
+						console.log(this.items);					
+					}
+				}
+			} catch (e) {
+				uni.showToast({
+					title: (e && e.message) || '分类加载失败',
+					icon: 'none',
+				})
+			}
+		},
 		handleSelect(_, idx) {
 			const nextItems = this.items.map((item, itemIdx) => ({
 				...item,

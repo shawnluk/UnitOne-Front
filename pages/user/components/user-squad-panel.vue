@@ -37,13 +37,19 @@ import { MOCK_USER_SQUAD_PANEL } from '@/mock/user-display.js'
 
 export default {
 	name: 'UserSquadPanel',
-	data() {
-		const { title, moreText, item } = MOCK_USER_SQUAD_PANEL
-		return {
-			title,
-			moreText,
-			item: { ...item },
-		}
+	props: {
+		title: {
+			type: String,
+			default: MOCK_USER_SQUAD_PANEL.title,
+		},
+		moreText: {
+			type: String,
+			default: MOCK_USER_SQUAD_PANEL.moreText,
+		},
+		item: {
+			type: Object,
+			default: () => ({ ...MOCK_USER_SQUAD_PANEL.item }),
+		},
 	},
 	methods: {
 		goCreateUnit() {
@@ -57,6 +63,10 @@ export default {
 
 		goSquadDetail() {
 			const id = this.item && this.item.id ? this.item.id : ''
+			if (id==='') {
+				uni.showToast({ title: '请先创建小队', icon: 'none' })
+				return
+			}
 			const q = id ? `?squadId=${encodeURIComponent(id)}` : ''
 			uni.navigateTo({
 				url: `/pages/user/components/squad-detail${q}`,

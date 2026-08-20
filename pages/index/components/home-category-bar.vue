@@ -70,9 +70,9 @@ export default {
 			}))
 			this.items = nextItems
 			const selectedItem = nextItems[idx]
-			const categoryId = selectedItem && selectedItem.isActive ? selectedItem.category_id : null
+			const category_id = selectedItem && selectedItem.isActive ? selectedItem.category_id : null
 			if (uni && typeof uni.$emit === 'function') {
-				uni.$emit('index:category-change', { categoryId })
+				uni.$emit('index:category-change', { category_id })
 			}
 		},
 	},

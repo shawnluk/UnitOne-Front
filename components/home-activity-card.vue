@@ -198,13 +198,15 @@ export default {
 				.map((item) => ({ ...item, isActive: true }))
 		},
 		handleCategoryFilter(payload) {
-			const categoryId = payload && payload.categoryId ? payload.categoryId : null
-			this.currentCategoryId = categoryId
-			this.applyCategoryFilter(categoryId)
+			console.log(payload)
+			const category_id = payload && payload.category_id ? payload.category_id : null
+			// console.log(categoryId)
+			this.currentCategoryId = category_id
+			this.applyCategoryFilter(category_id)
 		},
 		// NOTE:item对象改为传 id
 		handleCardClick(item) {
-			console.log(item)
+			console.log(item.activity_id || item.id)
 			uni.redirectTo({
 				url: "/src/activity-detail/activity-detail?item=" + encodeURIComponent(JSON.stringify(item))
 			})

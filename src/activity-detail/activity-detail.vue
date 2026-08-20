@@ -210,6 +210,7 @@ const safeBottom = computed(() => 'calc(24rpx + env(safe-area-inset-bottom))')
 onLoad((option) => {
 	try {
 		const raw = option && option.item ? JSON.parse(decodeURIComponent(option.item)) : null
+		// console.log(raw)
 		actDetail.data = normalizeActivity(raw)
 	} catch {
 		uni.showToast({ title: '活动信息加载失败', icon: 'none' })

@@ -15,10 +15,11 @@
 
 		<!-- 活动列表 -->
 		<view class="activityList">
-			<HomeActivityCard ref="activityCard"></HomeActivityCard>
-			<view class="noMoreText">
-				<text>没有更多了</text>
+			<view class="refreshingBar" v-if="refreshing">
+				<view class="spinner"></view>
+				<text class="refreshingText">刷新中...</text>
 			</view>
+			<HomeActivityCard ref="activityCard"></HomeActivityCard>
 		</view>
 	</PageScaffold>
 </template>
@@ -33,17 +34,36 @@ import HomeCategoryBar from './components/home-category-bar.vue'
 
 export default {
 	components: { PageScaffold, SwiperBar, HomeActivityCard, HomeCategoryBar, IndexLogoBubble, IndexSearchBox },
+	data() {
+		return {
+			/** 下拉刷新中标记，用于显示自定义转圈 */
+			refreshing: false,
+		}
+	},
 	async onPullDownRefresh() {
+		this.refreshing = true
 		try {
 			const card = this.$refs.activityCard
-			if (card && typeof card.refresh === 'function') {
-				await card.refresh()
-			}
+			const refreshTask = card && typeof card.refresh === 'function'
+				? card.refresh()
+				: Promise.resolve()
+			// 保证下拉刷新的转圈动画至少持续 3 秒
+			await Promise.all([refreshTask, this.delay(3000)])
 		} finally {
+			this.refreshing = false
 			uni.stopPullDownRefresh()
 		}
 	},
+	onReachBottom() {
+		const card = this.$refs.activityCard
+		if (card && typeof card.loadMore === 'function') {
+			card.loadMore()
+		}
+	},
 	methods: {
+		delay(ms) {
+			return new Promise((resolve) => setTimeout(resolve, ms))
+		},
 		onSearch(payload) {
 			const keyword = payload && payload.keyword ? payload.keyword : ''
 			if (!keyword) return
@@ -69,12 +89,31 @@ export default {
 		padding-bottom: calc(190rpx + env(safe-area-inset-bottom));
 	}
 
-	.noMoreText{
+	.refreshingBar {
 		display: flex;
-		justify-content: center;
 		align-items: center;
-		padding: 16rpx 0 8rpx;
+		justify-content: center;
+		gap: 12rpx;
+		padding: 12rpx 0;
+	}
+
+	.spinner {
+		width: 32rpx;
+		height: 32rpx;
+		border: 4rpx solid #e6e1f7;
+		border-top-color: #7d5fff;
+		border-radius: 50%;
+		animation: refreshing-spin 0.8s linear infinite;
+	}
+
+	.refreshingText {
 		font-size: 24rpx;
 		color: #9b9b9b;
+	}
+
+	@keyframes refreshing-spin {
+		to {
+			transform: rotate(360deg);
+		}
 	}
 </style>

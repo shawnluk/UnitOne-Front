@@ -47,7 +47,7 @@
 				<text class="orgName" :number-of-lines="1">{{ data.org_name }}</text>
 			</view>
 
-			<view class="join">
+<!-- 			<view class="join">
 				<view class="avaGroup">
 					<image
 						v-for="(a, idx) in data.joinAvatars.slice(0, 3)"
@@ -59,8 +59,16 @@
 					/>
 				</view>
 				<text class="joinText">{{ data.joinCount }}人参加</text>
+			</view> -->
 			</view>
 		</view>
+
+		<view class="loadStatus" v-if="filteredItems.length">
+			<view class="loadingRow" v-if="loading">
+				<view class="spinner"></view>
+				<text class="loadingText">加载中...</text>
+			</view>
+			<text v-else-if="!hasMore">没有更多了</text>
 		</view>
 	</view>
 </template>
@@ -83,10 +91,18 @@ export default {
 			filteredItems: [],
 			/** 当前选中的分类，下拉刷新后沿用 */
 			currentCategoryId: null,
+			/** 每页加载条数 */
+			pageSize: 10,
+			/** 当前偏移量 */
+			offset: 0,
+			/** 是否还有下一页 */
+			hasMore: true,
+			/** 是否正在加载 */
+			loading: false,
 		}
 	},
 	async created() {
-		await this.loadActivities()
+		await this.refresh()
 		if (uni && typeof uni.$on === 'function') {
 			uni.$on('index:category-change', this.handleCategoryFilter)
 		}
@@ -102,15 +118,47 @@ export default {
 		},
 	},
 	methods: {
-		/** 供首页下拉刷新调用，会保留当前分类筛选状态 */
+		/** 下拉刷新：重置偏移量并重新加载，保留当前分类筛选状态 */
 		async refresh() {
-			await this.loadActivities()
+			this.offset = 0
+			this.hasMore = true
+			this.activityList = []
+			await this.fetchPage()
 		},
-		async loadActivities() {
+		/** 上拉加载下一页（底部"加载中"持续 3 秒后再加载） */
+		async loadMore() {
+			if (!this.hasMore || this.loading) return
+			this.offset += this.pageSize
+			this.loading = true
 			try {
-				const list = await fetchHomeActivityList()
-				this.activityList = Array.isArray(list) ? list : [],
-				console.log(this.activityList[0])
+				await this.delay(3000)
+				await this.fetchPage()
+			} finally {
+				this.loading = false
+			}
+		},
+		/** 按当前偏移量请求一页活动数据 */
+		async fetchPage() {
+			try {
+				const res = await fetchHomeActivityList({
+					offset: this.offset,
+					limit: this.pageSize,
+				})
+				const { items, total } = this.normalizeActivityResult(res)
+				if (items.length <= this.pageSize) {
+					// 情况一：后端已实现分页，返回当前页数据（不超过一页）
+					this.activityList = this.offset === 0 ? items : this.activityList.concat(items)
+					console.log(this.activityList)
+					this.hasMore = total != null
+						? this.offset + this.pageSize < total
+						: items.length >= this.pageSize
+				} else {
+					// 情况二：后端未做分页，返回全量数据，前端本地切片
+					const pageItems = items.slice(this.offset, this.offset + this.pageSize)
+					this.activityList = this.offset === 0 ? pageItems : this.activityList.concat(pageItems)
+					console.log(this.activityList)
+					this.hasMore = this.offset + this.pageSize < items.length
+				}
 				this.applyCategoryFilter(this.currentCategoryId)
 			} catch (e) {
 				uni.showToast({
@@ -118,6 +166,24 @@ export default {
 					icon: 'none',
 				})
 			}
+		},
+		delay(ms) {
+			return new Promise((resolve) => setTimeout(resolve, ms))
+		},
+		/** 兼容后端返回数组或 { list/records/items, total } 两种分页结构 */
+		normalizeActivityResult(res) {
+			if (Array.isArray(res)) {
+				return { items: res, total: null }
+			}
+			if (res && typeof res === 'object') {
+				const list = res.list || res.records || res.items || res.rows || []
+				const rawTotal = res.total != null ? res.total : res.totalCount
+				return {
+					items: Array.isArray(list) ? list : [],
+					total: rawTotal != null ? Number(rawTotal) : null,
+				}
+			}
+			return { items: [], total: null }
 		},
 		applyCategoryFilter(categoryId) {
 			if (!categoryId) {
@@ -152,6 +218,41 @@ export default {
 	display: flex;
 	flex-direction: column;
 	gap: 18rpx;
+}
+
+.loadStatus {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 16rpx 0 8rpx;
+	font-size: 24rpx;
+	color: #9b9b9b;
+}
+
+.loadingRow {
+	display: flex;
+	align-items: center;
+	gap: 12rpx;
+}
+
+.loadingText {
+	font-size: 24rpx;
+	color: #9b9b9b;
+}
+
+.spinner {
+	width: 28rpx;
+	height: 28rpx;
+	border: 4rpx solid #e6e1f7;
+	border-top-color: #7d5fff;
+	border-radius: 50%;
+	animation: load-spin 0.8s linear infinite;
+}
+
+@keyframes load-spin {
+	to {
+		transform: rotate(360deg);
+	}
 }
 
 .card {

@@ -3,15 +3,19 @@ import { ApiPaths } from '@/constants/api-paths.js'
 import { HOME_ACTIVITY_LIST } from '@/mock/activity-list.js'
 
 /**
- * 首页 / 动态 Stories 等活动列表
- * @param {Record<string, unknown>} [query] 分类筛选等查询参数，随后端约定扩展
+ * 首页活动列表（分页）
+ * @param {Record<string, unknown>} [query] 查询参数：offset、limit、category_id 等
  */
 export async function fetchHomeActivityList(query = {}) {
 	return request({
 		url: ApiPaths.activities,
 		method: 'GET',
 		data: query,
-		// mock: () => HOME_ACTIVITY_LIST,
+		mock: ({ data }) => {
+			const offset = Number(data && data.offset) || 0
+			const limit = Number(data && data.limit) || 10
+			return HOME_ACTIVITY_LIST.slice(offset, offset + limit)
+		},
 	})
 }
 

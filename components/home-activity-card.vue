@@ -19,8 +19,8 @@
 				<text class="title" :number-of-lines="2">{{ data.title }}</text>
 			</view>
 
-			<view class="tagRow" v-if="data.tag_text">
-				<text class="tag">{{ data.tag_text }}</text>
+			<view class="tagRow" v-if="data.category_name">
+				<text class="tag">{{ data.category_name }}</text>
 			</view>
 
 			<view class="meta">
@@ -75,6 +75,7 @@
 
 <script>
 import { fetchHomeActivityList } from '@/api/modules/activity.js'
+import { cacheActivities } from '@/utils/activity-cache.js'
 
 export default {
 	name: 'HomeActivityCard',
@@ -145,6 +146,7 @@ export default {
 					limit: this.pageSize,
 				})
 				const { items, total } = this.normalizeActivityResult(res)
+				cacheActivities(items)
 				if (items.length <= this.pageSize) {
 					// 情况一：后端已实现分页，返回当前页数据（不超过一页）
 					this.activityList = this.offset === 0 ? items : this.activityList.concat(items)
@@ -202,11 +204,10 @@ export default {
 			this.currentCategoryId = categoryId
 			this.applyCategoryFilter(categoryId)
 		},
-		// NOTE:item对象改为传 id
 		handleCardClick(item) {
-			console.log(item)
+			const activity_id = item.activity_id || item.id
 			uni.redirectTo({
-				url: "/src/activity-detail/activity-detail?item=" + encodeURIComponent(JSON.stringify(item))
+				url: `/src/activity-detail/activity-detail?activity_id=${activity_id}`
 			})
 		},
 	},

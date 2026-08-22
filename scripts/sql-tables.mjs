@@ -73,7 +73,7 @@ export const Tables = {
 			category_id     BIGINT UNSIGNED NOT NULL DEFAULT 0        COMMENT '分类 ID',
 			title           VARCHAR(128)    NOT NULL DEFAULT ''       COMMENT '活动标题',
 			cover           VARCHAR(512)    NOT NULL DEFAULT ''       COMMENT '封面图 URL',
-			tag_text        VARCHAR(32)     NOT NULL DEFAULT ''       COMMENT '标签文案（约球/观影/户外/闲聊/艺术）',
+			category_name   VARCHAR(32)     NOT NULL DEFAULT ''       COMMENT '分类名称（约球/观影/户外/闲聊/艺术）',
 			location_text   VARCHAR(256)    NOT NULL DEFAULT ''       COMMENT '活动地点文案',
 			time_text       VARCHAR(64)     NOT NULL DEFAULT ''       COMMENT '活动时间展示文案',
 			fee_note        VARCHAR(128)    NOT NULL DEFAULT ''       COMMENT '费用说明',

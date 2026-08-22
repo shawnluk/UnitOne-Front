@@ -1,5 +1,62 @@
 import { getEnv } from '@/config/env.js'
 import { cloneJson } from '@/utils/json.js'
+import { isTokenExpired } from '@/utils/token.js'
+import { ApiPaths } from '@/constants/api-paths.js'
+
+/** 无需鉴权、跳过 token 过期拦截的接口（按 路径+方法 匹配） */
+const NO_AUTH_PATHS = [
+	{ url: ApiPaths.health, method: 'GET' },
+	{ url: ApiPaths.authLogin, method: 'POST' },
+	{ url: ApiPaths.authRegister, method: 'POST' },
+	{ url: ApiPaths.activities, method: 'GET' },
+	{ url: ApiPaths.categories, method: 'GET' },
+]
+
+function isNoAuth(url, method) {
+	return NO_AUTH_PATHS.some((item) => item.url === url && item.method === method)
+}
+
+function getStoredToken() {
+	try {
+		return uni.getStorageSync('token') || ''
+	} catch (_) {
+		return ''
+	}
+}
+
+function clearLoginCache() {
+	try {
+		uni.removeStorageSync('token')
+		uni.removeStorageSync('userId')
+		uni.removeStorageSync('username')
+		uni.removeStorageSync('userInfo')
+	} catch (_) {}
+}
+
+function promptReLogin() {
+	uni.showModal({
+		title: '请重新登录',
+		content: '登录已过期，请重新登录后再操作',
+		confirmText: '去登录',
+		showCancel: false,
+		success: (res) => {
+			if (res.confirm) {
+				uni.navigateTo({ url: '/src/login/login' })
+			}
+		},
+	})
+}
+
+/**
+ * token 过期统一拦截：返回拒绝的 Promise 并清缓存、提示重登
+ * @param {string} message
+ * @returns {Promise<never>}
+ */
+function rejectExpiredToken(message) {
+	clearLoginCache()
+	promptReLogin()
+	return Promise.reject(new Error(message))
+}
 
 function unwrapBusinessBody(body) {
 	if (!body || typeof body !== 'object') return body
@@ -63,6 +120,12 @@ function resolveMock(mock, ctx) {
 export function request(options) {
 	const env = getEnv()
 	const { url, method = 'GET', data, header = {}, timeout, mock } = options
+
+	// token 过期统一拦截：公共接口（无需鉴权）除外
+	const token = getStoredToken()
+	if (token && isTokenExpired(token) && !isNoAuth(url, method)) {
+		return rejectExpiredToken('登录已过期')
+	}
 
 	if (env.useMock) {
 		if (mock === undefined) {

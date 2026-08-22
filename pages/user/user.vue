@@ -26,6 +26,9 @@
 					:more-text="squad.moreText"
 					:item="squad.item"
 				/>
+				<view v-if="isLoggedIn" class="logoutCard" @tap="handleLogout">
+					<text class="logoutText">退出登录</text>
+				</view>
 			</view>
 		</PageScaffold>
 		<UserPublishButton :isBubbling="isBubbling" @click="createActivity" />
@@ -66,6 +69,7 @@ import {
 	fetchUserProfile,
 	fetchUserSquadPanel,
 } from '@/api/modules/user.js'
+import { isTokenExpired } from '@/utils/token.js'
 
 export default {
 	components: {
@@ -90,6 +94,8 @@ export default {
 			cropperImg: '',
 			cropCanceled: false,
 			isLoggedIn: false,
+			userId: '',
+			user_no: '',
 			isBubbling: false,
 			isNavigating: false,
 			bubbleTimer: null,
@@ -104,28 +110,93 @@ export default {
 		},
 	},
 
-	onLoad() {
-		this.isLoggedIn = false
+	onLoad(options) {
+		if (options && options.user_id) {
+			this.userId = options.user_id
+		}
+		if (this.checkTokenExpired()) return
+		this.loadLocalUser()
 		this.loadUserData()
 	},
 
 	methods: {
-		async loadUserData() {
+		checkTokenExpired() {
+			let token = ''
 			try {
-				const profile = await fetchUserProfile()
-				if (profile) {
-					this.avatarUrl = profile.avatarUrl || this.avatarUrl
-					this.displayNameGuest = profile.displayNameGuest || this.displayNameGuest
-					this.displayNameLoggedIn = profile.displayNameLoggedIn || this.displayNameLoggedIn
-					this.isLoggedIn = profile.isLoggedIn || false
-					if (profile.header) {
-						this.header = { ...this.header, ...profile.header }
-					}
-					if (Array.isArray(profile.dataItems) && profile.dataItems.length) {
-						this.dataItems = profile.dataItems
-					}
-				}
+				token = uni.getStorageSync('token') || ''
 			} catch (_) {}
+			if (!token) return false
+			if (!isTokenExpired(token)) return false
+			this.clearLoginCache()
+			this.loadLocalUser()
+			uni.showModal({
+				title: '请重新登录',
+				content: '登录已过期，请重新登录后再操作',
+				confirmText: '去登录',
+				showCancel: false,
+				success: (res) => {
+					if (res.confirm) {
+						uni.navigateTo({
+							url: '/src/login/login',
+						})
+					}
+				},
+			})
+			return true
+		},
+		clearLoginCache() {
+			try {
+				uni.removeStorageSync('token')
+				uni.removeStorageSync('userId')
+				uni.removeStorageSync('username')
+				uni.removeStorageSync('userInfo')
+			} catch (_) {}
+		},
+		loadLocalUser() {
+			let userId = ''
+			let username = ''
+			let userInfo = null
+			try {
+				userId = uni.getStorageSync('userId')
+				username = uni.getStorageSync('username')
+				userInfo = uni.getStorageSync('userInfo')
+			} catch (_) {}
+			if (!userId && !userInfo) {
+				this.isLoggedIn = false
+				return
+			}
+			this.userId = userId !== undefined && userId !== '' ? userId : this.userId
+			this.user_no = userInfo.user_no !== undefined && userInfo !== '' ? userInfo.user_no  : this.user_no
+			this.isLoggedIn = true
+			if (this.userId) {
+				this.header = { ...this.header, partnerId: String(this.user_no) }
+			}
+			if (userInfo) {
+				this.avatarUrl = userInfo.avatar || this.avatarUrl
+				this.displayNameLoggedIn =
+					userInfo.nickname || userInfo.username || username || this.displayNameLoggedIn
+			} else if (username) {
+				this.displayNameLoggedIn = username
+			}
+		},
+		async loadUserData() {
+			if (!this.isLoggedIn) {
+				try {
+					const profile = await fetchUserProfile()
+					if (profile) {
+						this.avatarUrl = profile.avatarUrl || this.avatarUrl
+						this.displayNameGuest = profile.displayNameGuest || this.displayNameGuest
+						this.displayNameLoggedIn = profile.displayNameLoggedIn || this.displayNameLoggedIn
+						this.isLoggedIn = profile.isLoggedIn || false
+						if (profile.header) {
+							this.header = { ...this.header, ...profile.header }
+						}
+						if (Array.isArray(profile.dataItems) && profile.dataItems.length) {
+							this.dataItems = profile.dataItems
+						}
+					}
+				} catch (_) {}
+			}
 
 			try {
 				const squad = await fetchUserSquadPanel()
@@ -139,11 +210,21 @@ export default {
 			if (this.isLoggedIn) return
 			uni.navigateTo({
 				url: '/src/login/login',
-				events: {
-					loginSuccess: () => {
-						this.isLoggedIn = true
-						uni.showToast({ title: '登录成功', icon: 'success' })
-					},
+			})
+		},
+
+		handleLogout() {
+			uni.showModal({
+				title: '退出登录',
+				content: '确定要退出当前账号吗？',
+				confirmText: '退出',
+				confirmColor: '#e54d42',
+				success: (res) => {
+					if (!res.confirm) return
+					this.clearLoginCache()
+					uni.redirectTo({
+						url: '/pages/user/user',
+					})
 				},
 			})
 		},
@@ -217,6 +298,24 @@ export default {
 	gap: 18rpx;
 	padding: 10rpx 24rpx 24rpx;
 	padding-bottom: calc(260rpx + env(safe-area-inset-bottom));
+}
+
+.logoutCard {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100rpx;
+	border-radius: 32rpx;
+	background: linear-gradient(145deg, #ffffff 0%, #fff1f3 100%);
+	box-shadow: 0 20rpx 48rpx rgba(255, 95, 120, 0.1);
+	border: 2rpx solid rgba(255, 255, 255, 0.9);
+}
+
+.logoutText {
+	font-size: 30rpx;
+	font-weight: 600;
+	color: #e54d42;
+	letter-spacing: 4rpx;
 }
 
 .cropCancel {

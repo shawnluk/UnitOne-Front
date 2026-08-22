@@ -110,15 +110,7 @@
 <script setup>
 import { computed, reactive } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
-
-const CATEGORY_TAG = {
-	1: '约球',
-	2: '观影',
-	3: '户外',
-	4: '闲聊',
-	5: '艺术',
-	6: '订阅',
-}
+import { getCachedActivity } from '@/utils/activity-cache.js'
 
 const actDetail = reactive({
 	data: {},
@@ -141,11 +133,11 @@ function normalizeActivity(raw) {
 		org_name: raw.org_name || '',
 		joinCount: Number(raw.joinCount) || joinAvatars.length || 0,
 		joinAvatars,
-		tag_text: raw.tag_text || '',
+		category_name: raw.category_name || '',
 		description: raw.description || '',
 		fee_note: raw.fee_note || '',
 		category_id: raw.category_id,
-		activity_id: raw.activity_id || '',
+		activity_id: raw.activity_id || raw.id || '',
 	}
 }
 
@@ -166,12 +158,7 @@ const joinList = computed(() => {
 	return list.length ? list : []
 })
 
-const tagLabel = computed(() => {
-	const t = detail.value.tag_text
-	if (t) return t
-	const id = detail.value.category_id
-	return id != null ? CATEGORY_TAG[id] || '' : ''
-})
+const tagLabel = computed(() => detail.value.category_name || '')
 
 const displayTime = computed(() => formatActivityTime(detail.value.time_text))
 
@@ -208,6 +195,7 @@ const statusBarPadding = computed(() => {
 const safeBottom = computed(() => 'calc(24rpx + env(safe-area-inset-bottom))')
 
 onLoad((option) => {
+
 	try {
 		const raw = option && option.item ? JSON.parse(decodeURIComponent(option.item)) : null
 		// console.log(raw)
@@ -215,6 +203,18 @@ onLoad((option) => {
 	} catch {
 		uni.showToast({ title: '活动信息加载失败', icon: 'none' })
 	}
+	const activityId = option && option.activity_id
+	if (!activityId) {
+		uni.showToast({ title: '缺少活动编号', icon: 'none' })
+		return
+
+	}
+	const raw = getCachedActivity(activityId)
+	if (!raw) {
+		uni.showToast({ title: '活动信息加载失败', icon: 'none' })
+		return
+	}
+	actDetail.data = normalizeActivity(raw)
 })
 
 const goHome = () => {

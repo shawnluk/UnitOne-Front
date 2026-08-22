@@ -7,7 +7,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 1,
 		activity_id: 1,
 		isActive: false,
-		tag_text: '约球',
+		category_name: '约球',
 		cover:
 			'https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?auto=format&fit=crop&w=900&q=80',
 		title: '周三晚南山羽毛球局（新手友好）',
@@ -28,7 +28,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 1,
 		activity_id: 2,
 		isActive: false,
-		tag_text: '约球',
+		category_name: '约球',
 		cover:
 			'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=900&q=80',
 		title: '福田5v5篮球夜场（缺2人）',
@@ -49,7 +49,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 2,
 		activity_id: 3,
 		isActive: false,
-		tag_text: '观影',
+		category_name: '观影',
 		cover:
 			'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=900&q=80',
 		title: 'IMAX观影《沙丘2》拼单场',
@@ -70,7 +70,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 3,
 		activity_id: 4,
 		isActive: false,
-		tag_text: '户外',
+		category_name: '户外',
 		cover:
 			'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=900&q=80',
 		title: '梧桐山轻徒步看日落（8km）',
@@ -91,7 +91,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 4,
 		activity_id: 5,
 		isActive: false,
-		tag_text: '闲聊',
+		category_name: '闲聊',
 		cover:
 			'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=80',
 		title: '下班后Coffee Chat：产品x设计交流',
@@ -112,7 +112,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 5,
 		activity_id: 6,
 		isActive: false,
-		tag_text: '艺术',
+		category_name: '艺术',
 		cover:
 			'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=900&q=80',
 		title: '周末油画体验课：莫兰迪静物',
@@ -142,7 +142,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 1,
 		activity_id: 7,
 		isActive: false,
-		tag_text: '约球',
+		category_name: '约球',
 		cover:
 			'https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?auto=format&fit=crop&w=900&q=80',
 		title: '宝安羽毛球友谊赛（周末场）',
@@ -163,7 +163,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 1,
 		activity_id: 8,
 		isActive: false,
-		tag_text: '约球',
+		category_name: '约球',
 		cover:
 			'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=900&q=80',
 		title: '龙岗篮球3对3街头赛',
@@ -184,7 +184,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 1,
 		activity_id: 9,
 		isActive: false,
-		tag_text: '约球',
+		category_name: '约球',
 		cover:
 			'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=900&q=80',
 		title: '罗湖足球五人制包场',
@@ -205,7 +205,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 1,
 		activity_id: 10,
 		isActive: false,
-		tag_text: '约球',
+		category_name: '约球',
 		cover:
 			'https://images.unsplash.com/photo-1511067007398-7e4b90cfa4bc?auto=format&fit=crop&w=900&q=80',
 		title: '福田乒乓球周末切磋',
@@ -226,7 +226,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 1,
 		activity_id: 11,
 		isActive: false,
-		tag_text: '约球',
+		category_name: '约球',
 		cover:
 			'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?auto=format&fit=crop&w=900&q=80',
 		title: '南山网球双打招募',
@@ -247,7 +247,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 1,
 		activity_id: 12,
 		isActive: false,
-		tag_text: '约球',
+		category_name: '约球',
 		cover:
 			'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=900&q=80',
 		title: '深圳湾夜跑荧光跑',
@@ -268,7 +268,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 1,
 		activity_id: 13,
 		isActive: false,
-		tag_text: '约球',
+		category_name: '约球',
 		cover:
 			'https://images.unsplash.com/photo-1530549387789-4c1017266635?auto=format&fit=crop&w=900&q=80',
 		title: '科技园游泳下午茶',
@@ -289,7 +289,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 1,
 		activity_id: 14,
 		isActive: false,
-		tag_text: '约球',
+		category_name: '约球',
 		cover:
 			'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=900&q=80',
 		title: '公园晨间瑜伽共练',
@@ -310,7 +310,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 2,
 		activity_id: 15,
 		isActive: false,
-		tag_text: '观影',
+		category_name: '观影',
 		cover:
 			'https://images.unsplash.com/photo-1440404653325-ab127d49abc1?auto=format&fit=crop&w=900&q=80',
 		title: '经典老片重温夜《霸王别姬》',
@@ -331,7 +331,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 2,
 		activity_id: 16,
 		isActive: false,
-		tag_text: '观影',
+		category_name: '观影',
 		cover:
 			'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=900&q=80',
 		title: '纪录片放映+导演连线',
@@ -352,7 +352,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 2,
 		activity_id: 17,
 		isActive: false,
-		tag_text: '观影',
+		category_name: '观影',
 		cover:
 			'https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=900&q=80',
 		title: '独立短片展映交流',
@@ -373,7 +373,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 2,
 		activity_id: 18,
 		isActive: false,
-		tag_text: '观影',
+		category_name: '观影',
 		cover:
 			'https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=900&q=80',
 		title: '露天汽车影院怀旧场',
@@ -394,7 +394,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 2,
 		activity_id: 19,
 		isActive: false,
-		tag_text: '观影',
+		category_name: '观影',
 		cover:
 			'https://images.unsplash.com/photo-1560109945-7900effc5e93?auto=format&fit=crop&w=900&q=80',
 		title: '动画电影亲子专场',
@@ -415,7 +415,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 2,
 		activity_id: 20,
 		isActive: false,
-		tag_text: '观影',
+		category_name: '观影',
 		cover:
 			'https://images.unsplash.com/photo-1503095396549-807759245b35?auto=format&fit=crop&w=900&q=80',
 		title: '舞台剧《雷雨》集体观演',
@@ -436,7 +436,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 2,
 		activity_id: 21,
 		isActive: false,
-		tag_text: '观影',
+		category_name: '观影',
 		cover:
 			'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=900&q=80',
 		title: '悬疑片推理夜',
@@ -457,7 +457,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 2,
 		activity_id: 22,
 		isActive: false,
-		tag_text: '观影',
+		category_name: '观影',
 		cover:
 			'https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=900&q=80',
 		title: '音乐纪录片专场',
@@ -478,7 +478,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 3,
 		activity_id: 23,
 		isActive: false,
-		tag_text: '户外',
+		category_name: '户外',
 		cover:
 			'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80',
 		title: '七娘山登顶看云海',
@@ -499,7 +499,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 3,
 		activity_id: 24,
 		isActive: false,
-		tag_text: '户外',
+		category_name: '户外',
 		cover:
 			'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=900&q=80',
 		title: '海边露营烧烤过夜',
@@ -520,7 +520,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 3,
 		activity_id: 25,
 		isActive: false,
-		tag_text: '户外',
+		category_name: '户外',
 		cover:
 			'https://images.unsplash.com/photo-1571068316344-75bc76f77890?auto=format&fit=crop&w=900&q=80',
 		title: '盐田海滨栈道骑行',
@@ -541,7 +541,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 3,
 		activity_id: 26,
 		isActive: false,
-		tag_text: '户外',
+		category_name: '户外',
 		cover:
 			'https://images.unsplash.com/photo-1533587851505-d119e13fa0d7?auto=format&fit=crop&w=900&q=80',
 		title: '羊台山森林溯溪',
@@ -562,7 +562,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 3,
 		activity_id: 27,
 		isActive: false,
-		tag_text: '户外',
+		category_name: '户外',
 		cover:
 			'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80',
 		title: '大鹏半岛赶海挖沙',
@@ -583,7 +583,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 3,
 		activity_id: 28,
 		isActive: false,
-		tag_text: '户外',
+		category_name: '户外',
 		cover:
 			'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=900&q=80',
 		title: '城市绿道徒步穿越',
@@ -604,7 +604,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 3,
 		activity_id: 29,
 		isActive: false,
-		tag_text: '户外',
+		category_name: '户外',
 		cover:
 			'https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=900&q=80',
 		title: '东西冲海岸线穿越',
@@ -625,7 +625,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 3,
 		activity_id: 30,
 		isActive: false,
-		tag_text: '户外',
+		category_name: '户外',
 		cover:
 			'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?auto=format&fit=crop&w=900&q=80',
 		title: '观澜湖高尔夫练习体验',
@@ -646,7 +646,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 4,
 		activity_id: 31,
 		isActive: false,
-		tag_text: '闲聊',
+		category_name: '闲聊',
 		cover:
 			'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=900&q=80',
 		title: '科技园午间咖啡社交',
@@ -667,7 +667,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 4,
 		activity_id: 32,
 		isActive: false,
-		tag_text: '闲聊',
+		category_name: '闲聊',
 		cover:
 			'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=900&q=80',
 		title: '周末读书分享会',
@@ -688,7 +688,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 4,
 		activity_id: 33,
 		isActive: false,
-		tag_text: '闲聊',
+		category_name: '闲聊',
 		cover:
 			'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=900&q=80',
 		title: '桌游之夜狼人杀',
@@ -709,7 +709,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 4,
 		activity_id: 34,
 		isActive: false,
-		tag_text: '闲聊',
+		category_name: '闲聊',
 		cover:
 			'https://images.unsplash.com/photo-1524578271613-d550eacf6090?auto=format&fit=crop&w=900&q=80',
 		title: '中英语言交换角',
@@ -730,7 +730,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 4,
 		activity_id: 35,
 		isActive: false,
-		tag_text: '闲聊',
+		category_name: '闲聊',
 		cover:
 			'https://images.unsplash.com/photo-1498804103079-a6351b050096?auto=format&fit=crop&w=900&q=80',
 		title: '职业互助茶话会',
@@ -751,7 +751,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 4,
 		activity_id: 36,
 		isActive: false,
-		tag_text: '闲聊',
+		category_name: '闲聊',
 		cover:
 			'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=900&q=80',
 		title: '独立开发者闭门交流',
@@ -772,7 +772,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 4,
 		activity_id: 37,
 		isActive: false,
-		tag_text: '闲聊',
+		category_name: '闲聊',
 		cover:
 			'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80',
 		title: '深夜食堂故事会',
@@ -793,7 +793,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 4,
 		activity_id: 38,
 		isActive: false,
-		tag_text: '闲聊',
+		category_name: '闲聊',
 		cover:
 			'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?auto=format&fit=crop&w=900&q=80',
 		title: '摄影街拍扫街约伴',
@@ -814,7 +814,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 5,
 		activity_id: 39,
 		isActive: false,
-		tag_text: '艺术',
+		category_name: '艺术',
 		cover:
 			'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&w=900&q=80',
 		title: '陶艺手作体验课',
@@ -835,7 +835,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 5,
 		activity_id: 40,
 		isActive: false,
-		tag_text: '艺术',
+		category_name: '艺术',
 		cover:
 			'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=900&q=80',
 		title: '水彩风景写生班',
@@ -856,7 +856,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 5,
 		activity_id: 41,
 		isActive: false,
-		tag_text: '艺术',
+		category_name: '艺术',
 		cover:
 			'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=900&q=80',
 		title: '手工皮具制作工坊',
@@ -877,7 +877,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 5,
 		activity_id: 42,
 		isActive: false,
-		tag_text: '艺术',
+		category_name: '艺术',
 		cover:
 			'https://images.unsplash.com/photo-1554048612-b6a482bc67e5?auto=format&fit=crop&w=900&q=80',
 		title: '街头摄影基础课',
@@ -898,7 +898,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 5,
 		activity_id: 43,
 		isActive: false,
-		tag_text: '艺术',
+		category_name: '艺术',
 		cover:
 			'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=900&q=80',
 		title: '尤克里里入门弹唱',
@@ -919,7 +919,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 5,
 		activity_id: 44,
 		isActive: false,
-		tag_text: '艺术',
+		category_name: '艺术',
 		cover:
 			'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=900&q=80',
 		title: '版画体验亲子场',
@@ -940,7 +940,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 5,
 		activity_id: 45,
 		isActive: false,
-		tag_text: '艺术',
+		category_name: '艺术',
 		cover:
 			'https://images.unsplash.com/photo-1602928321679-560bb453f190?auto=format&fit=crop&w=900&q=80',
 		title: '香薰蜡烛手作',
@@ -961,7 +961,7 @@ export const HOME_ACTIVITY_LIST = [
 		category_id: 5,
 		activity_id: 46,
 		isActive: false,
-		tag_text: '艺术',
+		category_name: '艺术',
 		cover:
 			'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=900&q=80',
 		title: '数字绘画板绘分享',

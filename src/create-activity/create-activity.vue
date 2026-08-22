@@ -75,10 +75,10 @@
 
 					<view class="field">
 						<text class="fieldLabel">活动类型</text>
-						<picker mode="selector" :range="typeOptions" @change="onTypePickerChange">
+						<picker mode="selector" :range="typeOptions" range-key="name" @change="onTypePickerChange">
 							<view class="fieldSelect">
-								<text :class="['fieldSelectText', !activityForm.type && 'isPlaceholder']">
-									{{ activityForm.type || '请选择活动类型' }}
+								<text :class="['fieldSelectText', !activityForm.category_name && 'isPlaceholder']">
+									{{ activityForm.category_name || '请选择活动类型' }}
 								</text>
 								<text class="chevron">›</text>
 							</view>
@@ -91,7 +91,7 @@
 							class="fieldInput fieldInputTime"
 							placeholder="请输入或选择活动时间"
 							placeholder-class="fieldPh"
-							v-model="activityForm.time"
+							v-model="activityForm.time_text"
 							:adjust-position="true"
 						/>
 						<view class="timePickRow">
@@ -121,7 +121,7 @@
 								class="fieldInput fieldInputFlex"
 								placeholder="城市、场馆或线上链接"
 								placeholder-class="fieldPh"
-								v-model="activityForm.location"
+								v-model="activityForm.location_text"
 								:adjust-position="true"
 							/>
 						</view>
@@ -135,7 +135,7 @@
 								class="fieldInput fieldInputFlex"
 								placeholder="0 表示免费"
 								placeholder-class="fieldPh"
-								v-model="activityForm.price"
+								v-model="activityForm.fee_note"
 								type="number"
 								:adjust-position="true"
 							/>
@@ -173,27 +173,32 @@
 
 <script>
 import { createActivity } from '@/api/modules/activity.js'
+import { fetchCategories } from '@/api/modules/category.js'
 
 export default {
 	data() {
 		return {
 			showActivityModal: true,
 			scrollAreaPx: 480,
-			typeOptions: ['线下聚会', '运动健身', '演出观赛', '户外出游', '线上活动', '其他'],
+			typeOptions: [],
 			timeDatePart: '',
 			timeClockPart: '',
 			coverTempPath: '',
 			activityForm: {
 				title: '',
-				type: '',
-				time: '',
-				location: '',
-				price: '',
+				category_name: '',
+				category_id: '',
+				time_text: '',
+				location_text: '',
+				fee_note: '',
 				description: '',
 				cover: '',
 			},
 			editorCtx: null,
 		}
+	},
+	async created() {
+		await this.loadTypeOptions()
 	},
 	onReady() {
 		this.updateScrollAreaHeight()
@@ -232,28 +237,47 @@ export default {
 			const d = (this.timeDatePart || '').trim()
 			const t = (this.timeClockPart || '').trim()
 			if (d && t) {
-				this.activityForm.time = `${d} ${t}`
+				this.activityForm.time_text = `${d} ${t}`
 				return
 			}
 			if (d && !t) {
-				this.activityForm.time = d
+				this.activityForm.time_text = d
 				return
 			}
 			if (!d && t) {
-				const cur = (this.activityForm.time || '').trim()
+				const cur = (this.activityForm.time_text || '').trim()
 				// 当前内容仅为日期时，只补上时刻
 				if (/^\d{4}-\d{2}-\d{2}$/.test(cur)) {
-					this.activityForm.time = `${cur} ${t}`
+					this.activityForm.time_text = `${cur} ${t}`
 					return
 				}
-				this.activityForm.time = cur ? `${cur} ${t}`.trim() : t
+				this.activityForm.time_text = cur ? `${cur} ${t}`.trim() : t
+			}
+		},
+		async loadTypeOptions() {
+			try {
+				const list = await fetchCategories()
+				if (Array.isArray(list) && list.length) {
+					this.typeOptions = list
+						.map((item) => ({
+							category_id: item.category_id != null ? item.category_id : item.id,
+							category_name: item.text || item.category_name || '',
+						}))
+						.filter((item) => item.category_id != null && item.category_name)
+				}
+			} catch (e) {
+				uni.showToast({
+					title: (e && e.message) || '分类加载失败',
+					icon: 'none',
+				})
 			}
 		},
 		onTypePickerChange(e) {
 			const i = Number(e.detail.value)
-			if (!Number.isNaN(i) && this.typeOptions[i]) {
-				this.activityForm.type = this.typeOptions[i]
-			}
+			const opt = this.typeOptions[i]
+			if (!opt) return
+			this.activityForm.category_name = opt.category_name
+			this.activityForm.category_id = opt.category_id
 		},
 		onDatePickerChange(e) {
 			this.timeDatePart = e.detail.value || ''
@@ -338,13 +362,15 @@ export default {
 				this.coverTempPath = ''
 				this.activityForm = {
 					title: '',
-					type: '',
-					time: '',
-					location: '',
-					price: '',
+					category_name: '',
+					category_id: '',
+					time_text: '',
+					location_text: '',
+					fee_note: '',
 					description: '',
 					cover: '',
 				}
+				console.log(this.activityForm)
 			} catch (e) {
 				uni.showToast({
 					title: (e && e.message) || '发布失败',

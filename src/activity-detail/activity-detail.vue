@@ -64,10 +64,11 @@
 				</view>
 
 				<view class="orgCard">
-					<image class="orgAva" :src="detail.org_avatar" mode="aspectFill" />
+					<!-- 展示所属小队头像/名称（后端从小队表带出） -->
+					<image class="orgAva" :src="detail.squad_avatar" mode="aspectFill" />
 					<view class="orgText">
 						<text class="orgLabel">主办方</text>
-						<text class="orgName">{{ detail.org_name }}</text>
+						<text class="orgName">{{ detail.squad_name }}</text>
 					</view>
 				</view>
 
@@ -110,12 +111,13 @@
 <script setup>
 import { computed, reactive } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
-import { getCachedActivity } from '@/utils/activity-cache.js'
+import { fetchActivityDetail } from '@/api/modules/activity.js'
 
 const actDetail = reactive({
 	data: {},
 })
 
+/** 归一化活动数据，补齐默认字段并兼容不同的字段命名 */
 function normalizeActivity(raw) {
 	if (!raw || typeof raw !== 'object') return {}
 	const joinAvatars = Array.isArray(raw.joinAvatars)
@@ -129,8 +131,8 @@ function normalizeActivity(raw) {
 		title: raw.title || '活动',
 		location_text: raw.location_text || '',
 		time_text: raw.time_text || '',
-		org_avatar: raw.org_avatar || '',
-		org_name: raw.org_name || '',
+		squad_avatar: raw.squad_avatar || '',
+		squad_name: raw.squad_name || '',
 		joinCount: Number(raw.joinCount) || joinAvatars.length || 0,
 		joinAvatars,
 		category_name: raw.category_name || '',
@@ -141,6 +143,7 @@ function normalizeActivity(raw) {
 	}
 }
 
+/** 将 ISO 时间字符串格式化为“年月日 时分”展示文案 */
 function formatActivityTime(str) {
 	if (!str || typeof str !== 'string') return ''
 	const m = str.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/)
@@ -194,12 +197,11 @@ const statusBarPadding = computed(() => {
 
 const safeBottom = computed(() => 'calc(24rpx + env(safe-area-inset-bottom))')
 
+/** 页面加载：解析路由参数并展示活动详情数据 */
 onLoad((option) => {
-
 	try {
 		const raw = option && option.item ? JSON.parse(decodeURIComponent(option.item)) : null
-		// console.log(raw)
-		actDetail.data = normalizeActivity(raw)
+		if (raw) actDetail.data = normalizeActivity(raw)
 	} catch {
 		uni.showToast({ title: '活动信息加载失败', icon: 'none' })
 	}
@@ -207,24 +209,39 @@ onLoad((option) => {
 	if (!activityId) {
 		uni.showToast({ title: '缺少活动编号', icon: 'none' })
 		return
-
 	}
-	const raw = getCachedActivity(activityId)
-	if (!raw) {
-		uni.showToast({ title: '活动信息加载失败', icon: 'none' })
-		return
-	}
-	actDetail.data = normalizeActivity(raw)
+	// 缓存优先：命中缓存直接展示；未命中再请求后端接口
+	loadActivityDetail(activityId)
 })
 
+/**
+ * 拉取活动详情：由 fetchActivityDetail 实现缓存优先
+ * （本地有该活动则直接读缓存，不发请求；否则请求 GET /api/v1/activities/:id）。
+ * @param {string} activityId 活动 ID
+ */
+async function loadActivityDetail(activityId) {
+	try {
+		const data = await fetchActivityDetail(activityId)
+		console.log('[debug] activityDetail =>', JSON.stringify(data, null, 2))
+		if (data && data.activity_id != null) {
+			actDetail.data = normalizeActivity(data)
+			return
+		}
+	} catch (_) {}
+	uni.showToast({ title: '活动信息加载失败', icon: 'none' })
+}
+
+/** 返回首页 */
 const goHome = () => {
 	uni.redirectTo({ url: '/pages/index/index' })
 }
 
+/** 报名入口：提示报名流程即将接入 */
 const onRegister = () => {
 	uni.showToast({ title: '报名流程即将接入', icon: 'none' })
 }
 
+/** 分享入口：提示分享能力即将接入 */
 const onShare = () => {
 	uni.showToast({ title: '分享能力即将接入', icon: 'none' })
 }

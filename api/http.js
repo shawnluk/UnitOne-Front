@@ -30,6 +30,7 @@ function clearLoginCache() {
 		uni.removeStorageSync('userId')
 		uni.removeStorageSync('username')
 		uni.removeStorageSync('userInfo')
+		uni.removeStorageSync('squads')
 	} catch (_) {}
 }
 

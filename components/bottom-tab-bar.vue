@@ -61,6 +61,7 @@ export default {
 		};
 	},
 	methods: {
+		/** 点击 tab：跳转到对应主页面 */
 		onTap(item, index) {
 			if (index === this.current) return;
 			// 使用 reLaunch 切换主页面，避免系统 tabbar 依赖

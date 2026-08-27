@@ -75,7 +75,7 @@
 
 					<view class="field">
 						<text class="fieldLabel">活动类型</text>
-						<picker mode="selector" :range="typeOptions" range-key="name" @change="onTypePickerChange">
+						<picker mode="selector" :range="typeOptions" range-key="category_name" @change="onTypePickerChange">
 							<view class="fieldSelect">
 								<text :class="['fieldSelectText', !activityForm.category_name && 'isPlaceholder']">
 									{{ activityForm.category_name || '请选择活动类型' }}
@@ -197,13 +197,16 @@ export default {
 			editorCtx: null,
 		}
 	},
+	/** 页面创建：加载活动类型选项 */
 	async created() {
 		await this.loadTypeOptions()
 	},
+	/** 页面首次渲染完成：根据窗口与安全区计算滚动区高度 */
 	onReady() {
 		this.updateScrollAreaHeight()
 	},
 	methods: {
+		/** 根据窗口与安全区尺寸计算滚动区可用高度 */
 		updateScrollAreaHeight() {
 			try {
 				const sys = uni.getSystemInfoSync()
@@ -254,9 +257,11 @@ export default {
 				this.activityForm.time_text = cur ? `${cur} ${t}`.trim() : t
 			}
 		},
+		/** 拉取活动分类并映射为 picker 选项 */
 		async loadTypeOptions() {
 			try {
 				const list = await fetchCategories()
+				// console.log(list)
 				if (Array.isArray(list) && list.length) {
 					this.typeOptions = list
 						.map((item) => ({
@@ -273,25 +278,31 @@ export default {
 			}
 		},
 		onTypePickerChange(e) {
+			// console.log(e);	
 			const i = Number(e.detail.value)
 			const opt = this.typeOptions[i]
+			// console.log(opt)
 			if (!opt) return
 			this.activityForm.category_name = opt.category_name
 			this.activityForm.category_id = opt.category_id
 		},
+		/** 日期选择：记录日期并同步到输入框 */
 		onDatePickerChange(e) {
 			this.timeDatePart = e.detail.value || ''
 			this.mergeDateTimeIntoForm()
 		},
+		/** 时刻选择：记录时间并同步到输入框 */
 		onTimePickerChange(e) {
 			this.timeClockPart = e.detail.value || ''
 			this.mergeDateTimeIntoForm()
 		},
+		/** 关闭弹窗并返回用户页 */
 		closeActivityModal() {
 			uni.navigateTo({
 				url: '/pages/user/user',
 			})
 		},
+		/** 选择活动封面图片 */
 		selectCoverImage() {
 			uni.chooseImage({
 				count: 1,
@@ -311,6 +322,7 @@ export default {
 				},
 			})
 		},
+		/** 编辑器就绪：获取编辑器上下文并回填已有内容 */
 		onEditorReady() {
 			uni.createSelectorQuery()
 				.in(this)
@@ -323,9 +335,11 @@ export default {
 				})
 				.exec()
 		},
+		/** 描述输入：同步编辑器内容到表单 */
 		onDescInput(e) {
 			this.activityForm.description = e.detail.html || ''
 		},
+		/** 在编辑器中插入所选图片 */
 		insertDescImage() {
 			if (!this.editorCtx) {
 				uni.showToast({ title: '编辑器尚未就绪', icon: 'none' })
@@ -348,6 +362,7 @@ export default {
 				},
 			})
 		},
+		/** 校验并提交活动，成功后重置表单 */
 		async submitActivity() {
 			const title = (this.activityForm.title || '').trim()
 			if (!title) {

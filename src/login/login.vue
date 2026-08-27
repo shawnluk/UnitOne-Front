@@ -112,20 +112,30 @@ export default {
 		}
 	},
 	methods: {
+		/** 提取输入框的值，兼容不同端的事件结构
+		 * @param {Object} e 输入事件对象
+		 * @returns {String} 输入的值
+		 */
 		inputValue(e) {
 			if (e && e.detail && e.detail.value !== undefined) return e.detail.value
 			if (e && e.target && e.target.value !== undefined) return e.target.value
 			return ''
 		},
+		/** 用户名输入处理：同步到表单 */
 		onUsernameInput(e) {
 			this.form.username = this.inputValue(e)
 		},
+		/** 密码输入处理：同步到表单 */
 		onPasswordInput(e) {
 			this.form.password = this.inputValue(e)
 		},
+		/** 确认密码输入处理：同步到表单 */
 		onConfirmPasswordInput(e) {
 			this.form.confirmPassword = this.inputValue(e)
 		},
+		/** 切换登录/注册模式，并清空密码输入
+		 * @param {String} mode 目标模式：login 或 register
+		 */
 		switchMode(mode) {
 			if (mode === this.mode) return
 			this.mode = mode
@@ -170,6 +180,7 @@ export default {
 				})
 			}
 		},
+		/** 提交处理：注册走注册流程，登录则校验后调用登录接口并跳转 */
 		async handleSubmit() {
 			if (this.mode === 'register') {
 				await this.handleRegister()

@@ -13,19 +13,25 @@
 				</view>
 			</view>
 			<view
+				v-for="(it, i) in items"
+				:key="it.id || i"
 				class="squadItem squadItem--clickable"
 				hover-class="squadItem--hover"
 				hover-stay-time="120"
-				@tap.stop="goSquadDetail"
+				@tap.stop="goSquadDetail(it)"
 			>
-				<image class="squadCover" :src="item.cover" mode="aspectFill" />
+				<image class="squadCover" :src="it.cover" mode="aspectFill" />
 				<view class="squadInfo">
-					<view class="squadName">{{ item.name }}</view>
-					<view class="squadStats">{{ item.stats }}</view>
+					<view class="squadName">{{ it.name }}</view>
+					<view class="squadStats">{{ it.stats }}</view>
 				</view>
 				<view class="squadTags">
-					<text class="squadBadge">{{ item.badge }}</text>
-					<text class="squadTop">{{ item.topTag }}</text>
+					<text class="squadBadge">{{ it.badge }}</text>
+					<text
+						class="squadTop"
+						:class="{ 'squadTop--pinned': it.pinned }"
+						@tap.stop="onTogglePin(it)"
+					>{{ it.pinned ? '已置顶' : '置顶' }}</text>
 				</view>
 			</view>
 		</view>
@@ -33,7 +39,7 @@
 </template>
 
 <script>
-import { MOCK_USER_SQUAD_PANEL } from '@/mock/user-display.js'
+import { MOCK_USER_SQUAD_PANEL, MOCK_USER_SQUAD_EMPTY_ITEM } from '@/mock/user-display.js'
 
 export default {
 	name: 'UserSquadPanel',
@@ -46,12 +52,19 @@ export default {
 			type: String,
 			default: MOCK_USER_SQUAD_PANEL.moreText,
 		},
-		item: {
-			type: Object,
-			default: () => ({ ...MOCK_USER_SQUAD_PANEL.item }),
+		items: {
+			type: Array,
+			default: () => [{ ...MOCK_USER_SQUAD_EMPTY_ITEM }],
 		},
 	},
 	methods: {
+		/** 置顶/取消置顶小队，交由父组件处理 */
+		onTogglePin(item) {
+			if (item && item.id) {
+				this.$emit('toggle-pin', item)
+			}
+		},
+		/** 跳转创建小队页 */
 		goCreateUnit() {
 			uni.navigateTo({
 				url: '/src/create-unit/create-unit',
@@ -61,9 +74,11 @@ export default {
 			})
 		},
 
-		goSquadDetail() {
-			const id = this.item && this.item.id ? this.item.id : ''
-			if (id==='') {
+		/** 跳转小队详情页 */
+		goSquadDetail(item) {
+			console.log(item);
+			const id = item && item.id ? item.id : ''
+			if (id === '') {
 				uni.showToast({ title: '请先创建小队', icon: 'none' })
 				return
 			}
@@ -153,6 +168,10 @@ export default {
 	box-shadow: 0 8rpx 22rpx rgba(50, 40, 90, 0.08);
 }
 
+.squadItem + .squadItem {
+	margin-top: 16rpx;
+}
+
 /* H5：卡片可点，与「创建小队」区分 */
 .squadItem--clickable {
 	cursor: pointer;
@@ -213,6 +232,9 @@ export default {
 
 .squadTop {
 	margin-top: 10rpx;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 	font-size: 20rpx;
 	font-weight: 600;
 	color: #5d37ff;
@@ -220,5 +242,13 @@ export default {
 	padding: 6rpx 14rpx;
 	border-radius: 999rpx;
 	border: 1rpx solid rgba(125, 95, 255, 0.26);
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.squadTop--pinned {
+	color: #9a6b00;
+	background: linear-gradient(90deg, rgba(250, 204, 21, 0.24) 0%, rgba(251, 191, 36, 0.3) 100%);
+	border-color: rgba(251, 191, 36, 0.5);
 }
 </style>

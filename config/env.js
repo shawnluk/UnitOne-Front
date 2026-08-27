@@ -1,6 +1,8 @@
 /**
- * 运行时配置：联调时改 apiBaseUrl，并将 useMock 设为 false。
+ * 获取运行时环境配置。
+ * 联调时改 apiBaseUrl，并将 useMock 设为 false。
  * 正式发布建议在 CI/打包脚本里替换或由后端下发配置（按需扩展）。
+ * @returns {{ apiBaseUrl: string, useMock: boolean, requestTimeoutMs: number }}
  */
 export function getEnv () {
 	return {

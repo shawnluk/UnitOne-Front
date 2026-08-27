@@ -26,9 +26,11 @@
 				posts: []
 			}
 		},
+		/** 页面加载：加载动态信息流 */
 		async onLoad() {
 			await this.loadFeed()
 		},
+		/** 下拉刷新：重新加载动态信息流并停止刷新动画 */
 		async onPullDownRefresh() {
 			try {
 				await this.loadFeed()
@@ -37,6 +39,7 @@
 			}
 		},
 		methods: {
+			/** 并行加载活动与动态数据并更新视图 */
 			async loadFeed() {
 				try {
 					const [activities, posts] = await Promise.all([

@@ -34,15 +34,19 @@
 
 				<view class="block">
 					<text class="blockTitle">成员（{{ detail.members.length }}）</text>
-					<view class="memberList">
-						<view v-for="(m, i) in detail.members" :key="i" class="memberRow">
-							<image class="memberAva" :src="m.avatar" mode="aspectFill" />
-							<view class="memberText">
-								<text class="memberName">{{ m.name }}</text>
-								<text class="memberRole">{{ m.role }}</text>
+					<!-- 所有成员同一排展示，超出宽度横向滑动浏览；PC 端显示滚动条以便拖动 -->
+					<scroll-view scroll-x class="memberScroll" :show-scrollbar="true">
+						<view class="memberList">
+							<view v-for="(m, i) in detail.members" :key="i" class="memberCard">
+								<image class="memberAva" :src="m.avatar" mode="aspectFill" />
+								<view class="memberText">
+									<text class="memberName">{{ m.name }}</text>
+									<!-- 仅显示队长/副队长角色，普通成员不显示「成员」文字，名称自然居中 -->
+									<text v-if="m.role !== '成员'" class="memberRole">{{ m.role }}</text>
+								</view>
 							</view>
 						</view>
-					</view>
+					</scroll-view>
 				</view>
 
 				<view class="block">
@@ -50,11 +54,21 @@
 					<view v-if="detail.recentActivities.length" class="actList">
 						<view
 							v-for="(a, j) in detail.recentActivities"
-							:key="j"
-							class="actRow"
+							:key="a.id || j"
+							class="actCard"
+							hover-class="actCardHover"
+							@click="onActivityTap(a)"
 						>
-							<text class="actTitle">{{ a.title }}</text>
-							<text class="actTime">{{ a.timeLabel }}</text>
+							<image v-if="a.cover" class="actCover" :src="a.cover" mode="aspectFill" />
+							<view class="actInfo">
+								<text class="actTitle">{{ a.title }}</text>
+								<text v-if="a.timeLabel" class="actMeta">{{ a.timeLabel }}</text>
+								<text v-if="a.location" class="actMeta">{{ a.location }}</text>
+								<view class="actFooter">
+									<text class="actFee">{{ a.fee || '免费' }}</text>
+									<text v-if="a.orgName" class="actOrg">{{ a.orgName }}</text>
+								</view>
+							</view>
 						</view>
 					</view>
 					<view v-else class="emptyAct">
@@ -73,7 +87,11 @@
 </template>
 
 <script>
-import { getMockUserSquadDetail, MOCK_USER_SQUAD_DEFAULT_ID } from '@/mock/user-display.js'
+import {
+	getMockUserSquadDetail,
+	MOCK_USER_SQUAD_DEFAULT_ID,
+	normalizeSquadDetail,
+} from '@/mock/user-display.js'
 import { fetchSquadDetail } from '@/api/modules/user.js'
 
 export default {
@@ -84,6 +102,7 @@ export default {
 			detail: getMockUserSquadDetail(MOCK_USER_SQUAD_DEFAULT_ID),
 		}
 	},
+	/** 页面加载：解析路由参数 squadId，先用 Mock 兜底渲染，再请求后端详情覆盖 */
 	onLoad(options) {
 		const raw = options && options.squadId ? String(options.squadId) : ''
 		const id = decodeURIComponent(raw) || MOCK_USER_SQUAD_DEFAULT_ID
@@ -92,13 +111,34 @@ export default {
 		this.loadSquadDetail(id)
 	},
 	methods: {
+		/**
+		 * 加载小队详情。
+		 * 发送 GET /api/v1/squads/:id（squadId 由调用方传入），
+		 * 后端鉴权通过后返回基础信息 + 成员 + 活动，经 normalizeSquadDetail
+		 * 映射为详情页视图结构；请求失败时保留 Mock 兜底数据。
+		 * @param {string|number} id 小队 ID
+		 */
 		async loadSquadDetail(id) {
 			try {
 				const data = await fetchSquadDetail(id)
 				if (data) {
-					this.detail = data
+					// 后端返回结构 → 详情页视图结构
+					this.detail = normalizeSquadDetail(data)
 				}
 			} catch (_) {}
+		},
+		/**
+		 * 点击活动卡片：跳转到活动详情页。
+		 * 活动数据仅在首页加载活动列表时写入本地缓存（含完整 squad 字段），
+		 * 这里不再写缓存，详情页会先读缓存、未命中则请求 GET /api/v1/activities/:id（带 squad 字段），
+		 * 避免写入不含 squad 字段的不完整缓存导致详情页丢失小队头像/名称。
+		 * @param {Object} activity recentActivities 中的活动条目
+		 */
+		onActivityTap(activity) {
+			if (!activity || !activity.id) return
+			uni.navigateTo({
+				url: `/src/activity-detail/activity-detail?activity_id=${activity.id}`,
+			})
 		},
 	},
 }
@@ -260,46 +300,93 @@ export default {
 	color: #4a4468;
 }
 
-.memberList {
-	display: flex;
-	flex-direction: column;
-	gap: 18rpx;
+.memberScroll {
+	width: 100%;
+	/* 关键：scroll-view 横向滚动需 nowrap，否则部分端（H5/小程序）不触发滚动 */
+	white-space: nowrap;
 }
 
-.memberRow {
-	display: flex;
+/* H5 桌面端修复：uni-app 把 scroll-view 渲染为内层 .uni-scroll-view 滚动容器，
+   需 deep 选择器让其原生横向溢出并显示可拖动的细滚动条；
+   小程序端无这些 web 类名与滚动条样式，不受影响 */
+.memberScroll ::v-deep .uni-scroll-view {
+	overflow-x: auto;
+	white-space: nowrap;
+}
+.memberScroll ::v-deep .uni-scroll-view-content {
+	display: inline-block;
+	white-space: nowrap;
+}
+.memberScroll ::v-deep ::-webkit-scrollbar {
+	height: 8rpx;
+}
+.memberScroll ::v-deep ::-webkit-scrollbar-thumb {
+	border-radius: 4rpx;
+	background: rgba(125, 95, 255, 0.35);
+}
+.memberScroll ::v-deep ::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.memberList {
+	/* 容器用 inline-block：宽度随内容收缩，超过容器宽度即可横向滚动（兼容性最好） */
+	display: inline-block;
+	vertical-align: top;
+}
+
+.memberCard {
+	display: inline-flex;
+	flex-direction: column;
 	align-items: center;
-	gap: 20rpx;
+	justify-content: center;
+	gap: 8rpx;
+	/* 正方形容器：高度与宽度一致 */
+	width: 120rpx;
+	height: 120rpx;
+	/* 用 margin 代替容器 gap，避免部分端 flex gap 不生效导致宽度计算异常 */
+	margin-right: 12rpx;
+	padding: 12rpx 10rpx;
+	background: rgba(125, 95, 255, 0.06);
+	/* border: 1rpx solid rgba(125, 95, 255, 0.12); */
+	border-radius: 20rpx;
+	vertical-align: top;
 }
 
 .memberAva {
-	width: 88rpx;
-	height: 88rpx;
+	width: 100rpx;
+	height: 100rpx;
 	border-radius: 22rpx;
 	flex-shrink: 0;
 	box-shadow: 0 10rpx 22rpx rgba(50, 40, 90, 0.15);
+	/* margin-top: 10rpx; */
 }
 
 .memberText {
-	flex: 1;
-	min-width: 0;
-	display: flex;
-	flex-direction: column;
+	/* 名称与角色同行展示 */
+	display: inline-flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
 	gap: 6rpx;
+	max-width: 100%;
 }
 
 .memberName {
-	margin-left: 20rpx;
-	font-size: 28rpx;
+	max-width: 76rpx;
+	font-size: 24rpx;
 	font-weight: 600;
 	color: #1b1732;
+	text-align: center;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .memberRole {
-	margin-left: 20rpx;
-	font-size: 24rpx;
+	font-size: 20rpx;
 	color: #5d37ff;
 	font-weight: 600;
+	flex-shrink: 0;
 }
 
 .actList {
@@ -308,25 +395,73 @@ export default {
 	gap: 14rpx;
 }
 
-.actRow {
-	padding: 18rpx 20rpx;
+.actCard {
+	display: flex;
+	gap: 20rpx;
+	padding: 20rpx;
 	border-radius: 20rpx;
 	background: rgba(125, 95, 255, 0.06);
 	border: 1rpx solid rgba(125, 95, 255, 0.12);
+}
+
+/* 活动卡片点击态 */
+.actCardHover {
+	opacity: 0.8;
+}
+
+.actCover {
+	width: 140rpx;
+	height: 140rpx;
+	border-radius: 16rpx;
+	flex-shrink: 0;
+	background: #f1edff;
+}
+
+.actInfo {
+	flex: 1;
+	min-width: 0;
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
 	gap: 8rpx;
 }
 
 .actTitle {
-	font-size: 26rpx;
+	font-size: 28rpx;
 	font-weight: 600;
 	color: #1b1732;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
-.actTime {
-	font-size: 22rpx;
+.actMeta {
+	font-size: 24rpx;
 	color: #6c6392;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.actFooter {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16rpx;
+}
+
+.actFee {
+	font-size: 24rpx;
+	font-weight: 600;
+	color: #5d37ff;
+}
+
+.actOrg {
+	font-size: 22rpx;
+	color: #9a94b0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .emptyAct {

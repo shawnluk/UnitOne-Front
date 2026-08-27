@@ -42,24 +42,28 @@
 		</view>
 
 		<view class="footer">
-			<view class="org">
-				<image class="orgAva" :src="data.org_avatar" mode="aspectFill" />
-				<text class="orgName" :number-of-lines="1">{{ data.org_name }}</text>
+			<view class="org" @click.stop>
+				<!-- 展示所属小队头像/名称（后端从小队表带出） -->
+				<image class="orgAva" :src="data.squad_avatar" mode="aspectFill" />
+				<text class="orgName" :number-of-lines="1">{{ data.squad_name }}</text>
 			</view>
 
-<!-- 			<view class="join">
-				<view class="avaGroup">
-					<image
-						v-for="(a, idx) in data.joinAvatars.slice(0, 3)"
-						:key="idx"
-						class="ava"
-						:style="{ zIndex: 10 - idx }"
-						:src="a"
-						mode="aspectFill"
-					/>
-				</view>
-				<text class="joinText">{{ data.joinCount }}人参加</text>
-			</view> -->
+			<view class="join" @click.stop>
+				<!-- 参与成员头像：一屏约显示 3 个，超出宽度横向滑动浏览（PC 端显示细滚动条可拖动） -->
+				<scroll-view scroll-x class="joinScroll" :show-scrollbar="true">
+					<view class="joinList">
+						<image
+							v-for="(m, idx) in getActivityMembers(data)"
+							:key="idx"
+							class="ava"
+							:src="m.avatar || m"
+							mode="aspectFill"
+						/>
+					</view>
+				</scroll-view>
+				<!-- 右下角最右边：参与人数 -->
+				<text class="joinText">{{ getActivityJoinCount(data) }}人参加</text>
+			</view>
 			</view>
 		</view>
 
@@ -102,12 +106,14 @@ export default {
 			loading: false,
 		}
 	},
+	/** 页面创建：加载首页活动数据并监听分类切换事件 */
 	async created() {
 		await this.refresh()
 		if (uni && typeof uni.$on === 'function') {
 			uni.$on('index:category-change', this.handleCategoryFilter)
 		}
 	},
+	/** 组件销毁：解绑全局分类切换事件监听 */
 	beforeDestroy() {
 		if (uni && typeof uni.$off === 'function') {
 			uni.$off('index:category-change', this.handleCategoryFilter)
@@ -146,7 +152,15 @@ export default {
 					limit: this.pageSize,
 				})
 				const { items, total } = this.normalizeActivityResult(res)
-				cacheActivities(items)
+				// 首页列表接口已返回 squad_avatar/squad_name/activity_member，写入本地缓存时显式补齐默认值，
+				// 保证详情页从缓存读取的数据携带所属小队信息与报名成员列表
+				const cacheItems = items.map((item) => ({
+					...item,
+					squad_avatar: item.squad_avatar || '',
+					squad_name: item.squad_name || '',
+					activity_member: item.activity_member || [],
+				}))
+				cacheActivities(cacheItems)
 				if (items.length <= this.pageSize) {
 					// 情况一：后端已实现分页，返回当前页数据（不超过一页）
 					this.activityList = this.offset === 0 ? items : this.activityList.concat(items)
@@ -169,6 +183,7 @@ export default {
 				})
 			}
 		},
+		/** 延时工具，返回 Promise */
 		delay(ms) {
 			return new Promise((resolve) => setTimeout(resolve, ms))
 		},
@@ -187,6 +202,20 @@ export default {
 			}
 			return { items: [], total: null }
 		},
+		/** 解析活动参与成员列表：兼容后端返回的 members 与 activity_member 两种字段 */
+		getActivityMembers(data) {
+			const list = data && (data.members || data.activity_member)
+			return Array.isArray(list) ? list : []
+		},
+		/** 参与人数：优先取成员列表长度，其次取后端 member_count / joinCount */
+		getActivityJoinCount(data) {
+			const members = this.getActivityMembers(data)
+			if (members.length) return members.length
+			if (data && data.member_count != null) return Number(data.member_count) || 0
+			if (data && data.joinCount != null) return Number(data.joinCount) || 0
+			return 0
+		},
+		/** 按当前分类筛选活动列表并标记选中态 */
 		applyCategoryFilter(categoryId) {
 			if (!categoryId) {
 				this.filteredItems = this.activityList.map((item) => ({
@@ -199,6 +228,7 @@ export default {
 				.filter((item) => item.category_id === categoryId)
 				.map((item) => ({ ...item, isActive: true }))
 		},
+		/** 接收分类切换事件并应用筛选 */
 		handleCategoryFilter(payload) {
 			console.log(payload)
 			const category_id = payload && payload.category_id ? payload.category_id : null
@@ -206,6 +236,7 @@ export default {
 			this.currentCategoryId = category_id
 			this.applyCategoryFilter(category_id)
 		},
+		/** 点击活动卡片：跳转到活动详情页 */
 		handleCardClick(item) {
 			console.log(item.activity_id || item.id)
 			const activity_id = item.activity_id || item.id
@@ -563,28 +594,59 @@ export default {
 	display: flex;
 	align-items: center;
 	gap: 10rpx;
+	max-width: 45%;
+	flex-shrink: 0;
 }
 
 .joinText {
 	font-size: 23rpx;
 	color: var(--join-text-color);
 	font-weight: 700;
+	flex-shrink: 0;
 }
 
-.avaGroup {
-	display: flex;
+/* 参与成员头像横滑区：一屏约 3 个头像，超出横向滑动 */
+.joinScroll {
+	width: 132rpx;
+	white-space: nowrap;
+	flex-shrink: 0;
+}
+
+.joinList {
+	display: inline-flex;
 	align-items: center;
-	padding-left: 12rpx;
 }
 
 .ava {
-	width: 38rpx;
-	height: 38rpx;
+	width: 40rpx;
+	height: 40rpx;
 	border-radius: 50%;
-	border: 3rpx solid #ffffff;
-	margin-left: -12rpx;
+	border: 2rpx solid #ffffff;
+	margin-right: 6rpx;
 	background: #f2f2f2;
-	box-shadow: var(--ava-shadow);
+	flex-shrink: 0;
+}
+
+/* H5 桌面端修复：uni-app 把 scroll-view 渲染为内层 .uni-scroll-view 滚动容器，
+   需 deep 选择器让其原生横向溢出并显示可拖动的细滚动条；
+   小程序端无这些 web 类名与滚动条样式，不受影响 */
+.joinScroll ::v-deep .uni-scroll-view {
+	overflow-x: auto;
+	white-space: nowrap;
+}
+.joinScroll ::v-deep .uni-scroll-view-content {
+	display: inline-block;
+	white-space: nowrap;
+}
+.joinScroll ::v-deep ::-webkit-scrollbar {
+	height: 4rpx;
+}
+.joinScroll ::v-deep ::-webkit-scrollbar-thumb {
+	border-radius: 2rpx;
+	background: rgba(125, 95, 255, 0.35);
+}
+.joinScroll ::v-deep ::-webkit-scrollbar-track {
+	background: transparent;
 }
 
 .themeDefault {

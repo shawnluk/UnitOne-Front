@@ -50,6 +50,15 @@
 				"navigationBarBackgroundColor": "#E8F4FF",
 				"navigationBarTextStyle": "black"
 			}
+		},
+		{
+			"path": "pages/chat/chat-room",
+			"style": {
+				"navigationBarTitleText": "聊天室",
+				"navigationStyle": "default",
+				"navigationBarBackgroundColor": "#E8F4FF",
+				"navigationBarTextStyle": "black"
+			}
 		}
 	],
 	"globalStyle": {

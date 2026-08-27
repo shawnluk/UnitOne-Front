@@ -163,7 +163,7 @@
 				const rest = list.map((a, i) => ({
 					id: String(a.activity_id || a.id || `activity-${i}`),
 					name: this.shortStoryTitle(a.title),
-					avatar: a.cover || a.org_avatar || fallbackAva,
+					avatar: a.cover || a.squad_avatar || fallbackAva,
 					isAdd: false,
 					activity: a
 				}))
@@ -171,13 +171,16 @@
 			}
 		},
 		methods: {
+			/** 切换点赞状态 */
 			toggleLike(id) {
 				this.likedMap[id] = !this.likedMap[id]
 			},
+			/** 返回评论预览（最多 2 条） */
 			visibleComments(item) {
 				if (!item.comments || !item.comments.length) return []
 				return item.comments.slice(0, 2)
 			},
+			/** 生成点赞摘要文案 */
 			likeSummary(item) {
 				const names = item.likes || []
 				const base =
@@ -190,24 +193,30 @@
 				}
 				return `${count} 次赞`
 			},
+			/** 点击更多：弹出举报/不感兴趣/复制链接面板 */
 			onMore(_item) {
 				uni.showActionSheet({
 					itemList: ['举报', '不感兴趣', '复制链接'],
 					fail: () => {}
 				})
 			},
+			/** 点击评论：提示评论功能开发中 */
 			onCommentTap(_item) {
 				uni.showToast({ title: '评论功能开发中', icon: 'none' })
 			},
+			/** 点击分享：提示分享功能开发中 */
 			onShareTap(_item) {
 				uni.showToast({ title: '分享功能开发中', icon: 'none' })
 			},
+			/** 点击收藏：提示已收藏 */
 			onSaveTap(_item) {
 				uni.showToast({ title: '已收藏', icon: 'none' })
 			},
+			/** 点击发布入口：提示发布功能开发中 */
 			onCreateTap() {
 				uni.showToast({ title: '发布活动时刻', icon: 'none' })
 			},
+			/** 截断超长活动标题（最多 11 字） */
 			shortStoryTitle(title) {
 				if (!title) return '活动'
 				const s = String(title).trim()
@@ -225,6 +234,7 @@
 					uni.showToast({ title: '无法打开活动', icon: 'none' })
 				}
 			},
+			/** 点击故事：发布入口或跳转对应活动详情 */
 			onStoryTap(s) {
 				if (s.isAdd) {
 					this.onCreateTap()

@@ -45,16 +45,19 @@ export default {
 		}
 	},
 	methods: {
+		/** 地区选择：更新城市与地区 */
 		handleRegionChange(e) {
 			const value = (e && e.detail && e.detail.value) || []
 			const nextCity = value.length >= 2 ? value[1].replace(/市$/, '') : this.innerCity
 			this.innerRegion = value
 			this.innerCity = nextCity
 		},
+		/** 搜索关键字输入：同步内部值 */
 		handleSearchInput(e) {
 			const value = (e && e.detail && e.detail.value) || ''
 			this.innerKeyword = value
 		},
+		/** 确认搜索：校验并向外发送搜索事件 */
 		handleSearchConfirm() {
 			const keyword = (this.innerKeyword || '').trim()
 			if (!keyword) return

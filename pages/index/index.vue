@@ -10,6 +10,9 @@
 		<!-- 轮播图组件 -->
 		<SwiperBar></SwiperBar>
 
+		<!-- 广播消息（弹幕式循环滚动） -->
+		<IndexMarquee></IndexMarquee>
+
 		<!-- 分类列表 -->
 		<HomeCategoryBar></HomeCategoryBar>
 
@@ -31,15 +34,17 @@ import SwiperBar from '@/components/swiper-bar.vue'
 import IndexLogoBubble from './components/index-logo-bubble.vue'
 import IndexSearchBox from './components/index-search-box.vue'
 import HomeCategoryBar from './components/home-category-bar.vue'
+import IndexMarquee from './components/index-marquee.vue'
 
 export default {
-	components: { PageScaffold, SwiperBar, HomeActivityCard, HomeCategoryBar, IndexLogoBubble, IndexSearchBox },
+	components: { PageScaffold, SwiperBar, HomeActivityCard, HomeCategoryBar, IndexLogoBubble, IndexSearchBox, IndexMarquee },
 	data() {
 		return {
 			/** 下拉刷新中标记，用于显示自定义转圈 */
 			refreshing: false,
 		}
 	},
+	/** 下拉刷新：触发活动卡片刷新，保证转圈动画至少持续 3 秒 */
 	async onPullDownRefresh() {
 		this.refreshing = true
 		try {
@@ -54,6 +59,7 @@ export default {
 			uni.stopPullDownRefresh()
 		}
 	},
+	/** 触底加载：转发给活动卡片组件执行加载下一页 */
 	onReachBottom() {
 		const card = this.$refs.activityCard
 		if (card && typeof card.loadMore === 'function') {
@@ -61,9 +67,11 @@ export default {
 		}
 	},
 	methods: {
+		/** 延时工具，返回 Promise */
 		delay(ms) {
 			return new Promise((resolve) => setTimeout(resolve, ms))
 		},
+		/** 搜索处理：提示当前搜索关键字 */
 		onSearch(payload) {
 			const keyword = payload && payload.keyword ? payload.keyword : ''
 			if (!keyword) return

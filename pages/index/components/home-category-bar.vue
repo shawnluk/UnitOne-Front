@@ -42,10 +42,12 @@ export default {
 			items: [],
 		}
 	},
+	/** 页面创建：加载分类数据 */
 	async created() {
 		await this.loadCategories()
 	},
 	methods: {
+		/** 拉取分类列表并映射为展示项 */
 		async loadCategories() {
 			try {
 				const list = await fetchCategories()
@@ -63,6 +65,7 @@ export default {
 				})
 			}
 		},
+		/** 选择分类：切换选中态并通过事件广播分类变化 */
 		handleSelect(_, idx) {
 			const nextItems = this.items.map((item, itemIdx) => ({
 				...item,

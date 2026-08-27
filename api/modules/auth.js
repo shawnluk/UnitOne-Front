@@ -10,13 +10,14 @@ function persistLogin(data) {
 	try {
 		if (data.token) uni.setStorageSync('token', data.token)
 		if (data.user_id !== undefined) uni.setStorageSync('userId', data.user_id)
+		if (data.squads) uni.setStorageSync('squads', data.squads)
 		if (data.username) uni.setStorageSync('username', data.username)
 		if (data.profile) uni.setStorageSync('userInfo', data.profile)
 	} catch (_) {}
 }
 
 /**
- * 后端返回：{ token, user_id, username, profile }
+ * 后端返回：{ token, user_id, username, profile,squads }
  * @param {{ username: string, password: string }} credentials
  * @returns {Promise<{ token?: string, user_id?: number, username?: string, profile?: object }>}
  */
@@ -48,7 +49,8 @@ export async function loginWithPassword(credentials) {
 }
 
 /**
- * @param {{ username: string, password: string }} credentials
+ * 注册新账号
+ * @param {{ username: string, password: string }} credentials 用户名与密码
  * @returns {Promise<{ success?: boolean }>}
  */
 export async function register(credentials) {

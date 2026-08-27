@@ -21,11 +21,7 @@
 				/> -->
 				<UserDataPanel :items="dataItems" />
 				<UserServiceEntryPanel />
-				<UserSquadPanel
-					:title="squad.title"
-					:more-text="squad.moreText"
-					:item="squad.item"
-				/>
+				<UserSquadPanel :items="squadItems" @toggle-pin="onTogglePin" />
 				<view v-if="isLoggedIn" class="logoutCard" @tap="handleLogout">
 					<text class="logoutText">退出登录</text>
 				</view>
@@ -63,7 +59,6 @@ import {
 	MOCK_USER_DISPLAY_NAME_LOGGED_IN,
 	MOCK_USER_HEADER,
 	MOCK_USER_DATA_ITEMS,
-	MOCK_USER_SQUAD_PANEL,
 } from '@/mock/user-display.js'
 import {
 	fetchUserProfile,
@@ -89,13 +84,14 @@ export default {
 			displayNameLoggedIn: MOCK_USER_DISPLAY_NAME_LOGGED_IN,
 			header: { ...MOCK_USER_HEADER },
 			dataItems: MOCK_USER_DATA_ITEMS.map((row) => ({ ...row })),
-			squad: { ...MOCK_USER_SQUAD_PANEL },
+			squadItems: [],
 			showCropper: false,
 			cropperImg: '',
 			cropCanceled: false,
 			isLoggedIn: false,
 			userId: '',
 			user_no: '',
+			squads: [],
 			isBubbling: false,
 			isNavigating: false,
 			bubbleTimer: null,
@@ -110,6 +106,7 @@ export default {
 		},
 	},
 
+	/** 页面加载：读取参数、校验登录态并加载用户数据 */
 	onLoad(options) {
 		if (options && options.user_id) {
 			this.userId = options.user_id
@@ -120,6 +117,7 @@ export default {
 	},
 
 	methods: {
+		/** 校验 token 是否过期，过期则清理登录态并引导重新登录 */
 		checkTokenExpired() {
 			let token = ''
 			try {
@@ -144,23 +142,28 @@ export default {
 			})
 			return true
 		},
+		/** 清理本地登录缓存 */
 		clearLoginCache() {
 			try {
 				uni.removeStorageSync('token')
 				uni.removeStorageSync('userId')
 				uni.removeStorageSync('username')
 				uni.removeStorageSync('userInfo')
+				uni.removeStorageSync('squads')
 			} catch (_) {}
 		},
 		loadLocalUser() {
 			let userId = ''
 			let username = ''
 			let userInfo = null
+			let squads = []
 			try {
 				userId = uni.getStorageSync('userId')
 				username = uni.getStorageSync('username')
 				userInfo = uni.getStorageSync('userInfo')
+				squads = uni.getStorageSync('squads') || []
 			} catch (_) {}
+			this.squads = squads
 			if (!userId && !userInfo) {
 				this.isLoggedIn = false
 				return
@@ -168,6 +171,12 @@ export default {
 			this.userId = userId !== undefined && userId !== '' ? userId : this.userId
 			this.user_no = userInfo.user_no !== undefined && userInfo !== '' ? userInfo.user_no  : this.user_no
 			this.isLoggedIn = true
+			// 登录后：数据宫格「小队」数量 = 缓存 squads 条数
+			const squadCount = Array.isArray(squads) ? squads.length : 0
+			const dataItems = (this.dataItems || []).map((row) => ({ ...row }))
+			const squadIdx = dataItems.findIndex((row) => row.label === '小队')
+			if (squadIdx !== -1) dataItems[squadIdx].value = squadCount
+			this.dataItems = dataItems
 			if (this.userId) {
 				this.header = { ...this.header, partnerId: String(this.user_no) }
 			}
@@ -179,6 +188,7 @@ export default {
 				this.displayNameLoggedIn = username
 			}
 		},
+		/** 异步加载用户资料与小队列表数据 */
 		async loadUserData() {
 			if (!this.isLoggedIn) {
 				try {
@@ -199,13 +209,35 @@ export default {
 			}
 
 			try {
-				const squad = await fetchUserSquadPanel()
-				if (squad) {
-					this.squad = { ...this.squad, ...squad }
+				const squadItems = await fetchUserSquadPanel()
+				if (Array.isArray(squadItems) && squadItems.length) {
+					this.squadItems = squadItems
 				}
 			} catch (_) {}
 		},
 
+		/** 切换小队置顶状态：置顶时取消其他置顶并移到首位 */
+		onTogglePin(item) {
+			if (!item || item.id === '') return
+			const list = this.squadItems.slice()
+			const idx = list.findIndex((t) => String(t.id) === String(item.id))
+			if (idx === -1) return
+			const current = list[idx].pinned
+			// 取消置顶
+			list[idx] = { ...list[idx], pinned: false }
+			// 若本次为置顶动作：先取消其他所有已置顶，再置顶该项并移到首位
+			if (!current) {
+				list.forEach((t, i) => {
+					if (i !== idx && t.pinned) list[i] = { ...t, pinned: false }
+				})
+				const target = { ...list[idx], pinned: true }
+				list.splice(idx, 1)
+				list.unshift(target)
+			}
+			this.squadItems = list
+		},
+
+		/** 点击用户名：未登录时跳转登录页 */
 		onUsernameClick() {
 			if (this.isLoggedIn) return
 			uni.navigateTo({
@@ -213,6 +245,7 @@ export default {
 			})
 		},
 
+		/** 退出登录：确认后清理缓存并刷新页面 */
 		handleLogout() {
 			uni.showModal({
 				title: '退出登录',
@@ -229,6 +262,7 @@ export default {
 			})
 		},
 
+		/** 打开头像裁剪组件并选择图片 */
 		handleCrop() {
 			this.showCropper = true
 			this.cropperImg = ''
@@ -238,6 +272,7 @@ export default {
 			})
 		},
 
+		/** 取消裁剪并复位裁剪状态 */
 		cancelCrop() {
 			this.cropCanceled = true
 			if (this.$refs.cropper && this.$refs.cropper.resetData) {
@@ -247,6 +282,7 @@ export default {
 			this.cropperImg = ''
 		},
 
+		/** 裁剪完成：更新头像并关闭裁剪组件 */
 		onCropperCrop(e) {
 			if (this.cropCanceled) return
 			if (e && e.tempFilePath) {
@@ -257,6 +293,7 @@ export default {
 			this.cropCanceled = false
 		},
 
+		/** 发布活动：播放冒泡动画后跳转创建活动页 */
 		createActivity() {
 			if (this.isNavigating) return
 
@@ -282,6 +319,7 @@ export default {
 			}, 3000)
 		}
 	},
+	/** 页面销毁：清理气泡定时器，避免内存泄漏 */
 	beforeDestroy() {
 		if (this.bubbleTimer) {
 			clearTimeout(this.bubbleTimer)

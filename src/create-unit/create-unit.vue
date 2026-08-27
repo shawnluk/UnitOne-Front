@@ -117,9 +117,11 @@ export default {
 			}
 			return ''
 		},
+		/** 同步当前名称的显示宽度计数 */
 		syncNameWidthUsed() {
 			this.nameWidthUsed = squadNameDisplayWidth(this.unitName || '')
 		},
+		/** 名称输入处理：过滤非法字符、超宽截断并同步计数 */
 		onUnitNameInput(e) {
 			const raw = this.readInputValue(e)
 			// blur/change 在部分端无 detail.value，若仍绑定会误把名称清空，导致计数与截断「不生效」
@@ -153,6 +155,7 @@ export default {
 			}
 			this.unitIntro = s
 		},
+		/** 名称超宽时提示（带间隔防抖） */
 		maybeToastSquadMaxWidth() {
 			const now = Date.now()
 			if (now - this._lastSquadWidthToastAt < SQUAD_NAME_TOAST_GAP_MS) return
@@ -175,6 +178,7 @@ export default {
 				},
 			})
 		},
+		/** 提交占位：校验头像/名称/简介后提示接口待接入 */
 		onSubmitPlaceholder() {
 			if (!this.avatarTempPath) {
 				uni.showToast({ title: '请先上传小队头像', icon: 'none' })

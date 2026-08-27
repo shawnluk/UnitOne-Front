@@ -26,6 +26,7 @@ export default {
 		}
 	},
 	methods: {
+		/** 点击 logo：生成并播放一段漂浮气泡动画 */
 		handleClick() {
 			const now = Date.now()
 			const bubbles = Array.from({ length: 6 }, (_, index) => {

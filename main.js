@@ -13,6 +13,10 @@ app.$mount()
 
 // #ifdef VUE3
 import { createSSRApp } from 'vue'
+/**
+ * 创建 SSR 应用实例（uni-app VUE3 约定入口）。
+ * @returns {{ app: import('vue').App }} 返回挂载好 App 组件的应用实例
+ */
 export function createApp() {
   const app = createSSRApp(App)
   return {

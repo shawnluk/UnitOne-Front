@@ -201,6 +201,29 @@ export default {
 	async created() {
 		await this.loadTypeOptions()
 	},
+	/** 页面加载：兜底校验登录态（防止通过 URL/分享/页面栈等方式直接进入） */
+	onLoad() {
+		let userId = ''
+		let userInfo = null
+		try {
+			userId = uni.getStorageSync('userId')
+			userInfo = uni.getStorageSync('userInfo')
+		} catch (_) {}
+		if (userId || userInfo) return
+		uni.showModal({
+			title: '提示',
+			content: '请先登录后再发布活动',
+			confirmText: '去登录',
+			cancelText: '取消',
+			success: (res) => {
+				if (res.confirm) {
+					uni.redirectTo({ url: '/src/login/login' })
+				} else {
+					uni.redirectTo({ url: '/pages/index/index' })
+				}
+			},
+		})
+	},
 	/** 页面首次渲染完成：根据窗口与安全区计算滚动区高度 */
 	onReady() {
 		this.updateScrollAreaHeight()
@@ -302,6 +325,12 @@ export default {
 				url: '/pages/user/user',
 			})
 		},
+		/** 取消发布：关闭弹窗并返回首页 */
+		cancelActivityModal() {
+			uni.navigateTo({
+				url: '/pages/index/index',
+			})
+		},
 		/** 选择活动封面图片 */
 		selectCoverImage() {
 			uni.chooseImage({
@@ -364,6 +393,31 @@ export default {
 		},
 		/** 校验并提交活动，成功后重置表单 */
 		async submitActivity() {
+			// 发布活动前先校验登录态：未登录则提示并跳转登录页
+			let userId = ''
+			let userInfo = null
+			try {
+				userId = uni.getStorageSync('userId')
+				userInfo = uni.getStorageSync('userInfo')
+			} catch (_) {}
+			if (!userId && !userInfo) {
+				uni.showModal({
+					title: '提示',
+					content: '请先登录后再发布活动',
+					confirmText: '去登录',
+					cancelText: '取消',
+					success: (res) => {
+						if (res.confirm) {
+							// 确定：跳转登录页
+							uni.navigateTo({ url: '/src/login/login' })
+						} else {
+							// 取消：关闭发布面板并返回首页
+							this.cancelActivityModal()
+						}
+					},
+				})
+				return
+			}
 			const title = (this.activityForm.title || '').trim()
 			if (!title) {
 				uni.showToast({ title: '请填写活动标题', icon: 'none' })
@@ -385,7 +439,7 @@ export default {
 					description: '',
 					cover: '',
 				}
-				console.log(this.activityForm)
+				console.log('[HiGo] 发布活动表单 activityForm =>', this.activityForm)
 			} catch (e) {
 				uni.showToast({
 					title: (e && e.message) || '发布失败',

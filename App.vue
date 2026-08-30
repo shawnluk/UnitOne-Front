@@ -2,7 +2,7 @@
 	export default {
 		/** 应用启动时触发 */
 		onLaunch: function() {
-			console.log('App Launch')
+			console.log('[HiGo] App Launch')
 		},
 		/** 应用从后台进入前台时触发 */
 		onShow: function() {
@@ -10,7 +10,7 @@
 		},
 		/** 应用进入后台时触发 */
 		onHide: function() {
-			console.log('App Hide')
+			console.log('[HiGo] App Hide')
 		}
 	}
 </script>

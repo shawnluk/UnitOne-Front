@@ -10,10 +10,14 @@ const NO_AUTH_PATHS = [
 	{ url: ApiPaths.authRegister, method: 'POST' },
 	{ url: ApiPaths.activities, method: 'GET' },
 	{ url: ApiPaths.categories, method: 'GET' },
+	{ url: ApiPaths.momentPosts, method: 'GET' },
 ]
 
 function isNoAuth(url, method) {
-	return NO_AUTH_PATHS.some((item) => item.url === url && item.method === method)
+	if (NO_AUTH_PATHS.some((item) => item.url === url && item.method === method)) return true
+	// 活动热度上报（POST .../activities/:id/views）：登录/未登录都可调用，跳过 token 过期拦截
+	if (method === 'POST' && url.endsWith('/views')) return true
+	return false
 }
 
 function getStoredToken() {

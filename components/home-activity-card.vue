@@ -10,7 +10,7 @@
 			<image class="cover" :src="data.cover" mode="aspectFill" />
 			<view class="coverMask"></view>
 			<view class="coverChip">
-				<text class="coverChipText">{{ data.joinCount }}人热度</text>
+				<text class="coverChipText">🔥 {{ displayHot(data) }} 热度</text>
 			</view>
 		</view>
 
@@ -78,8 +78,8 @@
 </template>
 
 <script>
-import { fetchHomeActivityList } from '@/api/modules/activity.js'
-import { cacheActivities } from '@/utils/activity-cache.js'
+import { fetchHomeActivityList, reportActivityView, applyHotResult } from '@/api/modules/activity.js'
+import { cacheActivities, getCachedActivity } from '@/utils/activity-cache.js'
 
 export default {
 	name: 'HomeActivityCard',
@@ -164,7 +164,7 @@ export default {
 				if (items.length <= this.pageSize) {
 					// 情况一：后端已实现分页，返回当前页数据（不超过一页）
 					this.activityList = this.offset === 0 ? items : this.activityList.concat(items)
-					console.log(this.activityList)
+					console.log('[HiGo] activityList(后端已分页) =>', this.activityList)
 					this.hasMore = total != null
 						? this.offset + this.pageSize < total
 						: items.length >= this.pageSize
@@ -172,7 +172,8 @@ export default {
 					// 情况二：后端未做分页，返回全量数据，前端本地切片
 					const pageItems = items.slice(this.offset, this.offset + this.pageSize)
 					this.activityList = this.offset === 0 ? pageItems : this.activityList.concat(pageItems)
-					console.log(this.activityList)
+					console.log('[HiGo] 首页活动列表(后端未分页，本地切片) =>')
+					console.log('[HiGo] activityList =>', this.activityList)
 					this.hasMore = this.offset + this.pageSize < items.length
 				}
 				this.applyCategoryFilter(this.currentCategoryId)
@@ -215,6 +216,50 @@ export default {
 			if (data && data.joinCount != null) return Number(data.joinCount) || 0
 			return 0
 		},
+		/** 热度显示：读取 data.hot，缺失时兼容 data.heat/0 避免空白 */
+		displayHot(data) {
+			const hot = data && (data.hot != null ? data.hot : data.heat)
+			return Number(hot) || 0
+		},
+		/** 点击活动卡片：跳转到活动详情页，并异步上报一次热度（fire-and-forget，失败静默） */
+		handleCardClick(item) {
+			console.log('[HiGo] 点击活动卡片 activity_id =>', item.activity_id || item.id)
+			const activity_id = item.activity_id || item.id
+			this.reportHot(activity_id)
+			uni.redirectTo({
+				url: `/src/activity-detail/activity-detail?activity_id=${activity_id}`
+			})
+		},
+		/** 上报热度：成功后按返回结果反写当前列表与本地缓存中的该项 hot，营造“热度跳动”反馈 */
+		async reportHot(activityId) {
+			let result
+			try {
+				result = await reportActivityView(activityId)
+			} catch (_) {
+				result = null
+			}
+			if (!result) return
+			const item = this.findActivityById(activityId)
+			const updated = applyHotResult(item, result)
+			if (updated && updated !== item) this.replaceActivity(updated)
+		},
+		/** 在列表与筛选结果中按活动 ID 定位当前条目 */
+		findActivityById(activityId) {
+			const id = String(activityId)
+			const find = (arr) => arr.find((it) => String(it.activity_id || it.id) === id)
+			return find(this.activityList) || find(this.filteredItems) || null
+		},
+		/** 用更新后的条目替换内存列表中的对应项，保持热度实时同步显示 */
+		replaceActivity(updated) {
+			if (!updated) return
+			const id = String(updated.activity_id || updated.id)
+			const replaceIn = (arr) => {
+				const idx = arr.findIndex((it) => String(it.activity_id || it.id) === id)
+				if (idx !== -1) arr.splice(idx, 1, updated)
+			}
+			replaceIn(this.activityList)
+			replaceIn(this.filteredItems)
+		},
 		/** 按当前分类筛选活动列表并标记选中态 */
 		applyCategoryFilter(categoryId) {
 			if (!categoryId) {
@@ -230,19 +275,35 @@ export default {
 		},
 		/** 接收分类切换事件并应用筛选 */
 		handleCategoryFilter(payload) {
-			console.log(payload)
+			console.log('[HiGo] 分类切换事件 payload =>', payload)
 			const category_id = payload && payload.category_id ? payload.category_id : null
 			// console.log(categoryId)
 			this.currentCategoryId = category_id
 			this.applyCategoryFilter(category_id)
 		},
-		/** 点击活动卡片：跳转到活动详情页 */
-		handleCardClick(item) {
-			console.log(item.activity_id || item.id)
-			const activity_id = item.activity_id || item.id
-			uni.redirectTo({
-				url: `/src/activity-detail/activity-detail?activity_id=${activity_id}`
-			})
+		/** 返回首页时调用：从本地缓存读取最新热度并同步到列表，实现"返回后热度 +1"的反馈 */
+		syncHotFromCache() {
+			const sync = (arr) => {
+				if (!Array.isArray(arr)) return false
+				let changed = false
+				arr.forEach((it) => {
+					if (!it) return
+					const key = String(it.activity_id != null ? it.activity_id : it.id)
+					if (!key) return
+					const cached = getCachedActivity(key)
+					if (cached && cached.hot != null && Number(cached.hot) !== Number(it.hot || 0)) {
+						it.hot = Number(cached.hot)
+						changed = true
+					}
+				})
+				return changed
+			}
+			const changed = sync(this.activityList)
+			// 仅当热度有变化时才整体替换以触发视图更新，避免无谓重渲
+			if (changed) {
+				this.activityList = this.activityList.map((it) => ({ ...it }))
+				this.applyCategoryFilter(this.currentCategoryId)
+			}
 		},
 	},
 }

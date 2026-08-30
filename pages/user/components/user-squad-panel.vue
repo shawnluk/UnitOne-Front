@@ -76,7 +76,7 @@ export default {
 
 		/** 跳转小队详情页 */
 		goSquadDetail(item) {
-			console.log(item);
+			console.log('[HiGo] 点击小队句柄 item =>', item);
 			const id = item && item.id ? item.id : ''
 			if (id === '') {
 				uni.showToast({ title: '请先创建小队', icon: 'none' })

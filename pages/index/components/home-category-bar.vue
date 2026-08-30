@@ -55,7 +55,7 @@ export default {
 					const mapped = list.map(normalizeCategory).filter(Boolean)
 					if (mapped.length) {
 						this.items = mapped
-						console.log(this.items);					
+						console.log('[HiGo] 分类列表 items =>', this.items);					
 					}
 				}
 			} catch (e) {

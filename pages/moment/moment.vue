@@ -4,6 +4,7 @@
 			:posts="posts"
 			:profile-avatar="profileAvatar"
 			:activities="activityListForStories"
+			@refresh="loadFeed"
 		/>
 	</PageScaffold>
 </template>
@@ -26,8 +27,8 @@
 				posts: []
 			}
 		},
-		/** 页面加载：加载动态信息流 */
-		async onLoad() {
+		/** 页面显示/返回时加载动态信息流（覆盖首次进入与发布返回） */
+		async onShow() {
 			await this.loadFeed()
 		},
 		/** 下拉刷新：重新加载动态信息流并停止刷新动画 */

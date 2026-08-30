@@ -295,6 +295,21 @@ export default {
 
 		/** 发布活动：播放冒泡动画后跳转创建活动页 */
 		createActivity() {
+			// 入口先校验登录态：未登录提示用户选择去登录或取消
+			if (!this.isLoggedIn) {
+				uni.showModal({
+					title: '提示',
+					content: '请先登录后再发布活动',
+					confirmText: '去登录',
+					cancelText: '取消',
+					success: (res) => {
+						if (res.confirm) {
+							uni.navigateTo({ url: '/src/login/login' })
+						}
+					},
+				})
+				return
+			}
 			if (this.isNavigating) return
 
 			this.isNavigating = true

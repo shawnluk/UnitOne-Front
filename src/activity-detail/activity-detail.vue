@@ -35,7 +35,7 @@
 				<image class="heroImg" :src="detail.cover" mode="aspectFill" />
 				<view class="heroMask"></view>
 				<view class="heroChip">
-					<text class="heroChipText">{{ detail.joinCount }}人热度</text>
+					<text class="heroChipText">🔥 {{ detail.hot || 0 }} 热度</text>
 				</view>
 				<view class="heroBottom">
 					<view v-if="tagLabel" class="tag">{{ tagLabel }}</view>
@@ -111,7 +111,8 @@
 <script setup>
 import { computed, reactive } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
-import { fetchActivityDetail } from '@/api/modules/activity.js'
+import { fetchActivityDetail, reportActivityView } from '@/api/modules/activity.js'
+import { updateCachedActivityHot } from '@/utils/activity-cache.js'
 
 const actDetail = reactive({
 	data: {},
@@ -134,6 +135,7 @@ function normalizeActivity(raw) {
 		squad_avatar: raw.squad_avatar || '',
 		squad_name: raw.squad_name || '',
 		joinCount: Number(raw.joinCount) || joinAvatars.length || 0,
+		hot: Number(raw.hot != null ? raw.hot : raw.heat) || 0,
 		joinAvatars,
 		category_name: raw.category_name || '',
 		description: raw.description || '',
@@ -222,9 +224,14 @@ onLoad((option) => {
 async function loadActivityDetail(activityId) {
 	try {
 		const data = await fetchActivityDetail(activityId)
-		console.log('[debug] activityDetail =>', JSON.stringify(data, null, 2))
+		console.log('[HiGo] activityDetail =>', JSON.stringify(data, null, 2))
 		if (data && data.activity_id != null) {
 			actDetail.data = normalizeActivity(data)
+			// 成功展示详情即上报一次热度（去重由后端保证，重复进入不会虚增），
+			// 并把最新热度写回本地缓存，返回首页时 onShow 同步列表显示
+			reportActivityView(activityId).then((res) => {
+				if (res && res.hot != null) updateCachedActivityHot(activityId, res.hot)
+			})
 			return
 		}
 	} catch (_) {}

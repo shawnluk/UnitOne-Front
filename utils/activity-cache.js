@@ -49,3 +49,24 @@ export function getCachedActivity(activityId) {
 	const map = readMap()
 	return map[id] || null
 }
+
+/**
+ * 仅更新某活动的热度到本地缓存，不清动其余字段。
+ * 详情页上报热度后，把结果 hot 回写，供返回首页时 onShow 同步列表显示。
+ * @param {string|number} activityId 活动 ID
+ * @param {number|string} hot 去重后的热度值
+ */
+export function updateCachedActivityHot(activityId, hot) {
+	const id = normalizeId(activityId)
+	if (id == null || hot == null || hot === '') return
+	const map = readMap()
+	const current = map[id]
+	if (!current || typeof current !== 'object') return
+	const next = Number(hot)
+	if (!Number.isNaN(next)) {
+		current.hot = next
+		try {
+			uni.setStorageSync(STORAGE_KEY, map)
+		} catch (_) {}
+	}
+}

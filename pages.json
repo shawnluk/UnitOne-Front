@@ -43,6 +43,13 @@
 		{"path": "src/activity-detail/activity-detail"},
 		{"path": "src/create-activity/create-activity"},
 		{
+			"path": "src/create-moment/create-moment",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "black"
+			}
+		},
+		{
 			"path": "src/create-unit/create-unit",
 			"style": {
 				"navigationBarTitleText": "创建小队",

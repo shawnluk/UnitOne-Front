@@ -66,6 +66,13 @@ export default {
 			card.loadMore()
 		}
 	},
+	/** 页面显示/返回时：同步活动卡片的最新热度（如从详情页返回后热度 +1） */
+	onShow() {
+		const card = this.$refs.activityCard
+		if (card && typeof card.syncHotFromCache === 'function') {
+			card.syncHotFromCache()
+		}
+	},
 	methods: {
 		/** 延时工具，返回 Promise */
 		delay(ms) {
